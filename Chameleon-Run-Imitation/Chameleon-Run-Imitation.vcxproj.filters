@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Includes">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Sources\Application">
+      <UniqueIdentifier>{4b08a841-baba-46e5-b220-a961ca17e38f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Common">
+      <UniqueIdentifier>{607526fa-3508-418f-ba8d-26c4b0c578c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Graphics">
+      <UniqueIdentifier>{784224aa-95fd-4010-b82d-fa0770b10c5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Graphics\Effect">
+      <UniqueIdentifier>{e887a67c-36f4-4523-86d5-2e7378603344}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texture">
+      <UniqueIdentifier>{e3b7ecd6-f9cb-41b7-a034-62a0cf46d031}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PCH">
+      <UniqueIdentifier>{96a81eb2-48b3-4908-afa6-9cb46be40957}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Includes\Application">
+      <UniqueIdentifier>{48eada1d-2448-4dcb-8eee-2a76acd2f279}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Includes\Common">
+      <UniqueIdentifier>{80bb4778-8804-4377-b998-9a4f0dec846f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Includes\Etc">
+      <UniqueIdentifier>{115d6a84-d73d-4f41-8525-c1e8f6796b68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Includes\Graphics">
+      <UniqueIdentifier>{b16cb5e2-1ef9-47e0-994c-11393acbca91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Includes\Graphics\Effect">
+      <UniqueIdentifier>{f88b45bd-5f9f-469a-9942-b3c31b041aa8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Document">
+      <UniqueIdentifier>{6681a2f4-9890-46aa-bb44-028ed1211b4c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>PCH</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>Includes\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Includes\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Includes\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Includes\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="MathHelper.h">
+      <Filter>Includes\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Unconstructable.h">
+      <Filter>Includes\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Uncopiable.h">
+      <Filter>Includes\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="UsingNamespace.h">
+      <Filter>Includes\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicEffect.h">
+      <Filter>Includes\Graphics\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="BlurSSAOEffect.h">
+      <Filter>Includes\Graphics\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dx11effect.h">
+      <Filter>Includes\Graphics\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugScreenEffect.h">
+      <Filter>Includes\Graphics\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Effects.h">
+      <Filter>Includes\Graphics\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectWrapper.h">
+      <Filter>Includes\Graphics\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalDepthMapEffect.h">
+      <Filter>Includes\Graphics\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalMappingEffect.h">
+      <Filter>Includes\Graphics\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderTextureEffect.h">
+      <Filter>Includes\Graphics\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMapEffect.h">
+      <Filter>Includes\Graphics\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="SSAOMapEffect.h">
+      <Filter>Includes\Graphics\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Includes\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="D3DUtil.h">
+      <Filter>Includes\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugScreen.h">
+      <Filter>Includes\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryGenerator.h">
+      <Filter>Includes\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="InputVertex.h">
+      <Filter>Includes\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Includes\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Includes\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Includes\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderStates.h">
+      <Filter>Includes\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMap.h">
+      <Filter>Includes\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="SSAOMap.h">
+      <Filter>Includes\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Includes\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Includes\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Constants.h">
+      <Filter>Includes\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Macros.h">
+      <Filter>Includes\Common</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Effects.cpp">
+      <Filter>Sources\Graphics\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectWrapper.cpp">
+      <Filter>Sources\Graphics\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugScreenEffect.cpp">
+      <Filter>Sources\Graphics\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="BlurSSAOEffect.cpp">
+      <Filter>Sources\Graphics\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicEffect.cpp">
+      <Filter>Sources\Graphics\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="NormalDepthMapEffect.cpp">
+      <Filter>Sources\Graphics\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="NormalMappingEffect.cpp">
+      <Filter>Sources\Graphics\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderTextureEffect.cpp">
+      <Filter>Sources\Graphics\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMapEffect.cpp">
+      <Filter>Sources\Graphics\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="SSAOMapEffect.cpp">
+      <Filter>Sources\Graphics\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Sources\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Sources\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="MathHelper.cpp">
+      <Filter>Sources\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Sources\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Sources\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="D3DUtil.cpp">
+      <Filter>Sources\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugScreen.cpp">
+      <Filter>Sources\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometryGenerator.cpp">
+      <Filter>Sources\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="InputVertex.cpp">
+      <Filter>Sources\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Sources\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Sources\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Sources\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderStates.cpp">
+      <Filter>Sources\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMap.cpp">
+      <Filter>Sources\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="SSAOMap.cpp">
+      <Filter>Sources\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Sources\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Sources\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>PCH</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Sources\Application</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ChameleonImitation.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="ChameleonImitation.ico">
+      <Filter>Resources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="TODO_LIST.txt">
+      <Filter>Document</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
