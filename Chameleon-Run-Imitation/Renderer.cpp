@@ -16,7 +16,6 @@ bool ba::Renderer::Init(ID3D11Device* device, ID3D11DeviceContext* dc)
 
 	if (!effects::InitAll(device)) { Release(); return false; }
 	if(!renderstates::InitAll(device)) { Release(); return false; }
-	if (!BuildScreenQuadBuffers(device)) { Release(); return false; }
 
 	return true;
 }
@@ -25,7 +24,6 @@ void ba::Renderer::Release()
 {
 	effects::ReleaseAll();
 	renderstates::ReleaseAll();
-	ReleaseScreenQuadBuffers();
 }
 
 void ba::Renderer::RenderScene(const std::vector<ModelInstance>& model_instances, const EffectVariableBundlePerFrame& bundle)
@@ -41,13 +39,8 @@ void ba::Renderer::RenderScene(const std::vector<ModelInstance>& model_instances
 
 	ID3DX11EffectTechnique* tech = nullptr;
 
-	// Add this line after implementing 'FBXLoader' completely(loading texture part).
-	//tech = effects::kBasicEffect.tech(BasicEffect::kLight3TexAlphaClipFog);
-
-	// Delete this line later.
 	tech = effects::kBasicEffect.tech(BasicEffect::kLight3);
 
-	// Set effect variables.
 	effects::kBasicEffect.SetEyePos(rendering_components_.cam->position_w_xf());
 	effects::kBasicEffect.SetView(rendering_components_.cam->view());
 	effects::kBasicEffect.SetShadowTransform(rendering_components_.shadow_map->world_to_tex());
@@ -62,25 +55,23 @@ void ba::Renderer::RenderScene(const std::vector<ModelInstance>& model_instances
 	{
 		for (UINT model_idx = 0; model_idx < model_instances.size(); ++model_idx)
 		{
-			std::vector<Mesh>& meshes = model_instances[model_idx].model->meshes;
+			Model* model = model_instances[model_idx].model;
 
-			for (UINT mesh_idx = 0; mesh_idx < meshes.size(); ++mesh_idx)
-			{
-				// Update effect variables.
-				world = meshes[mesh_idx].transform()
-					* model_instances[model_idx].scale
-					* model_instances[model_idx].rotation
-					* model_instances[model_idx].translation;
-				world_inv_trans = mathhelper::InverseTranspose(world);
-				effects::kBasicEffect.SetWorld(world);
-				effects::kBasicEffect.SetWorldInvTrans(world_inv_trans);
-				effects::kBasicEffect.SetTexMapping(XMMatrixIdentity());
-				effects::kBasicEffect.SetMaterial(meshes[mesh_idx].material());
-				//effects::kBasicEffect.SetDiffuseMap();
+			world = model->mesh.transform()
+				* model_instances[model_idx].scale
+				* model_instances[model_idx].rotation
+				* model_instances[model_idx].translation;
 
-				tech->GetPassByIndex(p)->Apply(0, dc_);
-				meshes[mesh_idx].Draw(dc_);
-			}
+			world_inv_trans = mathhelper::InverseTranspose(world);
+
+			effects::kBasicEffect.SetWorld(world);
+			effects::kBasicEffect.SetWorldInvTrans(world_inv_trans);
+			effects::kBasicEffect.SetTexMapping(XMMatrixIdentity());
+			effects::kBasicEffect.SetMaterial(model->mesh.material());
+			effects::kBasicEffect.SetDiffuseMap(model->diffuse_map);
+
+			tech->GetPassByIndex(p)->Apply(0, dc_);
+			model->mesh.Draw(dc_);
 		}
 
 		// Unbind the SRVs in case the resources are bound as render targets.
@@ -101,13 +92,8 @@ void ba::Renderer::RenderShadowMap(const std::vector<ModelInstance>& model_insta
 
 	ID3DX11EffectTechnique* tech = nullptr;
 
-	// Use these codes after implementing FBXLoader perfectly.
-	//tech = effects::kShadowMapEffect.tech(ShadowMapEffect::kBuildShadowMap);
-
-	// Delete this line later.
 	tech = effects::kShadowMapEffect.tech(ShadowMapEffect::kBuildShadowMap);
 
-	// Set effect variables.
 	effects::kShadowMapEffect.SetLightView(rendering_components_.shadow_map->view());
 	effects::kShadowMapEffect.SetLightProj(rendering_components_.shadow_map->proj());
 
@@ -119,23 +105,22 @@ void ba::Renderer::RenderShadowMap(const std::vector<ModelInstance>& model_insta
 	{
 		for (UINT model_idx = 0; model_idx < model_instances.size(); ++model_idx)
 		{
-			std::vector<Mesh>& meshes = model_instances[model_idx].model->meshes;
+			Model* model = model_instances[model_idx].model;
 
-			for (UINT mesh_idx = 0; mesh_idx < meshes.size(); ++mesh_idx)
-			{
-				world = meshes[mesh_idx].transform()
-					* model_instances[model_idx].scale
-					* model_instances[model_idx].rotation
-					* model_instances[model_idx].translation;
-				world_inv_trans = mathhelper::InverseTranspose(world);
-				effects::kShadowMapEffect.SetWorld(world);
-				effects::kShadowMapEffect.SetWorldInvTrans(world_inv_trans);
-				effects::kShadowMapEffect.SetTexMapping(XMMatrixIdentity());
-				//effects::kShadowMapEffect.SetDiffuseMap();
+			world = model->mesh.transform()
+				* model_instances[model_idx].scale
+				* model_instances[model_idx].rotation
+				* model_instances[model_idx].translation;
 
-				tech->GetPassByIndex(p)->Apply(0, dc_);
-				meshes[mesh_idx].Draw(dc_);
-			}
+			world_inv_trans = mathhelper::InverseTranspose(world);
+
+			effects::kShadowMapEffect.SetWorld(world);
+			effects::kShadowMapEffect.SetWorldInvTrans(world_inv_trans);
+			effects::kShadowMapEffect.SetTexMapping(XMMatrixIdentity());
+			effects::kShadowMapEffect.SetDiffuseMap(model->diffuse_map);
+
+			tech->GetPassByIndex(p)->Apply(0, dc_);
+			model->mesh.Draw(dc_);
 		}
 	}
 	dc_->RSSetState(nullptr);
@@ -155,13 +140,8 @@ void ba::Renderer::RenderNormalDepthMap(const std::vector<ModelInstance>& model_
 
 	ID3DX11EffectTechnique* tech = nullptr;
 
-	// Use these codes after implementing FBXLoader perfectly.
-	//tech = effects::kNormalDepthMapEffect.tech(NormalDepthMapEffect::kNormalDepthMapAlphaClip);
-
-	// Delete this line later.
 	tech = effects::kNormalDepthMapEffect.tech(NormalDepthMapEffect::kNormalDepthMap);
 
-	// Set effect variables.
 	effects::kNormalDepthMapEffect.SetView(rendering_components_.cam->view());
 
 	XMMATRIX world, world_inv_trans;
@@ -172,23 +152,22 @@ void ba::Renderer::RenderNormalDepthMap(const std::vector<ModelInstance>& model_
 	{
 		for (UINT model_idx = 0; model_idx < model_instances.size(); ++model_idx)
 		{
-			std::vector<Mesh>& meshes = model_instances[model_idx].model->meshes;
+			Model* model = model_instances[model_idx].model;
 
-			for (UINT mesh_idx = 0; mesh_idx < meshes.size(); ++mesh_idx)
-			{
-				world = meshes[mesh_idx].transform()
-					* model_instances[model_idx].scale
-					* model_instances[model_idx].rotation
-					* model_instances[model_idx].translation;
-				world_inv_trans = mathhelper::InverseTranspose(world);
-				effects::kNormalDepthMapEffect.SetWorld(world);
-				effects::kNormalDepthMapEffect.SetWorldInvTrans(world_inv_trans);
-				effects::kNormalDepthMapEffect.SetTexMapping(XMMatrixIdentity());
-				//effects::kNormalDepthMapEffect.SetDiffuseMap();
+			world = model->mesh.transform()
+				* model_instances[model_idx].scale
+				* model_instances[model_idx].rotation
+				* model_instances[model_idx].translation;
 
-				tech->GetPassByIndex(p)->Apply(0, dc_);
-				meshes[mesh_idx].Draw(dc_);
-			}
+			world_inv_trans = mathhelper::InverseTranspose(world);
+
+			effects::kNormalDepthMapEffect.SetWorld(world);
+			effects::kNormalDepthMapEffect.SetWorldInvTrans(world_inv_trans);
+			effects::kNormalDepthMapEffect.SetTexMapping(XMMatrixIdentity());
+			effects::kNormalDepthMapEffect.SetDiffuseMap(model->diffuse_map);
+
+			tech->GetPassByIndex(p)->Apply(0, dc_);
+			model->mesh.Draw(dc_);
 		}
 	}
 }
@@ -219,75 +198,7 @@ void ba::Renderer::SetEffectVariablesChangeRarely(const EffectVariableBundleChan
 	// NormalDepthMapEffect
 }
 
-void ba::Renderer::set_rendering_components(SceneRenderingComponents& rendering_component)
+void ba::Renderer::set_rendering_components(const SceneRenderingComponents& rendering_component)
 {
 	rendering_components_ = rendering_component;
-}
-
-void ba::Renderer::BlendTexture(ID3D11RenderTargetView* dst, ID3D11ShaderResourceView* src, const D3D11_VIEWPORT* viewport, const XMMATRIX& tex_mapping, BlendMode blend_mode)
-{
-	ID3D11RenderTargetView* rtvs[1] = { dst };
-	
-	dc_->OMSetRenderTargets(1, rtvs, nullptr);
-	dc_->RSSetViewports(1, viewport);
-
-	dc_->IASetInputLayout(inputvertex::PosNormalTex::kInputLayout);
-	dc_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	UINT strides = sizeof(inputvertex::PosNormalTex::Vertex);
-	UINT offsets = 0;
-	dc_->IASetVertexBuffers(0, 1, &screen_quad_vb_, &strides, &offsets);
-	dc_->IASetIndexBuffer(screen_quad_ib_, DXGI_FORMAT_R32_UINT, 0);
-
-	effects::kRenderTextureEffect.SetTexMapping(tex_mapping);
-	effects::kRenderTextureEffect.SetInputImage(src);
-}
-
-bool ba::Renderer::BuildScreenQuadBuffers(ID3D11Device* device)
-{
-	if (screen_quad_vb_ || screen_quad_ib_)
-		return false;
-
-	GeometryGenerator::Geometry geo;
-	GeometryGenerator::CreateFullscreenQuad(geo);
-
-	std::vector<inputvertex::PosNormalTex::Vertex> vertices(geo.vertices.size());
-
-	for (UINT i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].pos = geo.vertices[i].pos;
-		vertices[i].normal = geo.vertices[i].normal;
-		vertices[i].uv = geo.vertices[i].uv;
-	}
-
-	D3D11_BUFFER_DESC vb_desc{};
-	vb_desc.ByteWidth = sizeof(inputvertex::PosNormalTex::Vertex) * vertices.size();
-	vb_desc.Usage = D3D11_USAGE_IMMUTABLE;
-	vb_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	D3D11_SUBRESOURCE_DATA vb_init{};
-	vb_init.pSysMem = &vertices[0];
-	HRESULT res = device->CreateBuffer(&vb_desc, &vb_init, &screen_quad_vb_);
-	if (FAILED(res))
-		return false;
-
-	D3D11_BUFFER_DESC ib_desc{};
-	ib_desc.ByteWidth = sizeof(UINT) * geo.indices.size();
-	ib_desc.Usage = D3D11_USAGE_IMMUTABLE;
-	ib_desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	D3D11_SUBRESOURCE_DATA ib_init{};
-	ib_init.pSysMem = &geo.indices[0];
-	res = device->CreateBuffer(&ib_desc, &ib_init, &screen_quad_ib_);
-	if (FAILED(res))
-	{
-		ReleaseCOM(screen_quad_vb_);
-		return false;
-	}
-
-	return true;
-}
-
-void ba::Renderer::ReleaseScreenQuadBuffers()
-{
-	ReleaseCOM(screen_quad_vb_);
-	ReleaseCOM(screen_quad_ib_);
 }

@@ -49,6 +49,9 @@
     <Filter Include="Document">
       <UniqueIdentifier>{6681a2f4-9890-46aa-bb44-028ed1211b4c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FX">
+      <UniqueIdentifier>{1d0c9681-d504-4e77-a2c6-c69d21bdb26f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -250,7 +253,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="ChameleonImitation.rc">
+    <ResourceCompile Include="Chameleon-Run-Imitation.rc">
       <Filter>Resources</Filter>
     </ResourceCompile>
   </ItemGroup>
@@ -258,7 +261,7 @@
     <Image Include="small.ico">
       <Filter>Resources</Filter>
     </Image>
-    <Image Include="ChameleonImitation.ico">
+    <Image Include="Chameleon-Run-Imitation.ico">
       <Filter>Resources</Filter>
     </Image>
   </ItemGroup>
@@ -266,5 +269,34 @@
     <Text Include="TODO_LIST.txt">
       <Filter>Document</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="FX\NormalMapping.fx">
+      <Filter>FX</Filter>
+    </FxCompile>
+    <FxCompile Include="FX\RenderTexture.fx">
+      <Filter>FX</Filter>
+    </FxCompile>
+    <FxCompile Include="FX\ShadowMap.fx">
+      <Filter>FX</Filter>
+    </FxCompile>
+    <FxCompile Include="FX\SSAOMap.fx">
+      <Filter>FX</Filter>
+    </FxCompile>
+    <FxCompile Include="FX\Basic.fx">
+      <Filter>FX</Filter>
+    </FxCompile>
+    <FxCompile Include="FX\BlurSSAOMap.fx">
+      <Filter>FX</Filter>
+    </FxCompile>
+    <FxCompile Include="FX\DebugScreen.fx">
+      <Filter>FX</Filter>
+    </FxCompile>
+    <FxCompile Include="FX\LightingHelper.fx">
+      <Filter>FX</Filter>
+    </FxCompile>
+    <FxCompile Include="FX\NormalDepthMap.fx">
+      <Filter>FX</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

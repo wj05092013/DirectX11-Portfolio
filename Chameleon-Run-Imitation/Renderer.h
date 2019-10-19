@@ -66,24 +66,9 @@ namespace ba
 
 		void SetEffectVariablesChangeRarely(const EffectVariableBundleChangeRarely& bundle);
 
-		void set_rendering_components(SceneRenderingComponents& rendering_component);
+		void set_rendering_components(const SceneRenderingComponents& rendering_component);
 		
 	private:
 		SceneRenderingComponents rendering_components_;
-
-
-		//
-		// Related to Texture Blending
-		//
-
-	public:
-		void BlendTexture(ID3D11RenderTargetView* dst, ID3D11ShaderResourceView* src, const D3D11_VIEWPORT* viewport, const XMMATRIX& tex_mapping, renderstates::blend::BlendMode blend_mode);
-
-	private:
-		bool BuildScreenQuadBuffers(ID3D11Device* device);
-		void ReleaseScreenQuadBuffers();
-
-		ID3D11Buffer* screen_quad_vb_;
-		ID3D11Buffer* screen_quad_ib_;
 	};
 }

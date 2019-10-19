@@ -236,6 +236,17 @@
   <ItemGroup>
     <Text Include="TODO_LIST.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="FX\Basic.fx" />
+    <FxCompile Include="FX\BlurSSAOMap.fx" />
+    <FxCompile Include="FX\DebugScreen.fx" />
+    <FxCompile Include="FX\LightingHelper.fx" />
+    <FxCompile Include="FX\NormalDepthMap.fx" />
+    <FxCompile Include="FX\NormalMapping.fx" />
+    <FxCompile Include="FX\RenderTexture.fx" />
+    <FxCompile Include="FX\ShadowMap.fx" />
+    <FxCompile Include="FX\SSAOMap.fx" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
