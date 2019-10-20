@@ -55,7 +55,8 @@
 #include "RenderTextureEffect.h"
 #include "Effects.h"
 
-#include "D3DUtil.h"
+#include "GraphicComponent.h"
+#include "GraphicComponentManager.h"
 #include "InputVertex.h"
 #include "GeometryGenerator.h"
 #include "Mesh.h"
@@ -63,9 +64,16 @@
 #include "DebugScreen.h"
 #include "TextureManager.h"
 #include "Camera.h"
+#include "FreeViewpointCamera.h"
+#include "RotationalCamera.h"
 #include "RenderStates.h"
 #include "ShadowMap.h"
 #include "SSAOMap.h"
 #include "Renderer.h"
+
+#include "SceneComponent.h"
+#include "SceneComponentManager.h"
+#include "Scene.h"
+#include "SceneManager.h"
 
 #include "Application.h"

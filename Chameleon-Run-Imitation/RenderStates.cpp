@@ -53,7 +53,7 @@ bool ba::renderstates::blend::Init(ID3D11Device* device)
 	blend_desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
 	blend_desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
 
-	HRESULT res = device->CreateBlendState(&blend_desc, &kBSTranslucent);
+	res = device->CreateBlendState(&blend_desc, &kBSTranslucent);
 	if (FAILED(res))
 	{
 		Release();
@@ -67,7 +67,7 @@ bool ba::renderstates::blend::Init(ID3D11Device* device)
 	blend_desc.RenderTarget[0].DestBlend = D3D11_BLEND_DEST_COLOR;
 	blend_desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
 
-	HRESULT res = device->CreateBlendState(&blend_desc, &kBSAdditive);
+	res = device->CreateBlendState(&blend_desc, &kBSAdditive);
 	if (FAILED(res))
 	{
 		Release();
@@ -82,7 +82,7 @@ bool ba::renderstates::blend::Init(ID3D11Device* device)
 	blend_desc.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
 	blend_desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
 
-	HRESULT res = device->CreateBlendState(&blend_desc, &kBSModulate);
+	res = device->CreateBlendState(&blend_desc, &kBSModulate);
 	if (FAILED(res))
 	{
 		Release();
@@ -97,7 +97,7 @@ bool ba::renderstates::blend::Init(ID3D11Device* device)
 	blend_desc.RenderTarget[0].DestBlend = D3D11_BLEND_SRC_COLOR;
 	blend_desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
 
-	HRESULT res = device->CreateBlendState(&blend_desc, &kBSModulate2);
+	res = device->CreateBlendState(&blend_desc, &kBSModulate2);
 	if (FAILED(res))
 	{
 		Release();

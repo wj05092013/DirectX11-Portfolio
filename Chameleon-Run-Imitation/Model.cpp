@@ -15,7 +15,7 @@ bool ba::Model::Init(ID3D11Device* device, const GeometryGenerator::Geometry& ge
 	UINT vtx_count = geo.vertices.size();
 
 	std::vector<inputvertex::PosNormalTexTangent::Vertex> vertices(vtx_count);
-	for (int i = 0; i < vtx_count; ++i)
+	for (UINT i = 0; i < vtx_count; ++i)
 	{
 		vertices[i].pos = geo.vertices[i].pos;
 		vertices[i].normal = geo.vertices[i].normal;

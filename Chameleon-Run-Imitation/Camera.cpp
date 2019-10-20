@@ -1,27 +1,30 @@
 #include "stdafx.h"
 
-const DirectX::XMFLOAT3 ba::Camera::kInitPosW = XMFLOAT3(0.0f, 0.0f, 0.0f);
-const DirectX::XMFLOAT3 ba::Camera::kInitRightW = XMFLOAT3(1.0f, 0.0f, 0.0f);
-const DirectX::XMFLOAT3 ba::Camera::kInitUpW = XMFLOAT3(0.0f, 1.0f, 0.0f);
-const DirectX::XMFLOAT3 ba::Camera::kInitLookW = XMFLOAT3(0.0f, 0.0f, 1.0f);
+ba::Camera::Camera(
+	const XMFLOAT3& init_pos_w, const XMFLOAT3& init_right_w, const XMFLOAT3& init_up_w, const XMFLOAT3& init_look_w,
+	float init_near_z, float init_far_z, float init_fov_y, float init_aspect_ratio
+) :
+	init_pos_w_(init_pos_w),
+	init_right_w_(init_right_w),
+	init_up_w_(init_up_w),
+	init_look_w_(init_look_w),
 
-const float ba::Camera::kInitNearZ = 1.0f;
-const float ba::Camera::kInitFarZ = 1000.0f;
-const float ba::Camera::kInitFovY = 0.25f * XM_PI;
-const float ba::Camera::kInitAspectRatio = 1.0f;
+	init_near_z_(init_near_z),
+	init_far_z_(init_far_z),
+	init_fov_y_(init_fov_y),
+	init_aspect_ratio_(init_aspect_ratio),
 
-ba::Camera::Camera() :
-	pos_w_(kInitPosW),
-	right_w_(kInitRightW),
-	up_w_(kInitUpW),
-	look_w_(kInitLookW),
+	pos_w_(init_pos_w),
+	right_w_(init_right_w),
+	up_w_(init_up_w),
+	look_w_(init_look_w),
 
-	near_z_(kInitNearZ),
-	far_z_(kInitFarZ),
+	near_z_(init_near_z),
+	far_z_(init_far_z),
 	near_window_height_(0.0f),
 	far_window_height_(0.0f),
-	fov_y_(kInitFovY),
-	aspect_ratio_(kInitAspectRatio)
+	fov_y_(init_fov_y),
+	aspect_ratio_(init_aspect_ratio)
 {
 	XMMATRIX identity = XMMatrixIdentity();
 	XMStoreFloat4x4(&view_, identity);
@@ -32,110 +35,59 @@ ba::Camera::~Camera()
 {
 }
 
-DirectX::XMVECTOR ba::Camera::position_w_xv() const
+void ba::Camera::UpdateViewMatrix()
 {
-	return XMLoadFloat3(&pos_w_);
+	XMVECTOR p = XMLoadFloat3(&pos_w_);
+	XMVECTOR u = XMLoadFloat3(&right_w_);
+	XMVECTOR v = XMLoadFloat3(&up_w_);
+	XMVECTOR w = XMLoadFloat3(&look_w_);
+
+	w = XMVector3Normalize(w);
+	u = XMVector3Normalize(XMVector3Cross(v, w));
+	v = XMVector3Cross(w, u);
+
+	XMStoreFloat3(&right_w_, u);
+	XMStoreFloat3(&up_w_, v);
+	XMStoreFloat3(&look_w_, w);
+
+	float x = -XMVectorGetX(XMVector3Dot(p, u));
+	float y = -XMVectorGetY(XMVector3Dot(p, v));
+	float z = -XMVectorGetZ(XMVector3Dot(p, w));
+
+	view_(0, 0) = right_w_.x;
+	view_(1, 0) = right_w_.y;
+	view_(2, 0) = right_w_.z;
+	view_(3, 0) = x;
+
+	view_(0, 1) = up_w_.x;
+	view_(1, 1) = up_w_.y;
+	view_(2, 1) = up_w_.z;
+	view_(3, 1) = y;
+
+	view_(0, 2) = look_w_.x;
+	view_(1, 2) = look_w_.y;
+	view_(2, 2) = look_w_.z;
+	view_(3, 2) = z;
+
+	view_(0, 3) = 0.0f;
+	view_(1, 3) = 0.0f;
+	view_(2, 3) = 0.0f;
+	view_(3, 3) = 1.0f;
 }
 
-DirectX::XMFLOAT3 ba::Camera::position_w_xf() const
+void ba::Camera::SetLens(float fov_y, float aspect_ratio, float near_z, float far_z)
 {
-	return pos_w_;
-}
+	near_z_ = near_z;
+	far_z_ = far_z;
 
-void ba::Camera::set_position_w(float x, float y, float z)
-{
-	set_position_w(XMFLOAT3(x, y, z));
-}
+	fov_y_ = fov_y;
+	aspect_ratio_ = aspect_ratio;
 
-void ba::Camera::set_position_w(const XMFLOAT3& pos)
-{
-	pos_w_ = pos;
-}
+	near_window_height_ = 2.0f * tan(0.5f * fov_y_) * near_z_;
+	far_window_height_ = 2.0f * tan(0.5f * fov_y_) * far_z_;
 
-DirectX::XMVECTOR ba::Camera::right_w_xv() const
-{
-	return XMLoadFloat3(&right_w_);
-}
-
-DirectX::XMFLOAT3 ba::Camera::right_w_xf() const
-{
-	return right_w_;
-}
-
-DirectX::XMVECTOR ba::Camera::up_w_xv() const
-{
-	return XMLoadFloat3(&up_w_);
-}
-
-DirectX::XMFLOAT3 ba::Camera::up_w_xf() const
-{
-	return up_w_;
-}
-
-DirectX::XMVECTOR ba::Camera::look_w_xv() const
-{
-	return XMLoadFloat3(&look_w_);
-}
-
-DirectX::XMFLOAT3 ba::Camera::look_w_xf() const
-{
-	return look_w_;
-}
-
-float ba::Camera::near_z() const
-{
-	return near_z_;
-}
-
-float ba::Camera::far_z() const
-{
-	return far_z_;
-}
-
-float ba::Camera::near_window_width() const
-{
-	return aspect_ratio_ * near_window_height_;
-}
-
-float ba::Camera::near_window_height() const
-{
-	return near_window_height_;
-}
-
-float ba::Camera::far_window_width() const
-{
-	return aspect_ratio_ * far_window_height_;
-}
-
-float ba::Camera::far_window_height() const
-{
-	return far_window_height_;
-}
-
-float ba::Camera::aspect_ratio() const
-{
-	return aspect_ratio_;
-}
-
-float ba::Camera::fov_x() const
-{
-	float half_width = 0.5f * near_window_width();
-	return 2.0f * atan(half_width / near_z_);
-}
-
-float ba::Camera::fov_y() const
-{
-	return fov_y_;
-}
-
-DirectX::XMMATRIX ba::Camera::view() const
-{
-	return XMLoadFloat4x4(&view_);
-}
-
-DirectX::XMMATRIX ba::Camera::proj() const
-{
-	return XMLoadFloat4x4(&proj_);
+	XMMATRIX proj = XMMatrixPerspectiveFovLH(fov_y_, aspect_ratio_, near_z_, far_z_);
+	XMStoreFloat4x4(&proj_, proj);
 }
 
 void ba::Camera::LookAt(const XMVECTOR& pos, const XMVECTOR& target, const XMVECTOR& up)
@@ -234,57 +186,108 @@ void ba::Camera::RotateWorldZ(float radian)
 	XMStoreFloat3(&look_w_, XMVector3TransformNormal(XMLoadFloat3(&look_w_), rot));
 }
 
-void ba::Camera::UpdateViewMatrix()
+void ba::Camera::set_position_w(float x, float y, float z)
 {
-	XMVECTOR p = XMLoadFloat3(&pos_w_);
-	XMVECTOR u = XMLoadFloat3(&right_w_);
-	XMVECTOR v = XMLoadFloat3(&up_w_);
-	XMVECTOR w = XMLoadFloat3(&look_w_);
-
-	w = XMVector3Normalize(w);
-	u = XMVector3Normalize(XMVector3Cross(v, w));
-	v = XMVector3Cross(w, u);
-
-	XMStoreFloat3(&right_w_, u);
-	XMStoreFloat3(&up_w_, v);
-	XMStoreFloat3(&look_w_, w);
-
-	float x = -XMVectorGetX(XMVector3Dot(p, u));
-	float y = -XMVectorGetY(XMVector3Dot(p, v));
-	float z = -XMVectorGetZ(XMVector3Dot(p, w));
-
-	view_(0, 0) = right_w_.x;
-	view_(1, 0) = right_w_.y;
-	view_(2, 0) = right_w_.z;
-	view_(3, 0) = x;
-
-	view_(0, 1) = up_w_.x;
-	view_(1, 1) = up_w_.y;
-	view_(2, 1) = up_w_.z;
-	view_(3, 1) = y;
-
-	view_(0, 2) = look_w_.x;
-	view_(1, 2) = look_w_.y;
-	view_(2, 2) = look_w_.z;
-	view_(3, 2) = z;
-
-	view_(0, 3) = 0.0f;
-	view_(1, 3) = 0.0f;
-	view_(2, 3) = 0.0f;
-	view_(3, 3) = 1.0f;
+	set_position_w(XMFLOAT3(x, y, z));
 }
 
-void ba::Camera::SetLens(float fov_y, float aspect_ratio, float near_z, float far_z)
+void ba::Camera::set_position_w(const XMFLOAT3& pos)
 {
-	near_z_ = near_z;
-	far_z_ = far_z;
+	pos_w_ = pos;
+}
 
-	fov_y_ = fov_y;
-	aspect_ratio_ = aspect_ratio;
+DirectX::XMVECTOR ba::Camera::position_w_xv() const
+{
+	return XMLoadFloat3(&pos_w_);
+}
 
-	near_window_height_ = 2.0f * tan(0.5f * fov_y_) * near_z_;
-	far_window_height_ = 2.0f * tan(0.5f * fov_y_) * far_z_;
+DirectX::XMFLOAT3 ba::Camera::position_w_xf() const
+{
+	return pos_w_;
+}
 
-	XMMATRIX proj = XMMatrixPerspectiveFovLH(fov_y_, aspect_ratio_, near_z_, far_z_);
-	XMStoreFloat4x4(&proj_, proj);
+DirectX::XMVECTOR ba::Camera::right_w_xv() const
+{
+	return XMLoadFloat3(&right_w_);
+}
+
+DirectX::XMFLOAT3 ba::Camera::right_w_xf() const
+{
+	return right_w_;
+}
+
+DirectX::XMVECTOR ba::Camera::up_w_xv() const
+{
+	return XMLoadFloat3(&up_w_);
+}
+
+DirectX::XMFLOAT3 ba::Camera::up_w_xf() const
+{
+	return up_w_;
+}
+
+DirectX::XMVECTOR ba::Camera::look_w_xv() const
+{
+	return XMLoadFloat3(&look_w_);
+}
+
+DirectX::XMFLOAT3 ba::Camera::look_w_xf() const
+{
+	return look_w_;
+}
+
+float ba::Camera::near_z() const
+{
+	return near_z_;
+}
+
+float ba::Camera::far_z() const
+{
+	return far_z_;
+}
+
+float ba::Camera::near_window_width() const
+{
+	return aspect_ratio_ * near_window_height_;
+}
+
+float ba::Camera::near_window_height() const
+{
+	return near_window_height_;
+}
+
+float ba::Camera::far_window_width() const
+{
+	return aspect_ratio_ * far_window_height_;
+}
+
+float ba::Camera::far_window_height() const
+{
+	return far_window_height_;
+}
+
+float ba::Camera::aspect_ratio() const
+{
+	return aspect_ratio_;
+}
+
+float ba::Camera::fov_x() const
+{
+	float half_width = 0.5f * near_window_width();
+	return 2.0f * atan(half_width / near_z_);
+}
+
+float ba::Camera::fov_y() const
+{
+	return fov_y_;
+}
+
+DirectX::XMMATRIX ba::Camera::view() const
+{
+	return XMLoadFloat4x4(&view_);
+}
+
+DirectX::XMMATRIX ba::Camera::proj() const
+{
+	return XMLoadFloat4x4(&proj_);
 }

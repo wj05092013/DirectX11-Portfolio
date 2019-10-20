@@ -1,0 +1,35 @@
+class
+	SceneManager
+		Scene들의 load, release 관리
+
+	Scene
+		구체적인 Scene은 상속받아서 사용
+		Render, Update, OnResize
+
+	Scene의 자식클래스
+		SceneComponent들과 GraphicComponent들로 구성
+			Component의 포인터들을 가지고 있어야 함
+			ComponentManager들로부터 획득
+		렌더링은 GraphicComponent들을 통해 수행
+
+	SceneComponentManager
+		SceneComponent들의 자원관리
+		map으로 관리
+		키 값으로 Component 생성, 제공
+
+	SceneComponent
+		ex. ModelInstance
+			
+	GraphicComponentManager
+		GraphicComponent들의 자원관리
+		map으로 관리
+		키 값으로 Component 생성, 제공
+
+	GraphicComponent
+		ex. inputvertex, SSAOMap, ShadowMap, Camera
+
+	Camera
+		기본적인 Camera의 기능들 포함
+
+	Camera의 자식클래스
+		Camera의 기능을 사용해 다양한 Camera 구현

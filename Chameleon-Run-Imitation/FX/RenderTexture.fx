@@ -74,7 +74,7 @@ technique11 RenderTexture
     pass P0
     {
         SetVertexShader(CompileShader(vs_5_0, VS()));
-        SetGeometryShader(CompileShader(gs_5_0, GS()));
+        SetGeometryShader(NULL);
         SetPixelShader(CompileShader(ps_5_0, PS()));
     }
 }

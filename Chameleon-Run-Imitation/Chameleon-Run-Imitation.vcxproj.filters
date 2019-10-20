@@ -9,9 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Sources\Application">
-      <UniqueIdentifier>{4b08a841-baba-46e5-b220-a961ca17e38f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Common">
       <UniqueIdentifier>{607526fa-3508-418f-ba8d-26c4b0c578c9}</UniqueIdentifier>
     </Filter>
@@ -26,9 +23,6 @@
     </Filter>
     <Filter Include="PCH">
       <UniqueIdentifier>{96a81eb2-48b3-4908-afa6-9cb46be40957}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Includes\Application">
-      <UniqueIdentifier>{48eada1d-2448-4dcb-8eee-2a76acd2f279}</UniqueIdentifier>
     </Filter>
     <Filter Include="Includes\Common">
       <UniqueIdentifier>{80bb4778-8804-4377-b998-9a4f0dec846f}</UniqueIdentifier>
@@ -52,13 +46,19 @@
     <Filter Include="FX">
       <UniqueIdentifier>{1d0c9681-d504-4e77-a2c6-c69d21bdb26f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Includes\Game">
+      <UniqueIdentifier>{48eada1d-2448-4dcb-8eee-2a76acd2f279}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Game">
+      <UniqueIdentifier>{4b08a841-baba-46e5-b220-a961ca17e38f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>PCH</Filter>
     </ClInclude>
     <ClInclude Include="Application.h">
-      <Filter>Includes\Application</Filter>
+      <Filter>Includes\Game</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>Includes\Etc</Filter>
@@ -114,25 +114,10 @@
     <ClInclude Include="SSAOMapEffect.h">
       <Filter>Includes\Graphics\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Includes\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="D3DUtil.h">
-      <Filter>Includes\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="DebugScreen.h">
       <Filter>Includes\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="GeometryGenerator.h">
-      <Filter>Includes\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="InputVertex.h">
-      <Filter>Includes\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Includes\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
       <Filter>Includes\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
@@ -154,13 +139,49 @@
       <Filter>Resources</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
-      <Filter>Includes\Application</Filter>
+      <Filter>Includes\Game</Filter>
     </ClInclude>
     <ClInclude Include="Constants.h">
       <Filter>Includes\Common</Filter>
     </ClInclude>
     <ClInclude Include="Macros.h">
       <Filter>Includes\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Includes\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryGenerator.h">
+      <Filter>Includes\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Includes\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Includes\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicComponent.h">
+      <Filter>Includes\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneComponent.h">
+      <Filter>Includes\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Includes\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneComponentManager.h">
+      <Filter>Includes\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicComponentManager.h">
+      <Filter>Includes\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Includes\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="RotationalCamera.h">
+      <Filter>Includes\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeViewpointCamera.h">
+      <Filter>Includes\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -195,7 +216,7 @@
       <Filter>Sources\Graphics\Effect</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
-      <Filter>Sources\Application</Filter>
+      <Filter>Sources\Game</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Sources\Common</Filter>
@@ -206,25 +227,10 @@
     <ClCompile Include="Timer.cpp">
       <Filter>Sources\Common</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Sources\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="D3DUtil.cpp">
-      <Filter>Sources\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="DebugScreen.cpp">
       <Filter>Sources\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="GeometryGenerator.cpp">
-      <Filter>Sources\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="InputVertex.cpp">
-      <Filter>Sources\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Sources\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Model.cpp">
       <Filter>Sources\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
@@ -243,13 +249,49 @@
       <Filter>Sources\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Application.cpp">
-      <Filter>Sources\Application</Filter>
+      <Filter>Sources\Game</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>PCH</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
-      <Filter>Sources\Application</Filter>
+      <Filter>Sources\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Sources\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Sources\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Sources\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometryGenerator.cpp">
+      <Filter>Sources\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicComponent.cpp">
+      <Filter>Sources\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneComponent.cpp">
+      <Filter>Sources\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Sources\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneComponentManager.cpp">
+      <Filter>Sources\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicComponentManager.cpp">
+      <Filter>Sources\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Sources\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="RotationalCamera.cpp">
+      <Filter>Sources\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="FreeViewpointCamera.cpp">
+      <Filter>Includes\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -267,6 +309,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODO_LIST.txt">
+      <Filter>Document</Filter>
+    </Text>
+    <Text Include="Composition.txt">
       <Filter>Document</Filter>
     </Text>
   </ItemGroup>

@@ -4,7 +4,6 @@
 // Macros
 //
 
-#define MATERIAL_COUNT_MAX (16)
 #define BONE_COUNT_MAX (96)
 
 
@@ -18,7 +17,7 @@ cbuffer CBPerObject
     float4x4 world_inv_trans;
 	
     float4x4 tex_mapping;
-    Material material[MATERIAL_COUNT_MAX];
+    Material material;
 
 	// For skinned objects.
     float4x4 bone_transforms[BONE_COUNT_MAX];
