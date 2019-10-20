@@ -194,17 +194,11 @@ void ba::Game::UpdateOnKeyInput()
 	// Control the camera.
 	//
 	if (key_pressed_['W'])
-		cam_.MoveCameraZ(kForwardMovingRate * (float)timer_.get_delta_time());
 	if (key_pressed_['S'])
-		cam_.MoveCameraZ(-kForwardMovingRate * (float)timer_.get_delta_time());
 	if (key_pressed_['D'])
-		cam_.MoveCameraX(kRightMovingRate * (float)timer_.get_delta_time());
 	if (key_pressed_['A'])
-		cam_.MoveCameraX(-kRightMovingRate * (float)timer_.get_delta_time());
 	if (key_pressed_['E'])
-		cam_.MoveWorldY(kUpperMovingRate * (float)timer_.get_delta_time());
 	if (key_pressed_['Q'])
-		cam_.MoveWorldY(-kUpperMovingRate * (float)timer_.get_delta_time());
 	//__
 }
 
@@ -212,12 +206,7 @@ void ba::Game::OnMouseMove(WPARAM w_par, int x, int y)
 {
 	if ((w_par & MK_LBUTTON) != 0)
 	{
-		// Make each pixel correspond to a quarter of a degree.
-		float dx = XMConvertToRadians(kRotationRate * static_cast<float>(x - last_mouse_pos_.x));
-		float dy = XMConvertToRadians(kRotationRate * static_cast<float>(y - last_mouse_pos_.y));
-
-		cam_.Pitch(dy);
-		cam_.RotateWorldY(dx);
+		
 	}
 
 	last_mouse_pos_.x = x;

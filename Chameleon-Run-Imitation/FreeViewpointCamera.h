@@ -9,9 +9,15 @@ namespace ba
 	class FreeViewpointCamera : public Camera
 	{
 	public:
-		FreeViewpointCamera(
-			const XMFLOAT3& 
-			float forward_move_rate, float right_move_rate, float upper_move_rate, float rotation_rate);
+		struct FreeViewpointCameraDesc
+		{
+			float forward_move_rate;
+			float right_move_rate;
+			float upper_move_rate;
+			float rotation_rate;
+		};
+
+		FreeViewpointCamera(const CameraDesc& basic_desc, const FreeViewpointCameraDesc& desc);
 		~FreeViewpointCamera() override;
 
 		// Moduate camera transform.
@@ -21,22 +27,21 @@ namespace ba
 		void MoveRight(float delta_time);
 		void MoveUp(float delta_time);
 		void MoveDown(float delta_time);
-		void Rotate(const POINT& head, const POINT& tail);
+		void Rotate(const POINT& start, const POINT& end);
 
 		// Mutators.
 		void set_forward_move_rate(float rate);
 		void set_right_move_rate(float rate);
 		void set_upper_move_rate(float rate);
+		void set_rotation_rate(float rate);
 
 		// Accessors.
 		float forward_move_rate() const;
 		float right_move_rate() const;
 		float upper_move_rate() const;
+		float rotation_rate() const;
 
 	private:
-		float forward_move_rate_;
-		float right_move_rate_;
-		float upper_move_rate_;
-		float rotation_rate_;
+		FreeViewpointCameraDesc desc_;
 	};
 }

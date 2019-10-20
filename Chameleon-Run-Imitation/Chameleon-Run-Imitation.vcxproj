@@ -23,7 +23,7 @@
     <ProjectGuid>{578B0FFE-74AB-44AE-999D-167439B25499}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Chameleon-Run-Imitation</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
