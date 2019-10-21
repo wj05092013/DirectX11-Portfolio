@@ -26,7 +26,7 @@ class
 		키 값으로 Component 생성, 제공
 
 	GraphicComponent
-		ex. inputvertex, SSAOMap, ShadowMap, Camera
+		ex. SSAOMap, ShadowMap, Camera
 
 	Camera
 		기본적인 Camera의 기능들 포함

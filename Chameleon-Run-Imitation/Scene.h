@@ -12,6 +12,8 @@ namespace ba
 		Scene();
 		~Scene();
 
+		bool Init();
+
 		void Render();
 		void Update();
 		void OnResize();

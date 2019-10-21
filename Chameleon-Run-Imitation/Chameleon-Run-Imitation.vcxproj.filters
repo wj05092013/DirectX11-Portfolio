@@ -291,7 +291,7 @@
       <Filter>Sources\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="FreeViewpointCamera.cpp">
-      <Filter>Includes\Graphics</Filter>
+      <Filter>Sources\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
