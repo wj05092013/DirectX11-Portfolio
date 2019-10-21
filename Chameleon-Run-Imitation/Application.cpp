@@ -108,7 +108,7 @@ LRESULT ba::Application::WndProc(HWND hwnd, UINT msg, WPARAM w_par, LPARAM l_par
 				client_minimized_ = false;
 				paused_ = false;
 				timer_.Unpause();
-				if (!OnResize()) { Release(); DestroyWindow(main_wnd_); }
+				if (!OnResize()) { Destroy(); DestroyWindow(main_wnd_); }
 			}
 			else if (w_par == SIZE_MINIMIZED)
 			{
@@ -122,14 +122,14 @@ LRESULT ba::Application::WndProc(HWND hwnd, UINT msg, WPARAM w_par, LPARAM l_par
 				if (client_maximized_)
 				{
 					client_maximized_ = false;
-					if (!OnResize()) { Release(); DestroyWindow(main_wnd_); }
+					if (!OnResize()) { Destroy(); DestroyWindow(main_wnd_); }
 				}
 				else if (client_minimized_)
 				{
 					client_minimized_ = false;
 					paused_ = false;
 					timer_.Unpause();
-					if (!OnResize()) { Release(); DestroyWindow(main_wnd_); }
+					if (!OnResize()) { Destroy(); DestroyWindow(main_wnd_); }
 				}
 				else if (client_resizing_)
 				{
@@ -138,7 +138,7 @@ LRESULT ba::Application::WndProc(HWND hwnd, UINT msg, WPARAM w_par, LPARAM l_par
 				else
 				{
 					// API call such as SetWindowPos or SetFullscreenState.
-					if (!OnResize()) { Release(); DestroyWindow(main_wnd_); }
+					if (!OnResize()) { Destroy(); DestroyWindow(main_wnd_); }
 				}
 			}
 		}
@@ -191,7 +191,7 @@ bool ba::Application::Init(HINSTANCE wnd_inst)
 		return false;
 	if (!InitDirectX())
 	{
-		Release();
+		Destroy();
 		return false;
 	}
 	return true;
@@ -227,7 +227,7 @@ void ba::Application::Run()
 	}
 }
 
-void ba::Application::Release()
+void ba::Application::Destroy()
 {
 	ReleaseDirectX();
 }
@@ -285,12 +285,12 @@ bool ba::Application::InitDirectX()
 
 void ba::Application::ReleaseDirectX()
 {
-	ReleaseCOM(device_);
-	ReleaseCOM(dc_);
-	ReleaseCOM(swap_chain_);
-	ReleaseCOM(rtv_);
-	ReleaseCOM(dsv_);
-	ReleaseCOM(depth_stencil_buffer_);
+	DestroyCOM(device_);
+	DestroyCOM(dc_);
+	DestroyCOM(swap_chain_);
+	DestroyCOM(rtv_);
+	DestroyCOM(dsv_);
+	DestroyCOM(depth_stencil_buffer_);
 }
 
 bool ba::Application::OnResize()
@@ -298,9 +298,9 @@ bool ba::Application::OnResize()
 	if (device_ == nullptr || dc_ == nullptr || swap_chain_ == nullptr)
 		return false;
 
-	ReleaseCOM(rtv_);
-	ReleaseCOM(dsv_);
-	ReleaseCOM(depth_stencil_buffer_);
+	DestroyCOM(rtv_);
+	DestroyCOM(dsv_);
+	DestroyCOM(depth_stencil_buffer_);
 
 
 	HRESULT res = swap_chain_->ResizeBuffers(1, client_width_, client_height_, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
@@ -313,7 +313,7 @@ bool ba::Application::OnResize()
 		return false;
 
 	res = device_->CreateRenderTargetView(back_buffer, nullptr, &rtv_);
-	ReleaseCOM(back_buffer);
+	DestroyCOM(back_buffer);
 	if (FAILED(res))
 		return false;
 
@@ -402,9 +402,9 @@ bool ba::Application::CreateSwapChain()
 				res = dxgi_factory->CreateSwapChain(device_, &swap_chain_desc, &swap_chain_);
 		}
 	}
-	ReleaseCOM(dxgi_factory);
-	ReleaseCOM(dxgi_adapter);
-	ReleaseCOM(dxgi_device);
+	DestroyCOM(dxgi_factory);
+	DestroyCOM(dxgi_adapter);
+	DestroyCOM(dxgi_device);
 
 	if (FAILED(res))
 		return false;
@@ -421,7 +421,7 @@ bool ba::Application::CreateRenderTargetView()
 		return false;
 
 	res = device_->CreateRenderTargetView(back_buffer, nullptr, &rtv_);
-	ReleaseCOM(back_buffer);
+	DestroyCOM(back_buffer);
 
 	if (FAILED(res))
 		return false;

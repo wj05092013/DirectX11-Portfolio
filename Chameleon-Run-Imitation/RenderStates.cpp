@@ -12,7 +12,7 @@ bool ba::renderstates::rasterizer::Init(ID3D11Device* device)
 	return true;
 }
 
-void ba::renderstates::rasterizer::Release()
+void ba::renderstates::rasterizer::Destroy()
 {
 	// Do nothing now.
 }
@@ -23,7 +23,7 @@ bool ba::renderstates::depthstencil::Init(ID3D11Device* device)
 	return true;
 }
 
-void ba::renderstates::depthstencil::Release()
+void ba::renderstates::depthstencil::Destroy()
 {
 	// Do nothing now.
 }
@@ -56,7 +56,7 @@ bool ba::renderstates::blend::Init(ID3D11Device* device)
 	res = device->CreateBlendState(&blend_desc, &kBSTranslucent);
 	if (FAILED(res))
 	{
-		Release();
+		Destroy();
 		return false;
 	}
 	//__
@@ -70,7 +70,7 @@ bool ba::renderstates::blend::Init(ID3D11Device* device)
 	res = device->CreateBlendState(&blend_desc, &kBSAdditive);
 	if (FAILED(res))
 	{
-		Release();
+		Destroy();
 		return false;
 	}
 	//__
@@ -85,7 +85,7 @@ bool ba::renderstates::blend::Init(ID3D11Device* device)
 	res = device->CreateBlendState(&blend_desc, &kBSModulate);
 	if (FAILED(res))
 	{
-		Release();
+		Destroy();
 		return false;
 	}
 	//__
@@ -100,7 +100,7 @@ bool ba::renderstates::blend::Init(ID3D11Device* device)
 	res = device->CreateBlendState(&blend_desc, &kBSModulate2);
 	if (FAILED(res))
 	{
-		Release();
+		Destroy();
 		return false;
 	}
 	//__
@@ -108,27 +108,27 @@ bool ba::renderstates::blend::Init(ID3D11Device* device)
 	return true;
 }
 
-void ba::renderstates::blend::Release()
+void ba::renderstates::blend::Destroy()
 {
-	ReleaseCOM(kBSOver);
-	ReleaseCOM(kBSTranslucent);
-	ReleaseCOM(kBSAdditive);
-	ReleaseCOM(kBSModulate);
-	ReleaseCOM(kBSModulate2);
+	DestroyCOM(kBSOver);
+	DestroyCOM(kBSTranslucent);
+	DestroyCOM(kBSAdditive);
+	DestroyCOM(kBSModulate);
+	DestroyCOM(kBSModulate2);
 }
 
 bool ba::renderstates::InitAll(ID3D11Device* device)
 {
 	if (!rasterizer::Init(device)) { return false; }
-	if (!depthstencil::Init(device)) { ReleaseAll(); return false; }
-	if (!blend::Init(device)) { ReleaseAll(); return false; }
+	if (!depthstencil::Init(device)) { DestroyAll(); return false; }
+	if (!blend::Init(device)) { DestroyAll(); return false; }
 
 	return true;
 }
 
-void ba::renderstates::ReleaseAll()
+void ba::renderstates::DestroyAll()
 {
-	rasterizer::Release();
-	depthstencil::Release();
-	blend::Release();
+	rasterizer::Destroy();
+	depthstencil::Destroy();
+	blend::Destroy();
 }

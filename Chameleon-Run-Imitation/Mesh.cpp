@@ -16,8 +16,8 @@ ba::Mesh::Mesh() :
 
 ba::Mesh::~Mesh()
 {
-	ReleaseCOM(vb_);
-	ReleaseCOM(ib_);
+	DestroyCOM(vb_);
+	DestroyCOM(ib_);
 }
 
 void ba::Mesh::Draw(ID3D11DeviceContext* dc) const
@@ -50,7 +50,7 @@ bool ba::Mesh::BuildIndexBuffer(ID3D11Device* device, const std::vector<UINT> in
 		return false;
 	}
 
-	ReleaseCOM(old_ib);
+	DestroyCOM(old_ib);
 	idx_count_ = indices.size();
 
 	return true;

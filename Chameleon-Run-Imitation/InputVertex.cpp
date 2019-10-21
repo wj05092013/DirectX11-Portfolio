@@ -30,9 +30,9 @@ bool ba::inputvertex::PosNormalTex::Init(ID3D11Device* device)
 	return true;
 }
 
-void ba::inputvertex::PosNormalTex::Release()
+void ba::inputvertex::PosNormalTex::Destroy()
 {
-	ReleaseCOM(kInputLayout);
+	DestroyCOM(kInputLayout);
 }
 
 
@@ -67,9 +67,9 @@ bool ba::inputvertex::PosNormalTexTangent::Init(ID3D11Device* device)
 	return true;
 }
 
-void ba::inputvertex::PosNormalTexTangent::Release()
+void ba::inputvertex::PosNormalTexTangent::Destroy()
 {
-	ReleaseCOM(kInputLayout);
+	DestroyCOM(kInputLayout);
 }
 
 
@@ -106,9 +106,9 @@ bool ba::inputvertex::PosNormalTexTanSkinned::Init(ID3D11Device* device)
 	return true;
 }
 
-void ba::inputvertex::PosNormalTexTanSkinned::Release()
+void ba::inputvertex::PosNormalTexTanSkinned::Destroy()
 {
-	ReleaseCOM(kInputLayout);
+	DestroyCOM(kInputLayout);
 }
 
 
@@ -123,15 +123,15 @@ ba::inputvertex::PosNormalTexTanSkinned ba::inputvertex::kPosNormalTexTanSkinned
 bool ba::inputvertex::InitAll(ID3D11Device* device)
 {
 	if (!kPosNormalTex.Init(device)) return false;
-	if (!kPosNormalTexTangent.Init(device)) { ReleaseAll(); return false; }
-	if (!kPosNormalTexTanSkinned.Init(device)) { ReleaseAll(); return false; }
+	if (!kPosNormalTexTangent.Init(device)) { DestroyAll(); return false; }
+	if (!kPosNormalTexTanSkinned.Init(device)) { DestroyAll(); return false; }
 
 	return true;
 }
 
-void ba::inputvertex::ReleaseAll()
+void ba::inputvertex::DestroyAll()
 {
-	kPosNormalTex.Release();
-	kPosNormalTexTangent.Release();
-	kPosNormalTexTanSkinned.Release();
+	kPosNormalTex.Destroy();
+	kPosNormalTexTangent.Destroy();
+	kPosNormalTexTanSkinned.Destroy();
 }

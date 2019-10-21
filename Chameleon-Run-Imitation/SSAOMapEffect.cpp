@@ -41,7 +41,7 @@ bool ba::SSAOMapEffect::Init(ID3D11Device* device, const std::wstring& file_name
 	return true;
 }
 
-void ba::SSAOMapEffect::Release()
+void ba::SSAOMapEffect::Destroy()
 {
 	if (techs_)
 	{
@@ -49,7 +49,7 @@ void ba::SSAOMapEffect::Release()
 		techs_ = nullptr;
 	}
 
-	EffectWrapper::Release();
+	EffectWrapper::Destroy();
 }
 
 ID3DX11EffectTechnique* ba::SSAOMapEffect::tech(TechType type)

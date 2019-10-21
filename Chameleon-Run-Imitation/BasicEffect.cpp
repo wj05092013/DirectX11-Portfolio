@@ -162,7 +162,7 @@ bool ba::BasicEffect::Init(ID3D11Device* device, const std::wstring& file_name)
 	return true;
 }
 
-void ba::BasicEffect::Release()
+void ba::BasicEffect::Destroy()
 {
 	if (techs_)
 	{
@@ -170,7 +170,7 @@ void ba::BasicEffect::Release()
 		techs_ = nullptr;
 	}
 
-	EffectWrapper::Release();
+	EffectWrapper::Destroy();
 }
 
 ID3DX11EffectTechnique* ba::BasicEffect::tech(TechType type)

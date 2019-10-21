@@ -4,4 +4,4 @@
 PCH: Yes
 */
 
-#define ReleaseCOM(o) { if (o) { (o)->Release(); (o) = nullptr; } }
+#define DestroyCOM(o) { if (o) { (o)->Release(); (o) = nullptr; } }

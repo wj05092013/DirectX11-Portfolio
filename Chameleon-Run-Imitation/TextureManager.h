@@ -15,7 +15,7 @@ namespace ba
 		static TextureManager& GetInstance();
 
 		void Init(ID3D11Device* device);
-		void Release();
+		void Destroy();
 
 		bool CreateSRV(const std::wstring& file_name, ID3D11ShaderResourceView** out_srv);
 

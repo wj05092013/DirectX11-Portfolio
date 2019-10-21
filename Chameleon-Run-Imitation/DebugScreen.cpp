@@ -9,7 +9,7 @@ ba::DebugScreen::DebugScreen() :
 
 ba::DebugScreen::~DebugScreen()
 {
-	Release();
+	Destroy();
 }
 
 bool ba::DebugScreen::Init(ID3D11Device* device)
@@ -23,10 +23,10 @@ bool ba::DebugScreen::Init(ID3D11Device* device)
 	return true;
 }
 
-void ba::DebugScreen::Release()
+void ba::DebugScreen::Destroy()
 {
-	ReleaseCOM(vb_);
-	ReleaseCOM(ib_);
+	DestroyCOM(vb_);
+	DestroyCOM(ib_);
 }
 
 void ba::DebugScreen::Render(ID3D11DeviceContext* dc)
@@ -108,7 +108,7 @@ bool ba::DebugScreen::BuildGeometryBuffers(ID3D11Device* device)
 	res = device->CreateBuffer(&ib_desc, &ib_init, &ib_);
 	if (FAILED(res))
 	{
-		ReleaseCOM(vb_);
+		DestroyCOM(vb_);
 		return false;
 	}
 

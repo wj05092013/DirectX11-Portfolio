@@ -16,7 +16,7 @@ void ba::TextureManager::Init(ID3D11Device* device)
 	device_ = device;
 }
 
-void ba::TextureManager::Release()
+void ba::TextureManager::Destroy()
 {
 	device_ = nullptr;
 }

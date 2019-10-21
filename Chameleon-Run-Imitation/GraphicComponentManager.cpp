@@ -1,5 +1,9 @@
 #include "stdafx.h"
 
+ba::GraphicComponentManager::GraphicComponentManager()
+{
+}
+
 ba::GraphicComponentManager& ba::GraphicComponentManager::GetInstance()
 {
 	static GraphicComponentManager instance;
@@ -12,11 +16,11 @@ bool ba::GraphicComponentManager::Init()
 	return true;
 }
 
-void ba::GraphicComponentManager::Release()
+void ba::GraphicComponentManager::Destroy()
 {
 	for (auto iter = components_.begin(); iter != components_.end(); ++iter)
 	{
-		iter->second->Release();
+		iter->second->Destroy();
 		delete iter->second;
 	}
 
@@ -30,7 +34,7 @@ void ba::GraphicComponentManager::ReleaseComponent(const std::string& key_str)
 	if (iter == components_.end())
 		return;
 
-	iter->second->Release();
+	iter->second->Destroy();
 	delete iter->second;
 
 	components_.erase(key_str);

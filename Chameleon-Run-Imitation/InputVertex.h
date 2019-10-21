@@ -24,7 +24,7 @@ namespace ba
 			static ID3D11InputLayout* kInputLayout;
 
 			bool Init(ID3D11Device* device);
-			void Release();
+			void Destroy();
 		};
 
 		struct PosNormalTexTangent : public Uncopiable
@@ -40,7 +40,7 @@ namespace ba
 			static ID3D11InputLayout* kInputLayout;
 
 			bool Init(ID3D11Device* device);
-			void Release();
+			void Destroy();
 		};
 
 		struct PosNormalTexTanSkinned : public Uncopiable
@@ -58,14 +58,14 @@ namespace ba
 			static ID3D11InputLayout* kInputLayout;
 
 			bool Init(ID3D11Device* device);
-			void Release();
+			void Destroy();
 		};
 
 
 		// Integrated management of all input layouts.
 		//
 		bool InitAll(ID3D11Device* device);
-		void ReleaseAll();
+		void DestroyAll();
 
 		extern PosNormalTex kPosNormalTex;
 		extern PosNormalTexTangent kPosNormalTexTangent;

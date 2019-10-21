@@ -21,7 +21,7 @@ namespace ba
 		~BlurSSAOEffect() override;
 
 		bool Init(ID3D11Device* device, const std::wstring& file_name) override;
-		void Release() override;
+		void Destroy() override;
 
 		ID3DX11EffectTechnique* tech(TechType type);
 

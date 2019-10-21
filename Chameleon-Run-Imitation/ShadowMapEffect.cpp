@@ -46,7 +46,7 @@ bool ba::ShadowMapEffect::Init(ID3D11Device* device, const std::wstring& file_na
 	return true;
 }
 
-void ba::ShadowMapEffect::Release()
+void ba::ShadowMapEffect::Destroy()
 {
 	if (techs_)
 	{
@@ -54,7 +54,7 @@ void ba::ShadowMapEffect::Release()
 		techs_ = nullptr;
 	}
 
-	EffectWrapper::Release();
+	EffectWrapper::Destroy();
 }
 
 ID3DX11EffectTechnique* ba::ShadowMapEffect::tech(TechType type)

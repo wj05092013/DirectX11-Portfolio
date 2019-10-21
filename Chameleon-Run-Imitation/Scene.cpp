@@ -7,6 +7,10 @@ ba::Scene::Scene() :
 {
 }
 
+ba::Scene::~Scene()
+{
+}
+
 bool ba::Scene::Init(ID3D11Device* device, ID3D11DeviceContext* dc, Renderer* renderer)
 {
 	device_ = device;
@@ -16,7 +20,7 @@ bool ba::Scene::Init(ID3D11Device* device, ID3D11DeviceContext* dc, Renderer* re
 	return true;
 }
 
-void ba::Scene::Release()
+void ba::Scene::Destroy()
 {
 	// Do nothing.
 }

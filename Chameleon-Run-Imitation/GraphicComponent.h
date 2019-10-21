@@ -12,6 +12,6 @@ namespace ba
 		GraphicComponent();
 		virtual ~GraphicComponent();
 
-		virtual void Release() = 0;
+		virtual void Destroy() = 0;
 	};
 }

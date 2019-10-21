@@ -25,7 +25,7 @@ ba::SSAOMap::SSAOMap() :
 
 ba::SSAOMap::~SSAOMap()
 {
-	Release();
+	Destroy();
 }
 
 bool ba::SSAOMap::Init(
@@ -33,7 +33,7 @@ bool ba::SSAOMap::Init(
 	UINT width, UINT height, float fov_y, float far_z
 )
 {
-	Release();
+	Destroy();
 
 	device_ = device;
 	dc_ = dc;
@@ -43,11 +43,11 @@ bool ba::SSAOMap::Init(
 	fov_y_ = fov_y;
 	far_z_ = far_z;
 
-	if (!BuildFullScreenQuad()) { Release(); return false; }
-	if (!BuildNormalDepthMapViews()) { Release(); return false; }
-	if (!BuildDepthStencilView()) { Release(); return false; }
-	if (!BuildSSAOMapViews()) { Release(); return false; }
-	if (!BuildRandomVectorMapView()) { Release(); return false; }
+	if (!BuildFullScreenQuad()) { Destroy(); return false; }
+	if (!BuildNormalDepthMapViews()) { Destroy(); return false; }
+	if (!BuildDepthStencilView()) { Destroy(); return false; }
+	if (!BuildSSAOMapViews()) { Destroy(); return false; }
+	if (!BuildRandomVectorMapView()) { Destroy(); return false; }
 
 	BuildFarPlaneCornersVectors();
 	BuildOffsetVectors();
@@ -56,7 +56,7 @@ bool ba::SSAOMap::Init(
 	return true;
 }
 
-void ba::SSAOMap::Release()
+void ba::SSAOMap::Destroy()
 {
 	ReleaseFullScreenQuad();
 	ReleaseNormalDepthMapViews();
@@ -75,9 +75,9 @@ bool ba::SSAOMap::OnResize(UINT width, UINT height, float fov_y, float far_z)
 	ReleaseNormalDepthMapViews();
 	ReleaseSSAOMapViews();
 
-	if (!BuildNormalDepthMapViews()) { Release(); return false; }
-	if (!BuildDepthStencilView()) { Release(); return false; }
-	if (!BuildSSAOMapViews()) { Release(); return false; }
+	if (!BuildNormalDepthMapViews()) { Destroy(); return false; }
+	if (!BuildDepthStencilView()) { Destroy(); return false; }
+	if (!BuildSSAOMapViews()) { Destroy(); return false; }
 
 	BuildFarPlaneCornersVectors();
 	BuildSSAOViewport();
@@ -289,12 +289,12 @@ bool ba::SSAOMap::BuildNormalDepthMapViews()
 	res = device_->CreateShaderResourceView(tex, nullptr, &normal_depth_map_srv_);
 	if (FAILED(res))
 	{
-		ReleaseCOM(tex);
+		DestroyCOM(tex);
 		return false;
 	}
 
 	res = device_->CreateRenderTargetView(tex, nullptr, &normal_depth_map_rtv_);
-	ReleaseCOM(tex);
+	DestroyCOM(tex);
 	if (FAILED(res))
 		return false;
 
@@ -320,7 +320,7 @@ bool ba::SSAOMap::BuildDepthStencilView()
 		return false;
 
 	res = device_->CreateDepthStencilView(tex, nullptr, &dsv_);
-	ReleaseCOM(tex);
+	DestroyCOM(tex);
 	if (FAILED(res))
 		return false;
 
@@ -349,12 +349,12 @@ bool ba::SSAOMap::BuildSSAOMapViews()
 	res = device_->CreateShaderResourceView(tex_0, nullptr, &ssao_map_0_srv_);
 	if (FAILED(res))
 	{
-		ReleaseCOM(tex_0);
+		DestroyCOM(tex_0);
 		return false;
 	}
 
 	res = device_->CreateRenderTargetView(tex_0, nullptr, &ssao_map_0_rtv_);
-	ReleaseCOM(tex_0);
+	DestroyCOM(tex_0);
 	if (FAILED(res))
 		return false;
 
@@ -367,12 +367,12 @@ bool ba::SSAOMap::BuildSSAOMapViews()
 	res = device_->CreateShaderResourceView(tex_1, nullptr, &ssao_map_1_srv_);
 	if (FAILED(res))
 	{
-		ReleaseCOM(tex_1);
+		DestroyCOM(tex_1);
 		return false;
 	}
 
 	res = device_->CreateRenderTargetView(tex_1, nullptr, &ssao_map_1_rtv_);
-	ReleaseCOM(tex_1);
+	DestroyCOM(tex_1);
 	if (FAILED(res))
 		return false;
 
@@ -413,7 +413,7 @@ bool ba::SSAOMap::BuildRandomVectorMapView()
 		return false;
 
 	res = device_->CreateShaderResourceView(tex, nullptr, &random_vector_map_srv_);
-	ReleaseCOM(tex);
+	DestroyCOM(tex);
 	if (FAILED(res))
 		return false;
 
@@ -480,30 +480,30 @@ void ba::SSAOMap::BuildSSAOViewport()
 
 void ba::SSAOMap::ReleaseFullScreenQuad()
 {
-	ReleaseCOM(quad_vb_);
-	ReleaseCOM(quad_ib_);
+	DestroyCOM(quad_vb_);
+	DestroyCOM(quad_ib_);
 }
 
 void ba::SSAOMap::ReleaseNormalDepthMapViews()
 {
-	ReleaseCOM(normal_depth_map_srv_);
-	ReleaseCOM(normal_depth_map_rtv_);
+	DestroyCOM(normal_depth_map_srv_);
+	DestroyCOM(normal_depth_map_rtv_);
 }
 
 void ba::SSAOMap::ReleaseDepthStencilView()
 {
-	ReleaseCOM(dsv_);
+	DestroyCOM(dsv_);
 }
 
 void ba::SSAOMap::ReleaseSSAOMapViews()
 {
-	ReleaseCOM(ssao_map_0_srv_);
-	ReleaseCOM(ssao_map_1_srv_);
-	ReleaseCOM(ssao_map_0_rtv_);
-	ReleaseCOM(ssao_map_1_rtv_);
+	DestroyCOM(ssao_map_0_srv_);
+	DestroyCOM(ssao_map_1_srv_);
+	DestroyCOM(ssao_map_0_rtv_);
+	DestroyCOM(ssao_map_1_rtv_);
 }
 
 void ba::SSAOMap::ReleaseRandomVectorMapView()
 {
-	ReleaseCOM(random_vector_map_srv_);
+	DestroyCOM(random_vector_map_srv_);
 }

@@ -1,0 +1,7 @@
+impl
+	SceneManager
+		CreateScene(const int key) -> AddScene()
+		DestroyScene -> X
+		LoadScene(const int key, Renderer* renderer, Scene** out_scene)
+			-> LoadNextScene(Renderer* renderer, Scene** out_scene)
+		UnloadScene -> private function, must be used in LoadNextScene

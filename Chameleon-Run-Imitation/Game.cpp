@@ -130,14 +130,14 @@ bool ba::Game::InitDirectX()
 
 void ba::Game::ReleaseDirectX()
 {
-	renderer_.Release();
-	shadow_map_.Release();
-	ssao_map_.Release();
+	renderer_.Destroy();
+	shadow_map_.Destroy();
+	ssao_map_.Destroy();
 	ReleaseModels();
 
-	TextureManager::GetInstance().Release();
+	TextureManager::GetInstance().Destroy();
 
-	inputvertex::ReleaseAll();
+	inputvertex::DestroyAll();
 
 	Application::ReleaseDirectX();
 }

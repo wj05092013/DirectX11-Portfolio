@@ -17,7 +17,7 @@ namespace ba
 		~Renderer();
 
 		bool Init(ID3D11Device* device, ID3D11DeviceContext* dc);
-		void Release();
+		void Destroy();
 		
 	private:
 		ID3D11DeviceContext* dc_;

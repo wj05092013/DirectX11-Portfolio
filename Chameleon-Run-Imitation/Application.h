@@ -56,7 +56,7 @@ namespace ba
 		// Integrated initialization and releasement of application.
 		//
 		bool Init(HINSTANCE wnd_inst);
-		void Release();
+		void Destroy();
 		//__
 
 	private:

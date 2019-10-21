@@ -37,7 +37,7 @@ bool ba::BlurSSAOEffect::Init(ID3D11Device* device, const std::wstring& file_nam
 	return true;
 }
 
-void ba::BlurSSAOEffect::Release()
+void ba::BlurSSAOEffect::Destroy()
 {
 	if (techs_)
 	{
@@ -45,7 +45,7 @@ void ba::BlurSSAOEffect::Release()
 		techs_ = nullptr;
 	}
 
-	EffectWrapper::Release();
+	EffectWrapper::Destroy();
 }
 
 ID3DX11EffectTechnique* ba::BlurSSAOEffect::tech(TechType type)

@@ -13,13 +13,13 @@ namespace ba
 			extern ID3D11RasterizerState* kExample;
 
 			bool Init(ID3D11Device* device);
-			void Release();
+			void Destroy();
 		}
 		
 		namespace depthstencil
 		{
 			bool Init(ID3D11Device* device);
-			void Release();
+			void Destroy();
 		}
 
 		namespace blend
@@ -34,7 +34,7 @@ namespace ba
 			};
 
 			bool Init(ID3D11Device* device);
-			void Release();
+			void Destroy();
 
 			extern ID3D11BlendState* kBSOver;
 			extern ID3D11BlendState* kBSTranslucent;
@@ -44,6 +44,6 @@ namespace ba
 		}
 
 		bool InitAll(ID3D11Device* device);
-		void ReleaseAll();
+		void DestroyAll();
 	}
 }

@@ -58,7 +58,7 @@ bool ba::Mesh::BuildVertexBuffer(ID3D11Device* device, const std::vector<VertexT
 		return false;
 	}
 
-	ReleaseCOM(old_vb);
+	DestroyCOM(old_vb);
 	vertex_stride_ = sizeof(VertexType);
 
 	return true;

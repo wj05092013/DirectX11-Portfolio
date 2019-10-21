@@ -12,7 +12,9 @@ namespace ba
 			ID3D11Device* device, ID3D11DeviceContext* dc,
 			UINT width, UINT height, float fov_y, float far_z
 		);
-		void Release() override;
+
+		// Calling this function for managing resources is unnecessary, if the instance was created by 'GraphicComponentManager'.
+		void Destroy() override;
 
 		bool OnResize(UINT width, UINT height, float fov_y, float far_z);
 

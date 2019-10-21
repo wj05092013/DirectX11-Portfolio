@@ -13,7 +13,7 @@ namespace ba
 		virtual ~Scene();
 
 		virtual bool Init(ID3D11Device* device, ID3D11DeviceContext* dc, Renderer* renderer);
-		virtual void Release();
+		virtual void Destroy();
 
 		virtual void Render(IDXGISwapChain* swap_chain) = 0;
 		virtual void Update() = 0;

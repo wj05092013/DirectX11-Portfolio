@@ -25,9 +25,9 @@ bool ba::EffectWrapper::Init(ID3D11Device* device, const std::wstring& file_name
 	return false;
 }
 
-void ba::EffectWrapper::Release()
+void ba::EffectWrapper::Destroy()
 {
-	ReleaseCOM(effect_);
+	DestroyCOM(effect_);
 }
 
 ID3DX11Effect* ba::EffectWrapper::effect()
@@ -52,7 +52,7 @@ bool ba::EffectWrapper::CreateEffectFromFX(ID3D11Device* device)
 	);
 	if (compilation_msg)
 	{
-		ReleaseCOM(compilation_msg);
+		DestroyCOM(compilation_msg);
 		return false;
 	}
 	if (FAILED(res))
@@ -64,7 +64,7 @@ bool ba::EffectWrapper::CreateEffectFromFX(ID3D11Device* device)
 		compiled_shader->GetBufferPointer(), compiled_shader->GetBufferSize(), 0,
 		device, &effect_
 	);
-	ReleaseCOM(compiled_shader);
+	DestroyCOM(compiled_shader);
 	if (FAILED(res))
 	{
 		return false;

@@ -18,23 +18,23 @@ ba::ShadowMap::~ShadowMap()
 
 bool ba::ShadowMap::Init(ID3D11Device* device, UINT width, UINT height)
 {
-	Release();
+	Destroy();
 
 	device_ = device;
 
 	width_ = width;
 	height_ = height;
 
-	if (!BuildShadowMapViews()) { Release(); return false; }
+	if (!BuildShadowMapViews()) { Destroy(); return false; }
 	BuildShadowMapViewport();
 
 	return true;
 }
 
-void ba::ShadowMap::Release()
+void ba::ShadowMap::Destroy()
 {
-	ReleaseCOM(srv_);
-	ReleaseCOM(dsv_);
+	DestroyCOM(srv_);
+	DestroyCOM(dsv_);
 }
 
 void ba::ShadowMap::BuildShadowTransform()
@@ -149,7 +149,7 @@ bool ba::ShadowMap::BuildShadowMapViews()
 	res = device_->CreateShaderResourceView(tex, &srv_desc, &srv_);
 	if (FAILED(res))
 	{
-		ReleaseCOM(tex);
+		DestroyCOM(tex);
 		return false;
 	}
 
@@ -162,7 +162,7 @@ bool ba::ShadowMap::BuildShadowMapViews()
 	dsv_desc.Texture2D.MipSlice = 0;
 
 	res = device_->CreateDepthStencilView(tex, &dsv_desc, &dsv_);
-	ReleaseCOM(tex);
+	DestroyCOM(tex);
 	if (FAILED(res))
 		return false;
 

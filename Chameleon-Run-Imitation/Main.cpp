@@ -13,6 +13,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	if (tester.Init(hInstance))
 	{
 		tester.Run();
-		tester.Release();
+		tester.Destroy();
 	}
 }

@@ -15,7 +15,7 @@ namespace ba
 		static GraphicComponentManager& GetInstance();
 
 		bool Init();
-		void Release();
+		void Destroy();
 
 		template<class Type>
 		Type* CreateComponent(const std::string& key_str);
@@ -36,7 +36,7 @@ namespace ba
 		if (iter == components_.end())
 		{
 			// Create new component for the key.
-			component = new Type();
+			component = new Type;
 			components_.insert({ key_str, component });
 		}
 		else

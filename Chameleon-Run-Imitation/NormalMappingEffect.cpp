@@ -164,7 +164,7 @@ bool ba::NormalMappingEffect::Init(ID3D11Device* device, const std::wstring& fil
 	return true;
 }
 
-void ba::NormalMappingEffect::Release()
+void ba::NormalMappingEffect::Destroy()
 {
 	if (techs_)
 	{
@@ -172,7 +172,7 @@ void ba::NormalMappingEffect::Release()
 		techs_ = nullptr;
 	}
 
-	EffectWrapper::Release();
+	EffectWrapper::Destroy();
 }
 
 ID3DX11EffectTechnique* ba::NormalMappingEffect::tech(TechType type)

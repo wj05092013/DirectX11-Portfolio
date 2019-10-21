@@ -13,7 +13,7 @@ namespace ba
 	namespace effects
 	{
 		bool InitAll(ID3D11Device* device);
-		void ReleaseAll();
+		void DestroyAll();
 
 		// .fxo file names to create effect interfaces with.
 		//

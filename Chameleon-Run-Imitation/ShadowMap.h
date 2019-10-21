@@ -20,7 +20,9 @@ namespace ba
 		~ShadowMap() override;
 
 		bool Init(ID3D11Device* device, UINT width, UINT height);
-		void Release() override;
+
+		// Calling this function for managing resources is unnecessary, if the instance was created by 'GraphicComponentManager'.
+		void Destroy() override;
 
 		void BuildShadowTransform();
 

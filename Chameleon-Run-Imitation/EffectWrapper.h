@@ -21,7 +21,7 @@ namespace ba
 		virtual ~EffectWrapper() = 0;
 
 		virtual bool Init(ID3D11Device* device, const std::wstring& file_name);
-		virtual void Release();
+		virtual void Destroy();
 
 	protected:
 		ID3DX11Effect* effect();

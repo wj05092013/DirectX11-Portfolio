@@ -21,7 +21,7 @@ namespace ba
 		~DebugScreen();
 
 		bool Init(ID3D11Device* device);
-		void Release();
+		void Destroy();
 
 		void Render(ID3D11DeviceContext* dc);
 

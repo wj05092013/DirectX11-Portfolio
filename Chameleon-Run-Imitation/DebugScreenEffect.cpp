@@ -35,7 +35,7 @@ bool ba::DebugScreenEffect::Init(ID3D11Device* device, const std::wstring& file_
 	return true;
 }
 
-void ba::DebugScreenEffect::Release()
+void ba::DebugScreenEffect::Destroy()
 {
 	if (techs_)
 	{
@@ -43,7 +43,7 @@ void ba::DebugScreenEffect::Release()
 		techs_ = nullptr;
 	}
 
-	EffectWrapper::Release();
+	EffectWrapper::Destroy();
 }
 
 ID3DX11EffectTechnique* ba::DebugScreenEffect::tech(TechType type)

@@ -14,16 +14,16 @@ bool ba::Renderer::Init(ID3D11Device* device, ID3D11DeviceContext* dc)
 {
 	dc_ = dc;
 
-	if (!effects::InitAll(device)) { Release(); return false; }
-	if(!renderstates::InitAll(device)) { Release(); return false; }
+	if (!effects::InitAll(device)) { Destroy(); return false; }
+	if(!renderstates::InitAll(device)) { Destroy(); return false; }
 
 	return true;
 }
 
-void ba::Renderer::Release()
+void ba::Renderer::Destroy()
 {
-	effects::ReleaseAll();
-	renderstates::ReleaseAll();
+	effects::DestroyAll();
+	renderstates::DestroyAll();
 }
 
 void ba::Renderer::RenderScene(const std::vector<ModelInstance>& model_instances, const EffectVariableBundlePerFrame& bundle)

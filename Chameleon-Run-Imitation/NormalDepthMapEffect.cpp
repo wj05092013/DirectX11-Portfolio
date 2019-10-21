@@ -44,7 +44,7 @@ bool ba::NormalDepthMapEffect::Init(ID3D11Device* device, const std::wstring& fi
 	return true;
 }
 
-void ba::NormalDepthMapEffect::Release()
+void ba::NormalDepthMapEffect::Destroy()
 {
 	if (techs_)
 	{
@@ -52,7 +52,7 @@ void ba::NormalDepthMapEffect::Release()
 		techs_ = nullptr;
 	}
 
-	EffectWrapper::Release();
+	EffectWrapper::Destroy();
 }
 
 ID3DX11EffectTechnique* ba::NormalDepthMapEffect::tech(TechType type)
