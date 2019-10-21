@@ -10,22 +10,18 @@ namespace ba
 	{
 	public:
 		Scene();
-		~Scene();
+		virtual ~Scene();
 
-		bool Init();
+		virtual bool Init(ID3D11Device* device, ID3D11DeviceContext* dc, Renderer* renderer);
+		virtual void Release();
 
-		void Render();
-		void Update();
-		void OnResize();
+		virtual void Render(IDXGISwapChain* swap_chain) = 0;
+		virtual void Update() = 0;
+		virtual void OnResize(int width, int height, float near_z, float far_z, float fov_y) = 0;
 
-		void set_camera(Camera* camera, const XMVECTOR& init_pos, const XMVECTOR& init_target, const XMVECTOR& init_up);
-		
-	private:
-		Camera* camera_;
-		XMVECTOR init_cam_pos_;
-		XMVECTOR init_cam_target_;
-		XMVECTOR init_cam_up_;
-
-		
+	protected:
+		ID3D11Device* device_;
+		ID3D11DeviceContext* dc_;
+		Renderer* renderer_;
 	};
 }

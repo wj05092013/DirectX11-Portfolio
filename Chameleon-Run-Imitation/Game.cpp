@@ -52,7 +52,7 @@ void ba::Game::Render()
 void ba::Game::UpdateDirectX()
 {
 	cam_.UpdateViewMatrix();
-	shadow_map_.BuildShadowTransform(lights_[0], scene_bounds_);
+	shadow_map_.BuildShadowTransform();
 }
 
 bool ba::Game::OnResize()

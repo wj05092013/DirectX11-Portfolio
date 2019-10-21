@@ -1,6 +1,12 @@
 class
+	Game
+		모든 Scene 생성,	SceneManager를 통해 Scene 획득
+		Scene의 가상함수들 호출
+
 	SceneManager
 		Scene들의 load, release 관리
+		map으로 관리
+		키 값으로 Scene 생성, 제공
 
 	Scene
 		구체적인 Scene은 상속받아서 사용

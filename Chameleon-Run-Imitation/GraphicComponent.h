@@ -10,9 +10,8 @@ namespace ba
 	{
 	public:
 		GraphicComponent();
-		virtual ~GraphicComponent() = 0;
+		virtual ~GraphicComponent();
 
-		virtual bool Init() = 0;
 		virtual void Release() = 0;
 	};
 }

@@ -40,12 +40,12 @@ namespace ba
 
 		struct EffectVariableBundlePerFrame
 		{
-			// Empty now.
+			// Empty.
 		};
 
 		struct EffectVariableBundleOnStartAndResize
 		{
-			// Empty now.
+			// Empty.
 		};
 
 		struct EffectVariableBundleChangeRarely

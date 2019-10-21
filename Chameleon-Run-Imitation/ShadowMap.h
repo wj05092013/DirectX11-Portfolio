@@ -6,7 +6,7 @@ PCH: Yes
 
 namespace ba
 {
-	class ShadowMap
+	class ShadowMap : public GraphicComponent
 	{
 	public:
 		struct BoundingSphere
@@ -17,12 +17,25 @@ namespace ba
 
 	public:
 		ShadowMap();
-		~ShadowMap();
+		~ShadowMap() override;
 
 		bool Init(ID3D11Device* device, UINT width, UINT height);
-		void Release();
+		void Release() override;
 
-		void BuildShadowTransform(const ba::light::DirectionalLight& lit, const BoundingSphere& scene_bounds);
+		void BuildShadowTransform();
+
+
+		//
+		// Mutators
+		//
+
+		void set_directional_light(const light::DirectionalLight* light);
+		void set_bounding_sphere(const BoundingSphere* bounds);
+
+
+		//
+		// Accessors.
+		//
 
 		XMMATRIX view() const;
 		XMMATRIX proj() const;
@@ -41,6 +54,9 @@ namespace ba
 
 		UINT width_;
 		UINT height_;
+
+		const light::DirectionalLight* directional_light_;
+		const BoundingSphere* bounding_sphere_;
 
 		XMFLOAT4X4 view_;
 		XMFLOAT4X4 proj_;

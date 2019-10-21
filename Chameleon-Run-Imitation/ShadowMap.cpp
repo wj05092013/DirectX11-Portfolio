@@ -4,6 +4,8 @@ ba::ShadowMap::ShadowMap() :
 	device_(nullptr),
 	width_(0),
 	height_(0),
+	directional_light_(nullptr),
+	bounding_sphere_(nullptr),
 	viewport_{},
 	srv_(nullptr),
 	dsv_(nullptr)
@@ -35,13 +37,13 @@ void ba::ShadowMap::Release()
 	ReleaseCOM(dsv_);
 }
 
-void ba::ShadowMap::BuildShadowTransform(const ba::light::DirectionalLight& lit, const ba::ShadowMap::BoundingSphere& scene_bounds)
+void ba::ShadowMap::BuildShadowTransform()
 {
 	// Build view matrix of the directional light.
 	//
-	XMVECTOR lit_dir = XMVector3Normalize(XMLoadFloat3(&lit.direction));
-	XMVECTOR lit_pos = -2.0f * scene_bounds.radius * lit_dir;
-	XMVECTOR lit_target = XMLoadFloat3(&scene_bounds.center);
+	XMVECTOR lit_dir = XMVector3Normalize(XMLoadFloat3(&directional_light_->direction));
+	XMVECTOR lit_pos = -2.0f * bounding_sphere_->radius * lit_dir;
+	XMVECTOR lit_target = XMLoadFloat3(&bounding_sphere_->center);
 	XMVECTOR lit_up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
 	XMMATRIX view = XMMatrixLookAtLH(lit_pos, lit_target, lit_up);
@@ -52,12 +54,12 @@ void ba::ShadowMap::BuildShadowTransform(const ba::light::DirectionalLight& lit,
 
 	// Build orthographic projection matrix.
 	//
-	float l = center_lh.x - scene_bounds.radius;
-	float r = center_lh.x + scene_bounds.radius;
-	float b = center_lh.y - scene_bounds.radius;
-	float t = center_lh.y + scene_bounds.radius;
-	float n = center_lh.z - scene_bounds.radius;
-	float f = center_lh.z + scene_bounds.radius;
+	float l = center_lh.x - bounding_sphere_->radius;
+	float r = center_lh.x + bounding_sphere_->radius;
+	float b = center_lh.y - bounding_sphere_->radius;
+	float t = center_lh.y + bounding_sphere_->radius;
+	float n = center_lh.z - bounding_sphere_->radius;
+	float f = center_lh.z + bounding_sphere_->radius;
 	XMMATRIX proj = XMMatrixOrthographicOffCenterLH(l, r, b, t, n, f);
 
 	// Build a matrix for transforming NDC space to texture space.
@@ -72,6 +74,16 @@ void ba::ShadowMap::BuildShadowTransform(const ba::light::DirectionalLight& lit,
 	XMStoreFloat4x4(&view_, view);
 	XMStoreFloat4x4(&proj_, proj);
 	XMStoreFloat4x4(&world_to_tex_, view * proj * to_tex);
+}
+
+void ba::ShadowMap::set_directional_light(const light::DirectionalLight* light)
+{
+	directional_light_ = light;
+}
+
+void ba::ShadowMap::set_bounding_sphere(const BoundingSphere* bounds)
+{
+	bounding_sphere_ = bounds;
 }
 
 DirectX::XMMATRIX ba::ShadowMap::view() const

@@ -2,17 +2,17 @@
 
 namespace ba
 {
-	class SSAOMap : private Uncopiable
+	class SSAOMap : public GraphicComponent
 	{
 	public:
 		SSAOMap();
-		~SSAOMap();
+		~SSAOMap() override;
 
 		bool Init(
 			ID3D11Device* device, ID3D11DeviceContext* dc,
 			UINT width, UINT height, float fov_y, float far_z
 		);
-		void Release();
+		void Release() override;
 
 		bool OnResize(UINT width, UINT height, float fov_y, float far_z);
 
