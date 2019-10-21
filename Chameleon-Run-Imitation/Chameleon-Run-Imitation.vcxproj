@@ -248,8 +248,8 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Composition.txt" />
-    <Text Include="TODO_LIST.txt" />
+    <Text Include="..\Composition.txt" />
+    <Text Include="..\TODO_LIST.txt" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="FX\Basic.fx" />

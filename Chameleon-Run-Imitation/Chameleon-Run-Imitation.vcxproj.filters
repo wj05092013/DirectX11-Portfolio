@@ -308,10 +308,10 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="TODO_LIST.txt">
+    <Text Include="..\TODO_LIST.txt">
       <Filter>Document</Filter>
     </Text>
-    <Text Include="Composition.txt">
+    <Text Include="..\Composition.txt">
       <Filter>Document</Filter>
     </Text>
   </ItemGroup>
