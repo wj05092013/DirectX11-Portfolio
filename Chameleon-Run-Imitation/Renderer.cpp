@@ -19,7 +19,7 @@ bool ba::Renderer::Init(ID3D11Device* device, ID3D11DeviceContext* dc)
 	dc_ = dc;
 
 	if (!effects::InitAll(device)) { Destroy(); return false; }
-	if(!renderstates::InitAll(device)) { Destroy(); return false; }
+	if (!renderstates::InitAll(device)) { Destroy(); return false; }
 
 	return true;
 }

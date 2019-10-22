@@ -188,42 +188,42 @@ void ba::Camera::set_position_w(const XMFLOAT3& pos)
 	pos_w_ = pos;
 }
 
-const DirectX::XMVECTOR& ba::Camera::position_w_xv() const
+DirectX::XMVECTOR ba::Camera::position_w_xv() const
 {
 	return XMLoadFloat3(&pos_w_);
 }
 
-const DirectX::XMFLOAT3& ba::Camera::position_w_xf() const
+DirectX::XMFLOAT3 ba::Camera::position_w_xf() const
 {
 	return pos_w_;
 }
 
-const DirectX::XMVECTOR& ba::Camera::right_w_xv() const
+DirectX::XMVECTOR ba::Camera::right_w_xv() const
 {
 	return XMLoadFloat3(&right_w_);
 }
 
-const DirectX::XMFLOAT3& ba::Camera::right_w_xf() const
+DirectX::XMFLOAT3 ba::Camera::right_w_xf() const
 {
 	return right_w_;
 }
 
-const DirectX::XMVECTOR& ba::Camera::up_w_xv() const
+DirectX::XMVECTOR ba::Camera::up_w_xv() const
 {
 	return XMLoadFloat3(&up_w_);
 }
 
-const DirectX::XMFLOAT3& ba::Camera::up_w_xf() const
+DirectX::XMFLOAT3 ba::Camera::up_w_xf() const
 {
 	return up_w_;
 }
 
-const DirectX::XMVECTOR& ba::Camera::look_w_xv() const
+DirectX::XMVECTOR ba::Camera::look_w_xv() const
 {
 	return XMLoadFloat3(&look_w_);
 }
 
-const DirectX::XMFLOAT3& ba::Camera::look_w_xf() const
+DirectX::XMFLOAT3 ba::Camera::look_w_xf() const
 {
 	return look_w_;
 }
@@ -274,12 +274,12 @@ float ba::Camera::fov_y() const
 	return fov_y_;
 }
 
-const DirectX::XMMATRIX& ba::Camera::view() const
+DirectX::XMMATRIX ba::Camera::view() const
 {
 	return XMLoadFloat4x4(&view_);
 }
 
-const DirectX::XMMATRIX& ba::Camera::proj() const
+DirectX::XMMATRIX ba::Camera::proj() const
 {
 	return XMLoadFloat4x4(&proj_);
 }

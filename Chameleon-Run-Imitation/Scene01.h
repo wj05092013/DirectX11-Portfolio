@@ -9,6 +9,14 @@ namespace ba
 	class Scene01 : public Scene
 	{
 	public:
+		enum State
+		{
+			kPause = 0,
+			kRun,
+			kFinish
+		};
+
+	public:
 		Scene01();
 		~Scene01() override;
 
@@ -19,20 +27,22 @@ namespace ba
 		) override;
 		void Destroy() override;
 
-		void Render(IDXGISwapChain* swap_chain) override;
+		void Render() override;
 		void Update() override;
 		bool OnResize(int client_width, int client_height) override;
 
 		void UpdateOnKeyInput(bool key_pressed[256], bool key_switch[256]) override;
-		void OnMouseMove(WPARAM w_par, int x, int y) override;
-		void OnMouseLBtnDown(WPARAM w_par, int x, int y) override;
-		void OnMouseRBtnDown(WPARAM w_par, int x, int y) override;
-		void OnMouseLBtnUp(WPARAM w_par, int x, int y) override;
-		void OnMouseRBtnUp(WPARAM w_par, int x, int y) override;
+		void OnMouseMove(HWND wnd, WPARAM w_par, int x, int y) override;
+		void OnMouseLBtnDown(HWND wnd, WPARAM w_par, int x, int y) override;
+		void OnMouseRBtnDown(HWND wnd, WPARAM w_par, int x, int y) override;
+		void OnMouseLBtnUp(HWND wnd, WPARAM w_par, int x, int y) override;
+		void OnMouseRBtnUp(HWND wnd, WPARAM w_par, int x, int y) override;
 
 	private:
 		// For memory deallocation on failing initialization of members.
 		bool InitImpl();
+
+		bool LoadModels();
 
 	private:
 		static const float kCamFovY, kCamNearZ, kCamFarZ;
@@ -45,6 +55,8 @@ namespace ba
 		static const XMVECTOR kFogColor;
 		
 		static const XMMATRIX kToTex;
+
+		State scene_state_;
 
 		// Graphic components.
 		ShadowMap* shadow_map_;
@@ -61,6 +73,7 @@ namespace ba
 
 		light::DirectionalLight lights_[3];
 
+		Model* box_;
 		std::vector<ModelInstance> model_inst_;
 
 		ShadowMap::BoundingSphere bounding_sphere_;

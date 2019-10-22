@@ -53,7 +53,25 @@ const DirectX::XMMATRIX ba::Scene01::kToTex = XMMATRIX(
 );
 
 
-ba::Scene01::Scene01()
+ba::Scene01::Scene01() :
+	scene_state_(kPause),
+
+	shadow_map_(nullptr),
+	ssao_map_(nullptr),
+	camera_(nullptr),
+
+	client_width_(0),
+	client_height_(0),
+	aspect_ratio_(0.0f),
+
+	evb_change_rarely_{},
+	evb_on_start_and_resize_{},
+	evb_per_frame_{},
+
+	box_(nullptr),
+
+	bounding_sphere_{ XMFLOAT3(0.0f, 0.0f, 0.0f), 100.0f },
+	last_mouse_pos_{}
 {
 }
 
@@ -76,6 +94,8 @@ bool ba::Scene01::Init(ID3D11Device* device, ID3D11DeviceContext* dc, Renderer* 
 		return false;
 	}
 
+	scene_state_ = kRun;
+
 	return true;
 }
 
@@ -86,15 +106,18 @@ void ba::Scene01::Destroy()
 	GraphicComponentManager::GetInstance().DestroyComponent("FREE_VIEW_CAMERA");
 
 	Scene::Destroy();
+
+	scene_state_ = kFinish;
 }
 
-void ba::Scene01::Render(IDXGISwapChain* swap_chain)
+void ba::Scene01::Render()
 {
 	// Render on shadow map.
 	renderer_->RenderShadowMap(model_inst_, evb_per_frame_);
 
-	// Render on normal-depth map;
+	// Render on normal-depth map.
 	renderer_->RenderNormalDepthMap(model_inst_, evb_per_frame_);
+
 	// Build ssao map with the normal-depth map and blur it.
 	ssao_map_->BuildSSAOMap(camera_->proj());
 	ssao_map_->BlurSSAOMap(4);
@@ -105,8 +128,11 @@ void ba::Scene01::Render(IDXGISwapChain* swap_chain)
 
 void ba::Scene01::Update()
 {
-	shadow_map_->BuildShadowTransform();
-	camera_->UpdateViewMatrix();
+	if (scene_state_ == kRun)
+	{
+		shadow_map_->BuildShadowTransform();
+		camera_->UpdateViewMatrix();
+	}
 }
 
 bool ba::Scene01::OnResize(int client_width, int client_height)
@@ -128,26 +154,63 @@ bool ba::Scene01::OnResize(int client_width, int client_height)
 
 void ba::Scene01::UpdateOnKeyInput(bool key_pressed[256], bool key_switch[256])
 {
+	if (key_switch[VK_ESCAPE])
+		scene_state_ = kPause;
+	else
+		scene_state_ = kRun;
+
+	if (scene_state_ == kRun)
+	{
+		if (key_pressed['W'])
+			camera_->MoveFront(static_cast<float>(timer_->get_delta_time()));
+		if (key_pressed['S'])
+			camera_->MoveBack(static_cast<float>(timer_->get_delta_time()));
+		if (key_pressed['D'])
+			camera_->MoveRight(static_cast<float>(timer_->get_delta_time()));
+		if (key_pressed['A'])
+			camera_->MoveLeft(static_cast<float>(timer_->get_delta_time()));
+		if (key_pressed['E'])
+			camera_->MoveUp(static_cast<float>(timer_->get_delta_time()));
+		if (key_pressed['Q'])
+			camera_->MoveDown(static_cast<float>(timer_->get_delta_time()));
+	}
 }
 
-void ba::Scene01::OnMouseMove(WPARAM w_par, int x, int y)
+void ba::Scene01::OnMouseMove(HWND wnd, WPARAM w_par, int x, int y)
+{
+	if (scene_state_ == kRun)
+	{
+		if ((w_par & MK_RBUTTON) != 0)
+		{
+			camera_->Rotate({ x, y }, last_mouse_pos_);
+		}
+
+		last_mouse_pos_.x = x;
+		last_mouse_pos_.y = y;
+	}
+}
+
+void ba::Scene01::OnMouseLBtnDown(HWND wnd, WPARAM w_par, int x, int y)
 {
 }
 
-void ba::Scene01::OnMouseLBtnDown(WPARAM w_par, int x, int y)
+void ba::Scene01::OnMouseRBtnDown(HWND wnd, WPARAM w_par, int x, int y)
+{
+	if (scene_state_ == kRun)
+	{
+		SetCapture(wnd);
+		last_mouse_pos_.x = x;
+		last_mouse_pos_.y = y;
+	}
+}
+
+void ba::Scene01::OnMouseLBtnUp(HWND wnd, WPARAM w_par, int x, int y)
 {
 }
 
-void ba::Scene01::OnMouseRBtnDown(WPARAM w_par, int x, int y)
+void ba::Scene01::OnMouseRBtnUp(HWND wnd, WPARAM w_par, int x, int y)
 {
-}
-
-void ba::Scene01::OnMouseLBtnUp(WPARAM w_par, int x, int y)
-{
-}
-
-void ba::Scene01::OnMouseRBtnUp(WPARAM w_par, int x, int y)
-{
+	ReleaseCapture();
 }
 
 bool ba::Scene01::InitImpl()
@@ -161,13 +224,13 @@ bool ba::Scene01::InitImpl()
 	ssao_map_ = GraphicComponentManager::GetInstance().CreateComponent<SSAOMap>("SSAO_MAP");
 	camera_ = GraphicComponentManager::GetInstance().CreateComponent<FreeViewpointCamera>("FREE_VIEW_CAMERA");
 
-	if (!shadow_map_->Init(device_, static_cast<float>(kShadowMapSize), static_cast<float>(kShadowMapSize)))
+	if (!shadow_map_->Init(device_, kShadowMapSize, kShadowMapSize))
 		return false;
 	if (!ssao_map_->Init(device_, dc_, client_width_, client_height_, kCamFovY, kCamFarZ))
 		return false;
 
 	shadow_map_->set_directional_light(lights_);
-	shadow_map_->set_bounding_sphere();
+	shadow_map_->set_bounding_sphere(&bounding_sphere_);
 
 	camera_->Init(kCamInitDesc);
 	camera_->SetLens(kCamFovY, aspect_ratio_, kCamNearZ, kCamFarZ);
@@ -190,4 +253,59 @@ bool ba::Scene01::InitImpl()
 
 	// Set effect variables' values to be used on start and resizing screen.
 	renderer_->SetEffectVariablesOnStartAndResize(evb_on_start_and_resize_);
+
+	// Load models.
+	if (!LoadModels())
+		return false;
+
+	return true;
+}
+
+bool ba::Scene01::LoadModels()
+{
+	XMMATRIX identity = XMMatrixIdentity();
+
+	// Create a model.
+	//
+	GeometryGenerator::Geometry geo;
+	GeometryGenerator::CreateBox(2.0f, 2.0f, 2.0f, geo);
+
+	light::Material material;
+	material.ambient = XMFLOAT4(0.4f, 0.2f, 0.2f, 1.0f);
+	material.diffuse = XMFLOAT4(0.9f, 0.4f, 0.4f, 1.0f);
+	material.specular = XMFLOAT4(0.4f, 0.4f, 0.4f, 8.0f);
+	material.reflection = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+
+	box_ = new Model;
+	if (!box_->Init(device_, geo, identity, material))
+		return false;
+	//__
+
+	ModelInstance instance;
+
+	instance.model = box_;
+	instance.scale = XMMatrixScaling(1.0f, 1.0f, 5.0f);
+	instance.rotation = identity;
+	instance.translation = XMMatrixTranslation(0.0f, 0.0f, 0.0f);
+	model_inst_.push_back(instance);
+
+	instance.model = box_;
+	instance.scale = XMMatrixScaling(1.0f, 1.0f, 10.0f);
+	instance.rotation = identity;
+	instance.translation = XMMatrixTranslation(0.0f, 3.0f, 20.0f);
+	model_inst_.push_back(instance);
+
+	instance.model = box_;
+	instance.scale = XMMatrixScaling(1.0f, 1.0f, 2.0f);
+	instance.rotation = identity;
+	instance.translation = XMMatrixTranslation(0.0f, -2.0f, 30.0f);
+	model_inst_.push_back(instance);
+
+	instance.model = box_;
+	instance.scale = XMMatrixScaling(1.0f, 1.0f, 3.0f);
+	instance.rotation = identity;
+	instance.translation = XMMatrixTranslation(0.0f, 1.0f, 35.0f);
+	model_inst_.push_back(instance);
+
+	return true;
 }

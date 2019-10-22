@@ -65,16 +65,16 @@ namespace ba
 		//
 
 		// Accessors for the camera position.
-		const XMVECTOR& position_w_xv() const;
-		const XMFLOAT3& position_w_xf() const;
+		XMVECTOR position_w_xv() const;
+		XMFLOAT3 position_w_xf() const;
 
 		// Accessors to right, up, look vectors.
-		const XMVECTOR& right_w_xv() const;
-		const XMFLOAT3& right_w_xf() const;
-		const XMVECTOR& up_w_xv() const;
-		const XMFLOAT3& up_w_xf() const;
-		const XMVECTOR& look_w_xv() const;
-		const XMFLOAT3& look_w_xf() const;
+		XMVECTOR right_w_xv() const;
+		XMFLOAT3 right_w_xf() const;
+		XMVECTOR up_w_xv() const;
+		XMFLOAT3 up_w_xf() const;
+		XMVECTOR look_w_xv() const;
+		XMFLOAT3 look_w_xf() const;
 
 		// Accessors to the camera properties.
 		float near_z() const;
@@ -88,8 +88,8 @@ namespace ba
 		float fov_y() const;
 
 		// Accessors to view, projection matrices.
-		const XMMATRIX& view() const;
-		const XMMATRIX& proj() const;
+		XMMATRIX view() const;
+		XMMATRIX proj() const;
 
 	private:
 		XMFLOAT3 pos_w_;

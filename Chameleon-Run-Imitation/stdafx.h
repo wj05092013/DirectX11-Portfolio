@@ -55,14 +55,14 @@
 #include "RenderTextureEffect.h"
 #include "Effects.h"
 
-#include "GraphicComponent.h"
-#include "GraphicComponentManager.h"
 #include "InputVertex.h"
 #include "GeometryGenerator.h"
 #include "Mesh.h"
 #include "Model.h"
 #include "DebugScreen.h"
 #include "TextureManager.h"
+#include "GraphicComponentManager.h"
+#include "GraphicComponent.h"
 #include "Camera.h"
 #include "FreeViewpointCamera.h"
 #include "RotationalCamera.h"
@@ -71,9 +71,8 @@
 #include "SSAOMap.h"
 #include "Renderer.h"
 
-#include "SceneComponent.h"
-#include "SceneComponentManager.h"
-#include "Scene.h"
 #include "SceneManager.h"
+#include "Scene.h"
 
 #include "Application.h"
+#include "Game.h"

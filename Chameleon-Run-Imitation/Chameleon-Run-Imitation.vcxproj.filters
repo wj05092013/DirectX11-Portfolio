@@ -162,13 +162,7 @@
     <ClInclude Include="GraphicComponent.h">
       <Filter>Includes\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="SceneComponent.h">
-      <Filter>Includes\Game</Filter>
-    </ClInclude>
     <ClInclude Include="SceneManager.h">
-      <Filter>Includes\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneComponentManager.h">
       <Filter>Includes\Game</Filter>
     </ClInclude>
     <ClInclude Include="GraphicComponentManager.h">

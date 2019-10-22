@@ -6,6 +6,8 @@ PCH: Yes
 
 namespace ba
 {
+	class GraphicComponent;
+
 	class GraphicComponentManager : private Uncopiable
 	{
 	private:
@@ -45,6 +47,6 @@ namespace ba
 			component = iter->second;
 		}
 		
-		return component;
+		return dynamic_cast<Type*>(component);
 	}
 }

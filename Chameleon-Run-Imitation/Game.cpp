@@ -1,11 +1,8 @@
 #include "stdafx.h"
-#include "Game.h"
+#include "Scene01.h"
 
 ba::Game::Game() :
-	scene_bounds_{},
-
-	wolf_model_(nullptr),
-	
+	current_scene_(nullptr),
 	last_mouse_pos_{}
 {
 }
@@ -16,19 +13,22 @@ ba::Game::~Game()
 
 void ba::Game::Render()
 {
-	debug_screen_.set_srv(ssao_map_.normal_depth_map_srv());
-	debug_screen_.Render(dc_);
+	current_scene_->Render();
 
 	swap_chain_->Present(0U, 0U);
 }
 
 void ba::Game::UpdateDirectX()
 {
+	current_scene_->Update();
 }
 
 bool ba::Game::OnResize()
 {
 	if (!Application::OnResize())
+		return false;
+
+	if (!current_scene_->OnResize(client_width_, client_height_))
 		return false;
 
 	return true;
@@ -45,18 +45,9 @@ bool ba::Game::InitDirectX()
 		return false;
 	if (!inputvertex::InitAll(device_))
 		return false;
-	
-	if (!debug_screen_.Init(device_))
+	if (!SceneManager::GetInstance().Init(device_, dc_, &renderer_, &timer_))
 		return false;
-	debug_screen_.set_ndc_position_size(0.4f, -0.4f, 0.6f, 0.6f);
-
 	TextureManager::GetInstance().Init(device_);
-
-	if (!InitModels())
-		return false;
-
-	InitSceneBounds();
-	InitLights();
 
 	// Set screen descriptions participating on all kinds of rendering.
 	Renderer::ScreenDesc screen_desc;
@@ -65,18 +56,20 @@ bool ba::Game::InitDirectX()
 	screen_desc.viewport = &viewport_;
 	renderer_.set_screen_desc(screen_desc);
 	
+	SceneManager::GetInstance().AddScene<Scene01>();
+
+	if (!SceneManager::GetInstance().LoadNextScene(&current_scene_, client_width_, client_height_))
+		return false;
+
 	return true;
 }
 
 void ba::Game::DestroyDirectX()
 {
-	renderer_.Destroy();
-	ReleaseModels();
-
 	TextureManager::GetInstance().Destroy();
-
+	SceneManager::GetInstance().Destroy();
 	inputvertex::DestroyAll();
-
+	renderer_.Destroy();
 	GraphicComponentManager::GetInstance().Destroy();
 
 	Application::DestroyDirectX();
@@ -84,48 +77,30 @@ void ba::Game::DestroyDirectX()
 
 void ba::Game::UpdateOnKeyInput()
 {
-	// Control the camera.
-	//
-	if (key_pressed_['W'])
-	if (key_pressed_['S'])
-	if (key_pressed_['D'])
-	if (key_pressed_['A'])
-	if (key_pressed_['E'])
-	if (key_pressed_['Q'])
-	//__
+	current_scene_->UpdateOnKeyInput(key_pressed_, key_switch_);
 }
 
 void ba::Game::OnMouseMove(WPARAM w_par, int x, int y)
 {
-	if ((w_par & MK_LBUTTON) != 0)
-	{
-		
-	}
-
-	last_mouse_pos_.x = x;
-	last_mouse_pos_.y = y;
+	current_scene_->OnMouseMove(main_wnd_, w_par, x, y);
 }
 
 void ba::Game::OnMouseLBtnDown(WPARAM w_par, int x, int y)
 {
-	SetCapture(main_wnd_);
-	last_mouse_pos_.x = x;
-	last_mouse_pos_.y = y;
+	current_scene_->OnMouseLBtnDown(main_wnd_, w_par, x, y);
 }
 
 void ba::Game::OnMouseRBtnDown(WPARAM w_par, int x, int y)
 {
-	SetCapture(main_wnd_);
-	last_mouse_pos_.x = x;
-	last_mouse_pos_.y = y;
+	current_scene_->OnMouseRBtnDown(main_wnd_, w_par, x, y);
 }
 
 void ba::Game::OnMouseLBtnUp(WPARAM w_par, int x, int y)
 {
-	ReleaseCapture();
+	current_scene_->OnMouseLBtnUp(main_wnd_, w_par, x, y);
 }
 
 void ba::Game::OnMouseRBtnUp(WPARAM w_par, int x, int y)
 {
-	ReleaseCapture();
+	current_scene_->OnMouseRBtnUp(main_wnd_, w_par, x, y);
 }

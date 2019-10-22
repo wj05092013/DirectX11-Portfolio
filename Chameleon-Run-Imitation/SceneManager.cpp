@@ -10,6 +10,12 @@ ba::SceneManager::SceneManager() :
 {
 }
 
+ba::SceneManager& ba::SceneManager::GetInstance()
+{
+	static SceneManager instance;
+	return instance;
+}
+
 bool ba::SceneManager::Init(ID3D11Device* device, ID3D11DeviceContext* dc, Renderer* renderer, Timer* timer)
 {
 	device_ = device;
@@ -34,27 +40,31 @@ void ba::SceneManager::Destroy()
 	scenes_.clear();
 }
 
-bool ba::SceneManager::LoadNextScene(Scene** out_scene)
+bool ba::SceneManager::LoadNextScene(Scene** out_scene, int client_width, int client_height)
 {
 	auto iter = scenes_.find(next_scene_idx);
 
 	// There's no more scene.
-	if(iter == scenes_.end())
+	if (iter == scenes_.end())
 		return false;
 
 	// Initialization failed.
-	if (!iter->second->Init(device_, dc_, renderer_))
+	if (!(iter->second->Init(device_, dc_, renderer_, timer_, client_width, client_height)))
 		return false;
 
 	UnloadCurrentScene();
 	++next_scene_idx;
 
 	*out_scene = iter->second;
+
+	return true;
 }
 
 void ba::SceneManager::UnloadCurrentScene()
 {
 	auto iter = scenes_.find(next_scene_idx - 1);
-	
-	iter->second->Destroy();
+	if (iter != scenes_.end())
+	{
+		iter->second->Destroy();
+	}
 }

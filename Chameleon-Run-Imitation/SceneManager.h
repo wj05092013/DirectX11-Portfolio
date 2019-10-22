@@ -6,12 +6,16 @@ PCH: Yes
 
 namespace ba
 {
+	class Scene;
+
 	class SceneManager
 	{
 	private:
 		SceneManager();
 		
 	public:
+		static SceneManager& GetInstance();
+
 		bool Init(ID3D11Device* device, ID3D11DeviceContext* dc, Renderer* renderer, Timer* timer);
 		void Destroy();
 		
@@ -19,7 +23,7 @@ namespace ba
 		template<class Type>
 		void AddScene();
 
-		bool LoadNextScene(Scene** out_scene);
+		bool LoadNextScene(Scene** out_scene, int client_width, int client_height);
 
 	private:
 		void UnloadCurrentScene();

@@ -1,7 +1,7 @@
 #pragma once
 
 /*
-PCH: No
+PCH: Yes
 */
 
 namespace ba
@@ -21,12 +21,6 @@ namespace ba
 		bool InitDirectX() override;
 		void DestroyDirectX() override;
 
-		void InitSceneBounds();
-		void InitLights();
-
-		bool InitModels();
-		void ReleaseModels();
-
 	private:
 		void UpdateOnKeyInput() override;
 
@@ -37,11 +31,9 @@ namespace ba
 		void OnMouseRBtnUp(WPARAM w_par, int x, int y) override;
 
 	private:
-		// Renderer.
 		Renderer renderer_;
 
-		// Debug screen.
-		DebugScreen debug_screen_;
+		Scene* current_scene_;
 
 		POINT	last_mouse_pos_;
 	};
