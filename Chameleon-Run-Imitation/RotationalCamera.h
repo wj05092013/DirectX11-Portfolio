@@ -26,7 +26,7 @@ namespace ba
 		RotationalCamera();
 		~RotationalCamera() override;
 
-		void Init(const CameraDesc& base_desc, const RotationalCameraDesc& derived_desc);
+		void Init(const RotationalCameraDesc& desc);
 		void Destroy() override;
 
 

@@ -1,21 +1,6 @@
 #include "stdafx.h"
 #include "Game.h"
 
-const float ba::Game::kShadowMapSize = 2048.0f;
-
-const DirectX::XMVECTOR ba::Game::kInitCamPos = XMVectorSet(0.0f, 1.0f, -15.0f, 1.0f);
-const DirectX::XMVECTOR ba::Game::kInitCamTarget = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
-const DirectX::XMVECTOR ba::Game::kInitCamUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-
-const float ba::Game::kFovY = 0.25f * XM_PI;
-const float ba::Game::kNearZ = 0.1f;
-const float ba::Game::kFarZ = 1000.0f;
-
-const float ba::Game::kForwardMovingRate = 100.0f;
-const float ba::Game::kRightMovingRate = 100.0f;
-const float ba::Game::kUpperMovingRate = 100.0f;
-const float ba::Game::kRotationRate = 0.15f;
-
 ba::Game::Game() :
 	scene_bounds_{},
 
@@ -31,18 +16,6 @@ ba::Game::~Game()
 
 void ba::Game::Render()
 {
-	// Render on shadow map.
-	renderer_.RenderShadowMap(model_instances_, evb_per_frame_);
-
-	// Render on normal-depth map;
-	renderer_.RenderNormalDepthMap(model_instances_, evb_per_frame_);
-	// Build ssao map with the normal-depth map and blur it.
-	ssao_map_.BuildSSAOMap(cam_);
-	ssao_map_.BlurSSAOMap(4);
-
-	// Render on normal render targets.
-	renderer_.RenderScene(model_instances_, evb_per_frame_);
-
 	debug_screen_.set_srv(ssao_map_.normal_depth_map_srv());
 	debug_screen_.Render(dc_);
 
@@ -51,19 +24,12 @@ void ba::Game::Render()
 
 void ba::Game::UpdateDirectX()
 {
-	cam_.UpdateViewMatrix();
-	shadow_map_.BuildShadowTransform();
 }
 
 bool ba::Game::OnResize()
 {
 	if (!Application::OnResize())
 		return false;
-
-	cam_.SetLens(kFovY, aspect_ratio(), kNearZ, kFarZ);
-	ssao_map_.OnResize(client_width_, client_height_, kFovY, kFarZ);
-
-	renderer_.SetEffectVariablesOnStartAndResize(evb_on_start_and_resize_);
 
 	return true;
 }
@@ -73,20 +39,16 @@ bool ba::Game::InitDirectX()
 	if (!Application::InitDirectX())
 		return false;
 
+	if (!GraphicComponentManager::GetInstance().Init())
+		return false;
 	if (!renderer_.Init(device_, dc_))
 		return false;
 	if (!inputvertex::InitAll(device_))
 		return false;
-	if (!shadow_map_.Init(device_, static_cast<float>(kShadowMapSize), static_cast<float>(kShadowMapSize)))
-		return false;
-	if (!ssao_map_.Init(device_, dc_, client_width_, client_height_, kFovY, kFarZ))
-		return false;
+	
 	if (!debug_screen_.Init(device_))
 		return false;
 	debug_screen_.set_ndc_position_size(0.4f, -0.4f, 0.6f, 0.6f);
-
-	cam_.LookAt(XMFLOAT3(0.0f, 5.0f, -10.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 1.0f, 0.0f));
-	cam_.SetLens(kFovY, aspect_ratio(), kNearZ, kFarZ);
 
 	TextureManager::GetInstance().Init(device_);
 
@@ -96,86 +58,28 @@ bool ba::Game::InitDirectX()
 	InitSceneBounds();
 	InitLights();
 
-	// Set rendering components participating on all kind of rendering.
-	Renderer::SceneRenderingComponents rendering_component;
-	rendering_component.rtv = rtv_;
-	rendering_component.dsv = dsv_;
-	rendering_component.viewport = &viewport_;
-	rendering_component.cam = &cam_;
-	rendering_component.shadow_map = &shadow_map_;
-	rendering_component.ssao_map = &ssao_map_;
-
-	// Set effect variables' values to be used for all time.
-	evb_change_rarely_.directional_lights = lights_;
-	evb_change_rarely_.fog_start = 5.0f;
-	evb_change_rarely_.fog_range = 20.0f;
-	evb_change_rarely_.fog_color = color::kSilver;
-	evb_change_rarely_.shadow_map_size = kShadowMapSize;
-	evb_change_rarely_.to_tex = XMMATRIX(
-		0.5f, 0.0f, 0.0f, 0.0f,
-		0.0f, -0.5f, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		0.5f, 0.5f, 0.0f, 1.0f
-	);
-
-	// Set effect variables' values to be used on application start and resize.
-	//  Now, the structure has no members.
-
-	renderer_.set_rendering_components(rendering_component);
-	renderer_.SetEffectVariablesChangeRarely(evb_change_rarely_);
-	renderer_.SetEffectVariablesOnStartAndResize(evb_on_start_and_resize_);
-
+	// Set screen descriptions participating on all kinds of rendering.
+	Renderer::ScreenDesc screen_desc;
+	screen_desc.rtv = rtv_;
+	screen_desc.dsv = dsv_;
+	screen_desc.viewport = &viewport_;
+	renderer_.set_screen_desc(screen_desc);
+	
 	return true;
 }
 
 void ba::Game::DestroyDirectX()
 {
 	renderer_.Destroy();
-	shadow_map_.Destroy();
-	ssao_map_.Destroy();
 	ReleaseModels();
 
 	TextureManager::GetInstance().Destroy();
 
 	inputvertex::DestroyAll();
 
+	GraphicComponentManager::GetInstance().Destroy();
+
 	Application::DestroyDirectX();
-}
-
-void ba::Game::InitSceneBounds()
-{
-	scene_bounds_.center = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	scene_bounds_.radius = 100.0f;
-}
-
-void ba::Game::InitLights()
-{
-	lights_[0].ambient = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	lights_[0].diffuse = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	lights_[0].specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	lights_[0].direction = XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
-
-	lights_[1].ambient = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	lights_[1].diffuse = XMFLOAT4(0.20f, 0.20f, 0.20f, 1.0f);
-	lights_[1].specular = XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f);
-	lights_[1].direction = XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
-
-	lights_[2].ambient = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	lights_[2].diffuse = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	lights_[2].specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	lights_[2].direction = XMFLOAT3(0.0f, -0.707f, -0.707f);
-}
-
-bool ba::Game::InitModels()
-{
-	
-
-	return true;
-}
-
-void ba::Game::ReleaseModels()
-{
-	
 }
 
 void ba::Game::UpdateOnKeyInput()

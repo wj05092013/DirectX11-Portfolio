@@ -9,10 +9,9 @@ ba::FreeViewpointCamera::~FreeViewpointCamera()
 {
 }
 
-void ba::FreeViewpointCamera::Init(const CameraDesc& base_desc, const FreeViewpointCameraDesc& derived_desc)
+void ba::FreeViewpointCamera::Init(const FreeViewpointCameraDesc& desc)
 {
-	Camera::Init(base_desc);
-	desc_ = derived_desc;
+	desc_ = desc;
 }
 
 void ba::FreeViewpointCamera::Destroy()

@@ -28,14 +28,11 @@ namespace ba
 		//
 
 	public:
-		struct SceneRenderingComponents
+		struct ScreenDesc
 		{
 			ID3D11RenderTargetView* rtv;
 			ID3D11DepthStencilView* dsv;
 			D3D11_VIEWPORT* viewport;
-			Camera* cam;
-			ShadowMap* shadow_map;
-			SSAOMap* ssao_map;
 		};
 
 		struct EffectVariableBundlePerFrame
@@ -50,7 +47,7 @@ namespace ba
 
 		struct EffectVariableBundleChangeRarely
 		{
-			light::DirectionalLight* directional_lights;
+			light::DirectionalLight*	directional_lights;
 			float						fog_start;
 			float						fog_range;
 			XMVECTOR					fog_color;
@@ -66,9 +63,16 @@ namespace ba
 
 		void SetEffectVariablesChangeRarely(const EffectVariableBundleChangeRarely& bundle);
 
-		void set_rendering_components(const SceneRenderingComponents& rendering_component);
+		void set_screen_desc(const ScreenDesc& screen_desc);
+		void set_camera(Camera* camera);
+		void set_shadow_map(ShadowMap* shadow_map);
+		void set_ssao_map(SSAOMap* ssao_map);
 		
 	private:
-		SceneRenderingComponents rendering_components_;
+		ScreenDesc screen_desc_;
+
+		Camera* camera_;
+		ShadowMap* shadow_map_;
+		SSAOMap* ssao_map_;
 	};
 }

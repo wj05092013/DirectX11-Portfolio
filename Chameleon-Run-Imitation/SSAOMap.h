@@ -18,7 +18,7 @@ namespace ba
 
 		bool OnResize(UINT width, UINT height, float fov_y, float far_z);
 
-		void BuildSSAOMap(const Camera& cam);
+		void BuildSSAOMap(const XMMATRIX& proj);
 		void BlurSSAOMap(UINT blur_count);
 
 		ID3D11ShaderResourceView* normal_depth_map_srv();

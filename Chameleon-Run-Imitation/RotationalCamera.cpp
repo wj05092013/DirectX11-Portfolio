@@ -9,9 +9,8 @@ ba::RotationalCamera::~RotationalCamera()
 {
 }
 
-void ba::RotationalCamera::Init(const CameraDesc& base_desc, const RotationalCameraDesc& derived_desc)
+void ba::RotationalCamera::Init(const RotationalCameraDesc& derived_desc)
 {
-	Camera::Init(base_desc);
 	desc_ = derived_desc;
 }
 

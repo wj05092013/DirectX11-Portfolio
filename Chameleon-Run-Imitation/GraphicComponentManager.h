@@ -20,7 +20,7 @@ namespace ba
 		template<class Type>
 		Type* CreateComponent(const std::string& key_str);
 
-		void ReleaseComponent(const std::string& key_str);
+		void DestroyComponent(const std::string& key_str);
 
 	private:
 		std::map<std::string, GraphicComponent*> components_;

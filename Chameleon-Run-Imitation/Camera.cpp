@@ -1,7 +1,15 @@
 #include "stdafx.h"
 
 ba::Camera::Camera() :
-	desc_{},
+	pos_w_(0.0f, 0.0f, 0.0f),
+	up_w_(0.0f, 0.0f, 0.0f),
+	right_w_(0.0f, 0.0f, 0.0f),
+	look_w_(0.0f, 0.0f, 0.0f),
+	near_z_(0.0f),
+	far_z_(0.0f),
+	fov_y_(0.0f),
+	aspect_ratio_(0.0f),
+
 	near_window_height_(0.0f),
 	far_window_height_(0.0f)
 {
@@ -14,11 +22,6 @@ ba::Camera::~Camera()
 {
 }
 
-void ba::Camera::Init(const CameraDesc& init_desc)
-{
-	desc_ = init_desc;
-}
-
 void ba::Camera::Destroy()
 {
 	// Do nothing.
@@ -26,36 +29,36 @@ void ba::Camera::Destroy()
 
 void ba::Camera::UpdateViewMatrix()
 {
-	XMVECTOR p = XMLoadFloat3(&desc_.pos_w);
-	XMVECTOR u = XMLoadFloat3(&desc_.right_w);
-	XMVECTOR v = XMLoadFloat3(&desc_.up_w);
-	XMVECTOR w = XMLoadFloat3(&desc_.look_w);
+	XMVECTOR p = XMLoadFloat3(&pos_w_);
+	XMVECTOR u = XMLoadFloat3(&right_w_);
+	XMVECTOR v = XMLoadFloat3(&up_w_);
+	XMVECTOR w = XMLoadFloat3(&look_w_);
 
 	w = XMVector3Normalize(w);
 	u = XMVector3Normalize(XMVector3Cross(v, w));
 	v = XMVector3Cross(w, u);
 
-	XMStoreFloat3(&desc_.right_w, u);
-	XMStoreFloat3(&desc_.up_w, v);
-	XMStoreFloat3(&desc_.look_w, w);
+	XMStoreFloat3(&right_w_, u);
+	XMStoreFloat3(&up_w_, v);
+	XMStoreFloat3(&look_w_, w);
 
 	float x = -XMVectorGetX(XMVector3Dot(p, u));
 	float y = -XMVectorGetY(XMVector3Dot(p, v));
 	float z = -XMVectorGetZ(XMVector3Dot(p, w));
 
-	view_(0, 0) = desc_.right_w.x;
-	view_(1, 0) = desc_.right_w.y;
-	view_(2, 0) = desc_.right_w.z;
+	view_(0, 0) = right_w_.x;
+	view_(1, 0) = right_w_.y;
+	view_(2, 0) = right_w_.z;
 	view_(3, 0) = x;
 
-	view_(0, 1) = desc_.up_w.x;
-	view_(1, 1) = desc_.up_w.y;
-	view_(2, 1) = desc_.up_w.z;
+	view_(0, 1) = up_w_.x;
+	view_(1, 1) = up_w_.y;
+	view_(2, 1) = up_w_.z;
 	view_(3, 1) = y;
 
-	view_(0, 2) = desc_.look_w.x;
-	view_(1, 2) = desc_.look_w.y;
-	view_(2, 2) = desc_.look_w.z;
+	view_(0, 2) = look_w_.x;
+	view_(1, 2) = look_w_.y;
+	view_(2, 2) = look_w_.z;
 	view_(3, 2) = z;
 
 	view_(0, 3) = 0.0f;
@@ -66,16 +69,16 @@ void ba::Camera::UpdateViewMatrix()
 
 void ba::Camera::SetLens(float fov_y, float aspect_ratio, float near_z, float far_z)
 {
-	desc_.near_z = near_z;
-	desc_.far_z = far_z;
+	near_z = near_z;
+	far_z = far_z;
 
-	desc_.fov_y = fov_y;
-	desc_.aspect_ratio = aspect_ratio;
+	fov_y = fov_y;
+	aspect_ratio = aspect_ratio;
 
-	near_window_height_ = 2.0f * tan(0.5f * desc_.fov_y) * desc_.near_z;
-	far_window_height_ = 2.0f * tan(0.5f * desc_.fov_y) * desc_.far_z;
+	near_window_height_ = 2.0f * tan(0.5f * fov_y) * near_z;
+	far_window_height_ = 2.0f * tan(0.5f * fov_y) * far_z;
 
-	XMMATRIX proj = XMMatrixPerspectiveFovLH(desc_.fov_y, desc_.aspect_ratio, desc_.near_z, desc_.far_z);
+	XMMATRIX proj = XMMatrixPerspectiveFovLH(fov_y, aspect_ratio, near_z, far_z);
 	XMStoreFloat4x4(&proj_, proj);
 }
 
@@ -85,10 +88,10 @@ void ba::Camera::LookAt(const XMVECTOR& pos, const XMVECTOR& target, const XMVEC
 	XMVECTOR u = XMVector3Normalize(XMVector3Cross(up, w));
 	XMVECTOR v = XMVector3Cross(w, u);
 
-	XMStoreFloat3(&desc_.pos_w, pos);
-	XMStoreFloat3(&desc_.right_w, u);
-	XMStoreFloat3(&desc_.up_w, v);
-	XMStoreFloat3(&desc_.look_w, w);
+	XMStoreFloat3(&pos_w_, pos);
+	XMStoreFloat3(&right_w_, u);
+	XMStoreFloat3(&up_w_, v);
+	XMStoreFloat3(&look_w_, w);
 }
 
 void ba::Camera::LookAt(const XMFLOAT3& pos, const XMFLOAT3& target, const XMFLOAT3& up)
@@ -98,81 +101,81 @@ void ba::Camera::LookAt(const XMFLOAT3& pos, const XMFLOAT3& target, const XMFLO
 
 void ba::Camera::MoveCameraX(float d)
 {
-	XMVECTOR x = XMVectorScale(XMLoadFloat3(&desc_.right_w), d);
-	XMVECTOR pos = XMVectorAdd(XMLoadFloat3(&desc_.pos_w), x);
-	XMStoreFloat3(&desc_.pos_w, pos);
+	XMVECTOR x = XMVectorScale(XMLoadFloat3(&right_w_), d);
+	XMVECTOR pos = XMVectorAdd(XMLoadFloat3(&pos_w_), x);
+	XMStoreFloat3(&pos_w_, pos);
 }
 
 void ba::Camera::MoveCameraZ(float d)
 {
-	XMVECTOR z = XMVectorScale(XMLoadFloat3(&desc_.look_w), d);
-	XMVECTOR pos = XMVectorAdd(XMLoadFloat3(&desc_.pos_w), z);
-	XMStoreFloat3(&desc_.pos_w, pos);
+	XMVECTOR z = XMVectorScale(XMLoadFloat3(&look_w_), d);
+	XMVECTOR pos = XMVectorAdd(XMLoadFloat3(&pos_w_), z);
+	XMStoreFloat3(&pos_w_, pos);
 }
 
 void ba::Camera::MoveCameraY(float d)
 {
-	XMVECTOR y = XMVectorScale(XMLoadFloat3(&desc_.up_w), d);
-	XMVECTOR pos = XMVectorAdd(XMLoadFloat3(&desc_.pos_w), y);
-	XMStoreFloat3(&desc_.pos_w, pos);
+	XMVECTOR y = XMVectorScale(XMLoadFloat3(&up_w_), d);
+	XMVECTOR pos = XMVectorAdd(XMLoadFloat3(&pos_w_), y);
+	XMStoreFloat3(&pos_w_, pos);
 }
 
 void ba::Camera::MoveWorldY(float d)
 {
 	XMVECTOR world_y = XMVectorSet(0.0f, d, 0.0f, 0.0f);
-	XMVECTOR pos = XMVectorAdd(XMLoadFloat3(&desc_.pos_w), world_y);
-	XMStoreFloat3(&desc_.pos_w, pos);
+	XMVECTOR pos = XMVectorAdd(XMLoadFloat3(&pos_w_), world_y);
+	XMStoreFloat3(&pos_w_, pos);
 }
 
 void ba::Camera::Roll(float radian)
 {
-	XMMATRIX rot = XMMatrixRotationAxis(XMLoadFloat3(&desc_.look_w), radian);
+	XMMATRIX rot = XMMatrixRotationAxis(XMLoadFloat3(&look_w_), radian);
 
-	XMStoreFloat3(&desc_.right_w, XMVector3TransformNormal(XMLoadFloat3(&desc_.right_w), rot));
-	XMStoreFloat3(&desc_.up_w, XMVector3TransformNormal(XMLoadFloat3(&desc_.up_w), rot));
+	XMStoreFloat3(&right_w_, XMVector3TransformNormal(XMLoadFloat3(&right_w_), rot));
+	XMStoreFloat3(&up_w_, XMVector3TransformNormal(XMLoadFloat3(&up_w_), rot));
 }
 
 void ba::Camera::Pitch(float radian)
 {
-	XMMATRIX rot = XMMatrixRotationAxis(XMLoadFloat3(&desc_.right_w), radian);
+	XMMATRIX rot = XMMatrixRotationAxis(XMLoadFloat3(&right_w_), radian);
 
-	XMStoreFloat3(&desc_.up_w, XMVector3TransformNormal(XMLoadFloat3(&desc_.up_w), rot));
-	XMStoreFloat3(&desc_.look_w, XMVector3TransformNormal(XMLoadFloat3(&desc_.look_w), rot));
+	XMStoreFloat3(&up_w_, XMVector3TransformNormal(XMLoadFloat3(&up_w_), rot));
+	XMStoreFloat3(&look_w_, XMVector3TransformNormal(XMLoadFloat3(&look_w_), rot));
 }
 
 void ba::Camera::Yaw(float radian)
 {
-	XMMATRIX rot = XMMatrixRotationAxis(XMLoadFloat3(&desc_.up_w), radian);
+	XMMATRIX rot = XMMatrixRotationAxis(XMLoadFloat3(&up_w_), radian);
 
-	XMStoreFloat3(&desc_.right_w, XMVector3TransformNormal(XMLoadFloat3(&desc_.right_w), rot));
-	XMStoreFloat3(&desc_.look_w, XMVector3TransformNormal(XMLoadFloat3(&desc_.look_w), rot));
+	XMStoreFloat3(&right_w_, XMVector3TransformNormal(XMLoadFloat3(&right_w_), rot));
+	XMStoreFloat3(&look_w_, XMVector3TransformNormal(XMLoadFloat3(&look_w_), rot));
 }
 
 void ba::Camera::RotateWorldX(float radian)
 {
 	XMMATRIX rot = XMMatrixRotationX(radian);
 
-	XMStoreFloat3(&desc_.right_w, XMVector3TransformNormal(XMLoadFloat3(&desc_.right_w), rot));
-	XMStoreFloat3(&desc_.up_w, XMVector3TransformNormal(XMLoadFloat3(&desc_.up_w), rot));
-	XMStoreFloat3(&desc_.look_w, XMVector3TransformNormal(XMLoadFloat3(&desc_.look_w), rot));
+	XMStoreFloat3(&right_w_, XMVector3TransformNormal(XMLoadFloat3(&right_w_), rot));
+	XMStoreFloat3(&up_w_, XMVector3TransformNormal(XMLoadFloat3(&up_w_), rot));
+	XMStoreFloat3(&look_w_, XMVector3TransformNormal(XMLoadFloat3(&look_w_), rot));
 }
 
 void ba::Camera::RotateWorldY(float radian)
 {
 	XMMATRIX rot = XMMatrixRotationY(radian);
 
-	XMStoreFloat3(&desc_.right_w, XMVector3TransformNormal(XMLoadFloat3(&desc_.right_w), rot));
-	XMStoreFloat3(&desc_.up_w, XMVector3TransformNormal(XMLoadFloat3(&desc_.up_w), rot));
-	XMStoreFloat3(&desc_.look_w, XMVector3TransformNormal(XMLoadFloat3(&desc_.look_w), rot));
+	XMStoreFloat3(&right_w_, XMVector3TransformNormal(XMLoadFloat3(&right_w_), rot));
+	XMStoreFloat3(&up_w_, XMVector3TransformNormal(XMLoadFloat3(&up_w_), rot));
+	XMStoreFloat3(&look_w_, XMVector3TransformNormal(XMLoadFloat3(&look_w_), rot));
 }
 
 void ba::Camera::RotateWorldZ(float radian)
 {
 	XMMATRIX rot = XMMatrixRotationZ(radian);
 
-	XMStoreFloat3(&desc_.right_w, XMVector3TransformNormal(XMLoadFloat3(&desc_.right_w), rot));
-	XMStoreFloat3(&desc_.up_w, XMVector3TransformNormal(XMLoadFloat3(&desc_.up_w), rot));
-	XMStoreFloat3(&desc_.look_w, XMVector3TransformNormal(XMLoadFloat3(&desc_.look_w), rot));
+	XMStoreFloat3(&right_w_, XMVector3TransformNormal(XMLoadFloat3(&right_w_), rot));
+	XMStoreFloat3(&up_w_, XMVector3TransformNormal(XMLoadFloat3(&up_w_), rot));
+	XMStoreFloat3(&look_w_, XMVector3TransformNormal(XMLoadFloat3(&look_w_), rot));
 }
 
 void ba::Camera::set_position_w(float x, float y, float z)
@@ -182,62 +185,62 @@ void ba::Camera::set_position_w(float x, float y, float z)
 
 void ba::Camera::set_position_w(const XMFLOAT3& pos)
 {
-	desc_.pos_w = pos;
+	pos_w_ = pos;
 }
 
 const DirectX::XMVECTOR& ba::Camera::position_w_xv() const
 {
-	return XMLoadFloat3(&desc_.pos_w);
+	return XMLoadFloat3(&pos_w_);
 }
 
 const DirectX::XMFLOAT3& ba::Camera::position_w_xf() const
 {
-	return desc_.pos_w;
+	return pos_w_;
 }
 
 const DirectX::XMVECTOR& ba::Camera::right_w_xv() const
 {
-	return XMLoadFloat3(&desc_.right_w);
+	return XMLoadFloat3(&right_w_);
 }
 
 const DirectX::XMFLOAT3& ba::Camera::right_w_xf() const
 {
-	return desc_.right_w;
+	return right_w_;
 }
 
 const DirectX::XMVECTOR& ba::Camera::up_w_xv() const
 {
-	return XMLoadFloat3(&desc_.up_w);
+	return XMLoadFloat3(&up_w_);
 }
 
 const DirectX::XMFLOAT3& ba::Camera::up_w_xf() const
 {
-	return desc_.up_w;
+	return up_w_;
 }
 
 const DirectX::XMVECTOR& ba::Camera::look_w_xv() const
 {
-	return XMLoadFloat3(&desc_.look_w);
+	return XMLoadFloat3(&look_w_);
 }
 
 const DirectX::XMFLOAT3& ba::Camera::look_w_xf() const
 {
-	return desc_.look_w;
+	return look_w_;
 }
 
 float ba::Camera::near_z() const
 {
-	return desc_.near_z;
+	return near_z_;
 }
 
 float ba::Camera::far_z() const
 {
-	return desc_.far_z;
+	return far_z_;
 }
 
 float ba::Camera::near_window_width() const
 {
-	return desc_.aspect_ratio * near_window_height_;
+	return aspect_ratio_ * near_window_height_;
 }
 
 float ba::Camera::near_window_height() const
@@ -247,7 +250,7 @@ float ba::Camera::near_window_height() const
 
 float ba::Camera::far_window_width() const
 {
-	return desc_.aspect_ratio * far_window_height_;
+	return aspect_ratio_ * far_window_height_;
 }
 
 float ba::Camera::far_window_height() const
@@ -257,18 +260,18 @@ float ba::Camera::far_window_height() const
 
 float ba::Camera::aspect_ratio() const
 {
-	return desc_.aspect_ratio;
+	return aspect_ratio_;
 }
 
 float ba::Camera::fov_x() const
 {
 	float half_width = 0.5f * near_window_width();
-	return 2.0f * atan(half_width / desc_.near_z);
+	return 2.0f * atan(half_width / near_z_);
 }
 
 float ba::Camera::fov_y() const
 {
-	return desc_.fov_y;
+	return fov_y_;
 }
 
 const DirectX::XMMATRIX& ba::Camera::view() const

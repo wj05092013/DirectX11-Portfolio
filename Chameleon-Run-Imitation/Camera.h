@@ -9,22 +9,9 @@ namespace ba
 	class Camera : public GraphicComponent
 	{
 	public:
-		struct CameraDesc
-		{
-			XMFLOAT3 pos_w;
-			XMFLOAT3 right_w;
-			XMFLOAT3 up_w;
-			XMFLOAT3 look_w;
-			float near_z;
-			float far_z;
-			float fov_y;
-			float aspect_ratio;
-		};
-
 		Camera();
 		~Camera() override;
 
-		void Init(const CameraDesc& init_desc);
 		void Destroy() override;
 
 
@@ -105,8 +92,15 @@ namespace ba
 		const XMMATRIX& proj() const;
 
 	private:
-		CameraDesc desc_;
-
+		XMFLOAT3 pos_w_;
+		XMFLOAT3 up_w_;
+		XMFLOAT3 right_w_;
+		XMFLOAT3 look_w_;
+		float near_z_;
+		float far_z_;
+		float fov_y_;
+		float aspect_ratio_;
+		
 		float near_window_height_;
 		float far_window_height_;
 

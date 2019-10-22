@@ -85,7 +85,7 @@ bool ba::SSAOMap::OnResize(UINT width, UINT height, float fov_y, float far_z)
 	return true;
 }
 
-void ba::SSAOMap::BuildSSAOMap(const Camera& cam)
+void ba::SSAOMap::BuildSSAOMap(const XMMATRIX& proj)
 {
 	// Set render target and viewport.
 	//
@@ -120,7 +120,7 @@ void ba::SSAOMap::BuildSSAOMap(const Camera& cam)
 		0.0f, 0.0f, 1.0f, 0.0f,
 		0.5f, 0.5f, 0.0f, 1.0f
 	);
-	effects::kSSAOMapEffect.SetProj(cam.proj());
+	effects::kSSAOMapEffect.SetProj(proj);
 	effects::kSSAOMapEffect.SetToTex(to_tex);
 	effects::kSSAOMapEffect.SetNormalDepthMap(normal_depth_map_srv_);
 	effects::kSSAOMapEffect.SetRandomVectorMap(random_vector_map_srv_);

@@ -20,7 +20,7 @@ namespace ba
 		FreeViewpointCamera();
 		~FreeViewpointCamera() override;
 
-		void Init(const CameraDesc& base_desc, const FreeViewpointCameraDesc& derived_desc);
+		void Init(const FreeViewpointCameraDesc& desc);
 		void Destroy() override;
 
 

@@ -27,7 +27,7 @@ void ba::GraphicComponentManager::Destroy()
 	components_.clear();
 }
 
-void ba::GraphicComponentManager::ReleaseComponent(const std::string& key_str)
+void ba::GraphicComponentManager::DestroyComponent(const std::string& key_str)
 {
 	auto iter = components_.find(key_str);
 

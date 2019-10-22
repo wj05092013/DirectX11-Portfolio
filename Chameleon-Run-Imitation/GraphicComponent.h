@@ -14,7 +14,7 @@ namespace ba
 		friend class ba::GraphicComponentManager;
 
 	public:
-		virtual ~GraphicComponent();
+		virtual ~GraphicComponent() = 0;
 
 		virtual void Destroy() = 0;
 	};
