@@ -184,6 +184,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="RotationalCamera.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Scene01.h" />
     <ClInclude Include="SceneComponent.h" />
     <ClInclude Include="SceneComponentManager.h" />
     <ClInclude Include="SceneManager.h" />
@@ -226,6 +227,7 @@
     <ClCompile Include="RenderTextureEffect.cpp" />
     <ClCompile Include="RotationalCamera.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Scene01.cpp" />
     <ClCompile Include="SceneComponent.cpp" />
     <ClCompile Include="SceneComponentManager.cpp" />
     <ClCompile Include="SceneManager.cpp" />

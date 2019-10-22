@@ -21,8 +21,11 @@ namespace ba
 			float aspect_ratio;
 		};
 
-		Camera(const CameraDesc& init_desc);
+		Camera();
 		~Camera() override;
+
+		void Init(const CameraDesc& init_desc);
+		void Destroy() override;
 
 
 		//

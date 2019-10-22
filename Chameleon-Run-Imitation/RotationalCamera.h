@@ -23,8 +23,11 @@ namespace ba
 			float approach_rate;
 		};
 
-		RotationalCamera(const CameraDesc& basic_desc, const RotationalCameraDesc& desc);
+		RotationalCamera();
 		~RotationalCamera() override;
+
+		void Init(const CameraDesc& base_desc, const RotationalCameraDesc& derived_desc);
+		void Destroy() override;
 
 
 		//

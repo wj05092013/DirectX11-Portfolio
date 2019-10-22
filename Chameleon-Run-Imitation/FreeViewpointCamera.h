@@ -17,10 +17,17 @@ namespace ba
 			float rotation_rate;
 		};
 
-		FreeViewpointCamera(const CameraDesc& basic_desc, const FreeViewpointCameraDesc& desc);
+		FreeViewpointCamera();
 		~FreeViewpointCamera() override;
 
-		// Moduate camera transform.
+		void Init(const CameraDesc& base_desc, const FreeViewpointCameraDesc& derived_desc);
+		void Destroy() override;
+
+
+		//
+		// Modulate camera transform.
+		//
+
 		void MoveFront(float delta_time);
 		void MoveBack(float delta_time);
 		void MoveLeft(float delta_time);
@@ -29,13 +36,21 @@ namespace ba
 		void MoveDown(float delta_time);
 		void Rotate(const POINT& start, const POINT& end);
 
+
+		//
 		// Mutators.
+		//
+
 		void set_forward_move_rate(float rate);
 		void set_right_move_rate(float rate);
 		void set_upper_move_rate(float rate);
 		void set_rotation_rate(float rate);
 
+
+		//
 		// Accessors.
+		//
+
 		float forward_move_rate() const;
 		float right_move_rate() const;
 		float upper_move_rate() const;

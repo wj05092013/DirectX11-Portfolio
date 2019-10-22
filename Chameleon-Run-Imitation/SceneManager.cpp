@@ -4,16 +4,18 @@ ba::SceneManager::SceneManager() :
 	device_(nullptr),
 	dc_(nullptr),
 	renderer_(nullptr),
+	timer_(nullptr),
 	add_scene_idx(0),
 	next_scene_idx(0)
 {
 }
 
-bool ba::SceneManager::Init(ID3D11Device* device, ID3D11DeviceContext* dc, Renderer* renderer)
+bool ba::SceneManager::Init(ID3D11Device* device, ID3D11DeviceContext* dc, Renderer* renderer, Timer* timer)
 {
 	device_ = device;
 	dc_ = dc;
 	renderer_ = renderer;
+	timer_ = timer;
 
 	add_scene_idx = 0;
 	next_scene_idx = 0;

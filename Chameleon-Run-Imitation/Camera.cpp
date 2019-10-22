@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
-ba::Camera::Camera(const CameraDesc& init_desc) :
-	desc_(init_desc),
+ba::Camera::Camera() :
+	desc_{},
 	near_window_height_(0.0f),
 	far_window_height_(0.0f)
 {
@@ -12,6 +12,16 @@ ba::Camera::Camera(const CameraDesc& init_desc) :
 
 ba::Camera::~Camera()
 {
+}
+
+void ba::Camera::Init(const CameraDesc& init_desc)
+{
+	desc_ = init_desc;
+}
+
+void ba::Camera::Destroy()
+{
+	// Do nothing.
 }
 
 void ba::Camera::UpdateViewMatrix()

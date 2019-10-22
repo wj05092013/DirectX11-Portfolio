@@ -1,13 +1,23 @@
 #include "stdafx.h"
 
-ba::FreeViewpointCamera::FreeViewpointCamera(const CameraDesc& basic_desc, const FreeViewpointCameraDesc& desc) :
-	Camera(basic_desc),
-	desc_(desc)
+ba::FreeViewpointCamera::FreeViewpointCamera() :
+	desc_{}
 {
 }
 
 ba::FreeViewpointCamera::~FreeViewpointCamera()
 {
+}
+
+void ba::FreeViewpointCamera::Init(const CameraDesc& base_desc, const FreeViewpointCameraDesc& derived_desc)
+{
+	Camera::Init(base_desc);
+	desc_ = derived_desc;
+}
+
+void ba::FreeViewpointCamera::Destroy()
+{
+	// Do nothing.
 }
 
 void ba::FreeViewpointCamera::MoveFront(float delta_time)

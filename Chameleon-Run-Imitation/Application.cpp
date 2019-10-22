@@ -229,7 +229,7 @@ void ba::Application::Run()
 
 void ba::Application::Destroy()
 {
-	ReleaseDirectX();
+	DestroyDirectX();
 }
 
 bool ba::Application::InitMainWindow(HINSTANCE wnd_inst)
@@ -283,7 +283,7 @@ bool ba::Application::InitDirectX()
 	return true;
 }
 
-void ba::Application::ReleaseDirectX()
+void ba::Application::DestroyDirectX()
 {
 	DestroyCOM(device_);
 	DestroyCOM(dc_);

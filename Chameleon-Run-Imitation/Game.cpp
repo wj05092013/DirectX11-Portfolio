@@ -128,7 +128,7 @@ bool ba::Game::InitDirectX()
 	return true;
 }
 
-void ba::Game::ReleaseDirectX()
+void ba::Game::DestroyDirectX()
 {
 	renderer_.Destroy();
 	shadow_map_.Destroy();
@@ -139,7 +139,7 @@ void ba::Game::ReleaseDirectX()
 
 	inputvertex::DestroyAll();
 
-	Application::ReleaseDirectX();
+	Application::DestroyDirectX();
 }
 
 void ba::Game::InitSceneBounds()
@@ -175,18 +175,7 @@ bool ba::Game::InitModels()
 
 void ba::Game::ReleaseModels()
 {
-	if (wolf_model_)
-	{
-		delete wolf_model_;
-		wolf_model_ = nullptr;
-	}
-	if (floor_model_)
-	{
-		delete floor_model_;
-		floor_model_ = nullptr;
-	}
-
-	model_instances_.clear();
+	
 }
 
 void ba::Game::UpdateOnKeyInput()

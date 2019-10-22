@@ -12,11 +12,11 @@ namespace ba
 		void UpdateDirectX()
 
 	[virtual functions]
-		virtual ~Application()
+		~Application()
 		void UpdateOnKeyInput()
 		bool OnResize()			- call base function
 		bool InitDirectX()		- call base function
-		void ReleaseDirectX()	- call base function(end)
+		void DestroyDirectX()	- call base function(end)
 		void OnMouseMove(WPARAM w_par, int x, int y)
 		void OnMouseLBtnDown(WPARAM w_par, int x, int y)
 		void OnMouseMBtnDown(WPARAM w_par, int x, int y)
@@ -68,7 +68,7 @@ namespace ba
 		virtual bool InitDirectX();
 
 		// Release DirectX properties.
-		virtual void ReleaseDirectX();
+		virtual void DestroyDirectX();
 
 		// Called when the window is resized.
 		virtual bool OnResize();

@@ -2,6 +2,8 @@ class
 	Game
 		모든 Scene 생성,	SceneManager를 통해 Scene 획득
 		Scene의 가상함수들 호출
+		마우스, 키보드 입력 시 Scene들의 이벤트 함수 먼저 호출 후
+			Game에서 처리
 
 	SceneManager
 		Scene들의 load, release 관리

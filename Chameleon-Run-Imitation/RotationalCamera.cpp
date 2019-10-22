@@ -1,13 +1,23 @@
 #include "stdafx.h"
 
-ba::RotationalCamera::RotationalCamera(const CameraDesc& basic_desc, const RotationalCameraDesc& desc) :
-	Camera(basic_desc),
-	desc_(desc)
+ba::RotationalCamera::RotationalCamera() :
+	desc_{}
 {
 }
 
 ba::RotationalCamera::~RotationalCamera()
 {
+}
+
+void ba::RotationalCamera::Init(const CameraDesc& base_desc, const RotationalCameraDesc& derived_desc)
+{
+	Camera::Init(base_desc);
+	desc_ = derived_desc;
+}
+
+void ba::RotationalCamera::Destroy()
+{
+	// Do nothing.
 }
 
 void ba::RotationalCamera::Rotate(const POINT& start, const POINT& end)

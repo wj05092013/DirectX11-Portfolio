@@ -183,6 +183,9 @@
     <ClInclude Include="FreeViewpointCamera.h">
       <Filter>Includes\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Scene01.h">
+      <Filter>Includes\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Effects.cpp">
@@ -292,6 +295,9 @@
     </ClCompile>
     <ClCompile Include="FreeViewpointCamera.cpp">
       <Filter>Sources\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene01.cpp">
+      <Filter>Sources\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

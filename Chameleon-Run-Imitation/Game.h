@@ -19,7 +19,7 @@ namespace ba
 		bool OnResize() override;
 
 		bool InitDirectX() override;
-		void ReleaseDirectX() override;
+		void DestroyDirectX() override;
 
 		void InitSceneBounds();
 		void InitLights();
