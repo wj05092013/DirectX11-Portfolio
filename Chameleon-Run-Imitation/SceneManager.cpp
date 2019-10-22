@@ -2,14 +2,23 @@
 
 ba::SceneManager::SceneManager() :
 	device_(nullptr),
-	dc_(nullptr)
+	dc_(nullptr),
+	renderer_(nullptr),
+	add_scene_idx(0),
+	next_scene_idx(0)
 {
 }
 
-bool ba::SceneManager::Init(ID3D11Device* device, ID3D11DeviceContext* dc)
+bool ba::SceneManager::Init(ID3D11Device* device, ID3D11DeviceContext* dc, Renderer* renderer)
 {
-	// Do nothing.
-	return false;
+	device_ = device;
+	dc_ = dc;
+	renderer_ = renderer;
+
+	add_scene_idx = 0;
+	next_scene_idx = 0;
+
+	return true;
 }
 
 void ba::SceneManager::Destroy()
@@ -17,41 +26,33 @@ void ba::SceneManager::Destroy()
 	for (auto iter = scenes_.begin(); iter != scenes_.end(); ++iter)
 	{
 		iter->second->Destroy();
+		delete iter->second;
 	}
+
+	scenes_.clear();
 }
 
-void ba::SceneManager::DestroyScene(const std::string& key_str)
+bool ba::SceneManager::LoadNextScene(Scene** out_scene)
 {
-	auto iter = scenes_.find(key_str);
+	auto iter = scenes_.find(next_scene_idx);
 
-	if (iter == scenes_.end())
-		return;
-
-	iter->second->Destroy();
-	delete iter->second;
-
-	scenes_.erase(iter);
-}
-
-bool ba::SceneManager::LoadScene(const std::string& key_str, Renderer* renderer, Scene** out_scene)
-{
-	auto iter = scenes_.find(key_str);
-
+	// There's no more scene.
 	if(iter == scenes_.end())
 		return false;
 
-	if (!iter->second->Init(device_, dc_, renderer))
+	// Initialization failed.
+	if (!iter->second->Init(device_, dc_, renderer_))
 		return false;
+
+	UnloadCurrentScene();
+	++next_scene_idx;
 
 	*out_scene = iter->second;
 }
 
-void ba::SceneManager::UnloadScene(const std::string& key_str)
+void ba::SceneManager::UnloadCurrentScene()
 {
-	auto iter = scenes_.find(key_str);
-
-	if (iter == scenes_.end())
-		return;
-
+	auto iter = scenes_.find(next_scene_idx - 1);
+	
 	iter->second->Destroy();
 }

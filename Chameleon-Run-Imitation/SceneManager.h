@@ -12,33 +12,32 @@ namespace ba
 		SceneManager();
 
 	public:
-		bool Init(ID3D11Device* device, ID3D11DeviceContext* dc);
+		bool Init(ID3D11Device* device, ID3D11DeviceContext* dc, Renderer* renderer);
 		void Destroy();
 		
+		// The template parameter 'Type' must be an instance of 'Scene' class.
 		template<class Type>
-		void CreateScene(const int key);
+		void AddScene();
 
-		void DestroyScene(const int key);
-
-		bool LoadScene(const int key, Renderer* renderer, Scene** out_scene);
-
-		void UnloadScene(const int key);
+		bool LoadNextScene(Scene** out_scene);
 
 	private:
+		void UnloadCurrentScene();
+
 		ID3D11Device* device_;
 		ID3D11DeviceContext* dc_;
+		Renderer* renderer_;
 
 		std::map<int, Scene*> scenes_;
+
+		int add_scene_idx;
+		int next_scene_idx;
 	};
 
 	template<class Type>
-	inline void SceneManager::CreateScene(const int key)
+	inline void SceneManager::AddScene()
 	{
-		auto iter = scenes_.find(key);
-		if (iter == scenes_.end())
-		{
-			Scene* scene = new Type;
-			scenes_.insert({ key, scene });
-		}
+		Scene* scene = new Type;
+		scenes_.insert({ add_scene_idx, scene });
 	}
 }
