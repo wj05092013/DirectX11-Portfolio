@@ -52,6 +52,12 @@
     <Filter Include="Sources\Game">
       <UniqueIdentifier>{4b08a841-baba-46e5-b220-a961ca17e38f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Includes\Physics">
+      <UniqueIdentifier>{0bb12d4f-83d6-4a33-a2eb-9943ce2b4028}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Physics">
+      <UniqueIdentifier>{37edcf32-8297-4b1a-92e9-93510e76bcf6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -180,6 +186,24 @@
     <ClInclude Include="Scene01.h">
       <Filter>Includes\Game</Filter>
     </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>Includes\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>Includes\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>Includes\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicCollider.h">
+      <Filter>Includes\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsModel.h">
+      <Filter>Includes\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticCollider.h">
+      <Filter>Includes\Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Effects.cpp">
@@ -292,6 +316,24 @@
     </ClCompile>
     <ClCompile Include="Scene01.cpp">
       <Filter>Sources\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>Sources\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider.cpp">
+      <Filter>Sources\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>Sources\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicCollider.cpp">
+      <Filter>Sources\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsModel.cpp">
+      <Filter>Sources\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticCollider.cpp">
+      <Filter>Sources\Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

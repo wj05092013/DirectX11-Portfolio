@@ -2,15 +2,15 @@
 
 
 //
-// Model class
+// ModelData class
 //
 
-ba::Model::Model() :
+ba::ModelData::ModelData() :
 	diffuse_map(nullptr)
 {
 }
 
-bool ba::Model::Init(ID3D11Device* device, const GeometryGenerator::Geometry& geo, const XMMATRIX& local_transform, const light::Material& material)
+bool ba::ModelData::Init(ID3D11Device* device, const GeometryGenerator::Geometry& geo, const XMMATRIX& local_transform, const light::Material& material)
 {
 	UINT vtx_count = geo.vertices.size();
 
@@ -38,13 +38,25 @@ bool ba::Model::Init(ID3D11Device* device, const GeometryGenerator::Geometry& ge
 
 
 //
-// ModelInstance class
+// Model class
 //
 
-ba::ModelInstance::ModelInstance() :
-	model(nullptr),
-	scale(XMMatrixIdentity()),
-	rotation(XMMatrixIdentity()),
-	translation(XMMatrixIdentity())
+ba::Model::Model() :
+	model_data(nullptr),
+	scale(XMVectorZero()),
+	rotation(XMVectorZero()),
+	translation(XMVectorZero()),
+	transform(XMMatrixIdentity())
 {
+}
+
+ba::Model::~Model()
+{
+}
+
+void ba::Model::CalcTransform()
+{
+	transform = XMMatrixScalingFromVector(scale)
+		* XMMatrixRotationQuaternion(rotation)
+		* XMMatrixTranslationFromVector(translation);
 }

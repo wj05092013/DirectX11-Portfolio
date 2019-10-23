@@ -9,20 +9,20 @@ namespace ba
 {
 	void InitLights(light::DirectionalLight inout_lights[3])
 	{
-		inout_lights[0].ambient = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-		inout_lights[0].diffuse = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+		inout_lights[0].ambient = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
+		inout_lights[0].diffuse = XMFLOAT4(0.7f, 0.7f, 0.7f, 1.0f);
 		inout_lights[0].specular = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-		inout_lights[0].direction = XMFLOAT3(0.57735f, -0.57735f, 0.57735f);
+		XMStoreFloat3(&inout_lights[0].direction, XMVector3Normalize(XMVectorSet(-1.0f, -1.0f, -1.0f, 0.0f)));
 
-		inout_lights[1].ambient = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-		inout_lights[1].diffuse = XMFLOAT4(0.20f, 0.20f, 0.20f, 1.0f);
+		inout_lights[1].ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
+		inout_lights[1].diffuse = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
 		inout_lights[1].specular = XMFLOAT4(0.25f, 0.25f, 0.25f, 1.0f);
-		inout_lights[1].direction = XMFLOAT3(-0.57735f, -0.57735f, 0.57735f);
+		XMStoreFloat3(&inout_lights[1].direction, XMVector3Normalize(XMVectorSet(-1.0f, -1.0f, 1.0f, 0.0f)));
 
-		inout_lights[2].ambient = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-		inout_lights[2].diffuse = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+		inout_lights[2].ambient = XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
+		inout_lights[2].diffuse = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
 		inout_lights[2].specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-		inout_lights[2].direction = XMFLOAT3(0.0f, -0.707f, -0.707f);
+		XMStoreFloat3(&inout_lights[1].direction, XMVector3Normalize(XMVectorSet(1.0f, -1.0f, 1.0f, 0.0f)));
 	}
 }
 
@@ -34,10 +34,10 @@ namespace ba
 const float ba::Scene01::kCamFovY = 0.25f * XM_PI;
 const float ba::Scene01::kCamNearZ = 0.1f;
 const float ba::Scene01::kCamFarZ = 1000.0f;
-const DirectX::XMFLOAT3 ba::Scene01::kCamInitPos = DirectX::XMFLOAT3(0.0f, 1.0f, -15.0f);
-const DirectX::XMFLOAT3 ba::Scene01::kCamInitTarget = DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f);
+const DirectX::XMFLOAT3 ba::Scene01::kCamInitPos = DirectX::XMFLOAT3(10.0f, 10.0f, -10.0f);
+const DirectX::XMFLOAT3 ba::Scene01::kCamInitTarget = DirectX::XMFLOAT3(0.0f, 2.0f, 5.0f);
 const DirectX::XMFLOAT3 ba::Scene01::kCamInitUp = DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f);
-const ba::FreeViewpointCamera::FreeViewpointCameraDesc ba::Scene01::kCamInitDesc = { 100.0f, 100.0f, 100.0f, 0.15f };
+const ba::FreeViewpointCamera::FreeViewpointCameraDesc ba::Scene01::kCamInitDesc = { 20.0f, 20.0f, 20.0f, 0.1f };
 
 const UINT ba::Scene01::kShadowMapSize = 2048U;
 
@@ -68,10 +68,12 @@ ba::Scene01::Scene01() :
 	evb_on_start_and_resize_{},
 	evb_per_frame_{},
 
-	box_(nullptr),
-
 	bounding_sphere_{ XMFLOAT3(0.0f, 0.0f, 0.0f), 100.0f },
-	last_mouse_pos_{}
+	last_mouse_pos_{},
+
+	character_(nullptr),
+	red_box_(nullptr),
+	ylw_box_(nullptr)
 {
 }
 
@@ -101,13 +103,17 @@ bool ba::Scene01::Init(ID3D11Device* device, ID3D11DeviceContext* dc, Renderer* 
 
 void ba::Scene01::Destroy()
 {
+	scene_state_ = kFinish;
+
+	DestroyModels();
+
+	renderer_->Destroy();
+
 	GraphicComponentManager::GetInstance().DestroyComponent("SHADOW_MAP");
 	GraphicComponentManager::GetInstance().DestroyComponent("SSAO_MAP");
 	GraphicComponentManager::GetInstance().DestroyComponent("FREE_VIEW_CAMERA");
 
 	Scene::Destroy();
-
-	scene_state_ = kFinish;
 }
 
 void ba::Scene01::Render()
@@ -132,6 +138,11 @@ void ba::Scene01::Update()
 	{
 		shadow_map_->BuildShadowTransform();
 		camera_->UpdateViewMatrix();
+
+		// Update the character.
+		//
+		
+		//__
 	}
 }
 
@@ -150,6 +161,8 @@ bool ba::Scene01::OnResize(int client_width, int client_height)
 	}
 
 	renderer_->SetEffectVariablesOnStartAndResize(evb_on_start_and_resize_);
+
+	return true;
 }
 
 void ba::Scene01::UpdateOnKeyInput(bool key_pressed[256], bool key_switch[256])
@@ -161,6 +174,13 @@ void ba::Scene01::UpdateOnKeyInput(bool key_pressed[256], bool key_switch[256])
 
 	if (scene_state_ == kRun)
 	{
+		// Control the character.
+		//
+		character_->UpdateOnKeyInput(key_pressed, key_switch);
+		//__
+
+		// Camera control for debugging.
+		//
 		if (key_pressed['W'])
 			camera_->MoveFront(static_cast<float>(timer_->get_delta_time()));
 		if (key_pressed['S'])
@@ -173,6 +193,7 @@ void ba::Scene01::UpdateOnKeyInput(bool key_pressed[256], bool key_switch[256])
 			camera_->MoveUp(static_cast<float>(timer_->get_delta_time()));
 		if (key_pressed['Q'])
 			camera_->MoveDown(static_cast<float>(timer_->get_delta_time()));
+		//__
 	}
 }
 
@@ -261,51 +282,126 @@ bool ba::Scene01::InitImpl()
 	return true;
 }
 
-bool ba::Scene01::LoadModels()
+bool ba::Scene01::LoadCharacter()
 {
-	XMMATRIX identity = XMMatrixIdentity();
-
-	// Create a model.
-	//
 	GeometryGenerator::Geometry geo;
-	GeometryGenerator::CreateBox(2.0f, 2.0f, 2.0f, geo);
+	GeometryGenerator::CreateGeosphere(0.5f, 3, geo);
+
+	XMMATRIX local_transform = XMMatrixTranslation(0.5f, 0.5f, 0.5f);
 
 	light::Material material;
-	material.ambient = XMFLOAT4(0.4f, 0.2f, 0.2f, 1.0f);
-	material.diffuse = XMFLOAT4(0.9f, 0.4f, 0.4f, 1.0f);
+	material.ambient = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
+	material.diffuse = XMFLOAT4(1.0f, 0.0f, 0.501960f, 1.0f);
 	material.specular = XMFLOAT4(0.4f, 0.4f, 0.4f, 8.0f);
 	material.reflection = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
 
-	box_ = new Model;
-	if (!box_->Init(device_, geo, identity, material))
+	sphere_ = new ModelData;
+	if (!sphere_->Init(device_, geo, local_transform, material))
+		return false;
+
+	Character character_inst;
+
+	character_inst.model_data = sphere_;
+	character_inst.scale = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
+	character_inst.rotation = XMQuaternionIdentity();
+	character_inst.translation = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+
+	character_inst.CalcTransform();
+
+	model_inst_.push_back(character_inst);
+	character_ = dynamic_cast<Character*>(&model_inst_[model_inst_.size() - 1]);
+
+	return true;
+}
+
+bool ba::Scene01::LoadModels()
+{
+	LoadCharacter();
+
+	XMVECTOR identity_quat = XMQuaternionIdentity();
+	XMMATRIX local_transform;
+
+	// Create a red box model_data.
+	//
+	GeometryGenerator::Geometry geo;
+	GeometryGenerator::CreateBox(1.0f, 1.0f, 1.0f, geo);
+	local_transform = XMMatrixTranslation(0.5f, 0.5f, 0.5f);
+
+	light::Material material;
+	material.ambient = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
+	material.diffuse = XMFLOAT4(1.0f, 0.0f, 0.501960f, 1.0f);
+	material.specular = XMFLOAT4(0.4f, 0.4f, 0.4f, 8.0f);
+	material.reflection = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+
+	red_box_ = new ModelData;
+	if (!red_box_->Init(device_, geo, local_transform, material))
 		return false;
 	//__
 
-	ModelInstance instance;
+	// Create a yellow box model_data.
+	//
+	material.ambient = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
+	material.diffuse = XMFLOAT4(1.0f, 0.925490f, 0.015686f, 1.0f);
+	material.specular = XMFLOAT4(0.4f, 0.4f, 0.4f, 8.0f);
+	material.reflection = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
 
-	instance.model = box_;
-	instance.scale = XMMatrixScaling(1.0f, 1.0f, 5.0f);
-	instance.rotation = identity;
-	instance.translation = XMMatrixTranslation(0.0f, 0.0f, 0.0f);
+	ylw_box_ = new ModelData;
+	if (!ylw_box_->Init(device_, geo, local_transform, material))
+		return false;
+	//__
+
+	Model instance;
+	
+	instance.model_data = red_box_;
+	instance.scale = XMVectorSet(1.0f, 1.0f, 6.0f, 0.0f);
+	instance.rotation = identity_quat;
+	instance.translation = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	instance.CalcTransform();
 	model_inst_.push_back(instance);
 
-	instance.model = box_;
-	instance.scale = XMMatrixScaling(1.0f, 1.0f, 10.0f);
-	instance.rotation = identity;
-	instance.translation = XMMatrixTranslation(0.0f, 3.0f, 20.0f);
+	instance.model_data = ylw_box_;
+	instance.scale = XMVectorSet(1.0f, 1.0f, 3.0f, 0.0f);
+	instance.rotation = identity_quat;
+	instance.translation = XMVectorSet(0.0f, 1.0f, 9.0f, 0.0f);
+	instance.CalcTransform();
 	model_inst_.push_back(instance);
 
-	instance.model = box_;
-	instance.scale = XMMatrixScaling(1.0f, 1.0f, 2.0f);
-	instance.rotation = identity;
-	instance.translation = XMMatrixTranslation(0.0f, -2.0f, 30.0f);
+	instance.model_data = ylw_box_;
+	instance.scale = XMVectorSet(1.0f, 1.0f, 3.0f, 0.0f);
+	instance.rotation = identity_quat;
+	instance.translation = XMVectorSet(0.0f, 1.0f, 15.0f, 0.0f);
+	instance.CalcTransform();
 	model_inst_.push_back(instance);
 
-	instance.model = box_;
-	instance.scale = XMMatrixScaling(1.0f, 1.0f, 3.0f);
-	instance.rotation = identity;
-	instance.translation = XMMatrixTranslation(0.0f, 1.0f, 35.0f);
+	instance.model_data = red_box_;
+	instance.scale = XMVectorSet(1.0f, 1.0f, 2.0f, 0.0f);
+	instance.rotation = identity_quat;
+	instance.translation = XMVectorSet(0.0f, 0.0f, 20.0f, 0.0f);
+	instance.CalcTransform();
 	model_inst_.push_back(instance);
 
 	return true;
+}
+
+void ba::Scene01::DestroyModels()
+{
+	if (sphere_)
+	{
+		delete sphere_;
+		sphere_ = nullptr;
+	}
+	if (red_box_)
+	{
+		delete red_box_;
+		red_box_ = nullptr;
+	}
+	if (ylw_box_)
+	{
+		delete ylw_box_;
+		ylw_box_ = nullptr;
+	}
+
+	character_ = nullptr;
+
+	model_inst_.clear();
 }

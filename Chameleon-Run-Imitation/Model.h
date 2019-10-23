@@ -6,10 +6,10 @@ PCH: Yes
 
 namespace ba
 {
-	class Model
+	class ModelData
 	{
 	public:
-		Model();
+		ModelData();
 
 		bool Init(ID3D11Device* device, const GeometryGenerator::Geometry& geo, const XMMATRIX& local_transform, const light::Material& material);
 
@@ -17,14 +17,18 @@ namespace ba
 		ID3D11ShaderResourceView* diffuse_map;
 	};
 
-	class ModelInstance
+	class Model
 	{
 	public:
-		ModelInstance();
+		Model();
+		virtual ~Model();
 
-		Model*		model;
-		XMMATRIX	scale;
-		XMMATRIX	rotation;
-		XMMATRIX	translation;
+		void CalcTransform();
+
+		ModelData*	model_data;
+		XMVECTOR	scale;
+		XMVECTOR	rotation;
+		XMVECTOR	translation;
+		XMMATRIX	transform;
 	};
 }

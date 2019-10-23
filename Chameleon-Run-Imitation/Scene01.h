@@ -42,7 +42,9 @@ namespace ba
 		// For memory deallocation on failing initialization of members.
 		bool InitImpl();
 
+		bool LoadCharacter();
 		bool LoadModels();
+		void DestroyModels();
 
 	private:
 		static const float kCamFovY, kCamNearZ, kCamFarZ;
@@ -73,11 +75,14 @@ namespace ba
 
 		light::DirectionalLight lights_[3];
 
-		Model* box_;
-		std::vector<ModelInstance> model_inst_;
-
 		ShadowMap::BoundingSphere bounding_sphere_;
 
 		POINT last_mouse_pos_;
+
+		Character* character_;
+		ModelData* sphere_;
+		ModelData* red_box_;
+		ModelData* ylw_box_;
+		std::vector<Model> model_inst_;
 	};
 }
