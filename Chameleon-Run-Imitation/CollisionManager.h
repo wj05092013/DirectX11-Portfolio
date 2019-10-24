@@ -25,7 +25,12 @@ namespace ba
 
 			~CollisionManager();
 
-			void CreateCollider(const Collider::ColliderDesc& desc, PhysicsModel* physics_model);
+			void CreateCollider(
+				Collider::EMovementType movement_type,
+				Collider::EPrimitiveType primitive_type,
+				const float* restitutions,
+				PhysicsModel* in_physics_model
+			);
 
 		private:
 			// The key(type 'int') is index of a collision domain.

@@ -61,6 +61,8 @@
 #include "Mesh.h"
 #include "Model.h"
 #include "Collider.h"
+#include "SphereCollider.h"
+#include "AABBCollider.h"
 #include "PhysicsModel.h"
 #include "CollisionManager.h"
 #include "Character.h"

@@ -8,8 +8,6 @@ namespace ba
 {
 	namespace collision
 	{
-		class Collider;
-
 		// Collider를 포함
 		// 
 		class PhysicsModel : public Model
@@ -18,8 +16,9 @@ namespace ba
 			PhysicsModel();
 			~PhysicsModel() override;
 
-			// 이 PhysicsModel의 충돌을 담당할 Collider 생성
-			void CreateCollider(Collider::EMovementType movement_type, Collider::EPrimitiveType primitive_type);
+			// If 'primitive_type' is 'kSphere', just one element of the array 'restitutions' will be used.
+			//  If it is 'kAxisAlignedBox', the array must contain 6 elements.
+			void CreateCollider(Collider::EMovementType movement_type, Collider::EPrimitiveType primitive_type, const float* restitutions);
 
 			void OnCollision();
 

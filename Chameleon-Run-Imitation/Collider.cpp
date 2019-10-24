@@ -17,7 +17,7 @@ namespace ba
 		{
 		}
 
-		void Collider::CalcDomainIndex()
+		void Collider::CalcDomainIndices()
 		{
 			int center_idx;
 			int left_idx = -1;

@@ -198,6 +198,12 @@
     <ClInclude Include="Constants.h">
       <Filter>Includes\Game</Filter>
     </ClInclude>
+    <ClInclude Include="SphereCollider.h">
+      <Filter>Includes\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="AABBCollider.h">
+      <Filter>Includes\Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Effects.cpp">
@@ -321,6 +327,12 @@
       <Filter>Sources\Physics</Filter>
     </ClCompile>
     <ClCompile Include="PhysicsModel.cpp">
+      <Filter>Sources\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="SphereCollider.cpp">
+      <Filter>Sources\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="AABBCollider.cpp">
       <Filter>Sources\Physics</Filter>
     </ClCompile>
   </ItemGroup>
