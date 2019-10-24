@@ -144,8 +144,8 @@ void ba::SSAOMap::BlurSSAOMap(UINT blur_count)
 {
 	for (UINT i = 0; i < blur_count; ++i)
 	{
-		BlurSSAOMap(ssao_map_0_srv_, ssao_map_1_rtv_, BlurSSAOEffect::TechType::kHorizontalBlur);
-		BlurSSAOMap(ssao_map_1_srv_, ssao_map_0_rtv_, BlurSSAOEffect::TechType::kVerticalBlur);
+		BlurSSAOMap(ssao_map_0_srv_, ssao_map_1_rtv_, BlurSSAOEffect::ETechType::kHorizontalBlur);
+		BlurSSAOMap(ssao_map_1_srv_, ssao_map_0_rtv_, BlurSSAOEffect::ETechType::kVerticalBlur);
 	}
 }
 
@@ -169,7 +169,7 @@ ID3D11ShaderResourceView* ba::SSAOMap::ssao_map_srv()
 	return ssao_map_0_srv_;
 }
 
-void ba::SSAOMap::BlurSSAOMap(ID3D11ShaderResourceView* input_image_srv, ID3D11RenderTargetView* output_image_rtv, BlurSSAOEffect::TechType tech_type)
+void ba::SSAOMap::BlurSSAOMap(ID3D11ShaderResourceView* input_image_srv, ID3D11RenderTargetView* output_image_rtv, BlurSSAOEffect::ETechType tech_type)
 {
 	// Set render target and viewport.
 	//

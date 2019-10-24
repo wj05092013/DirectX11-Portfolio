@@ -30,7 +30,7 @@ bool ba::ModelData::Init(ID3D11Device* device, const GeometryGenerator::Geometry
 		return false;
 	if (!mesh.BuildIndexBuffer(device, indices))
 		return false;
-	mesh.set_transform(local_transform);
+	mesh.set_local_transform(local_transform);
 	mesh.set_material(material);
 
 	return true;
@@ -46,7 +46,7 @@ ba::Model::Model() :
 	scale(XMVectorZero()),
 	rotation(XMVectorZero()),
 	translation(XMVectorZero()),
-	transform(XMMatrixIdentity())
+	world_transform(XMMatrixIdentity())
 {
 }
 
@@ -54,9 +54,9 @@ ba::Model::~Model()
 {
 }
 
-void ba::Model::CalcTransform()
+void ba::Model::CalcWorldTransform()
 {
-	transform = XMMatrixScalingFromVector(scale)
+	world_transform = XMMatrixScalingFromVector(scale)
 		* XMMatrixRotationQuaternion(rotation)
 		* XMMatrixTranslationFromVector(translation);
 }

@@ -31,6 +31,34 @@ void ba::Mesh::Draw(ID3D11DeviceContext* dc) const
 	dc->DrawIndexed(idx_count_, 0, 0);
 }
 
+bool ba::Mesh::BuildVertexBuffer(ID3D11Device* device, const std::vector<inputvertex::PosNormalTexTangent::Vertex> vertices)
+{
+	ID3D11Buffer* old_vb = nullptr;
+
+	D3D11_BUFFER_DESC vb_desc{};
+	vb_desc.ByteWidth = vertices.size() * sizeof(inputvertex::PosNormalTexTangent::Vertex);
+	vb_desc.Usage = D3D11_USAGE_IMMUTABLE;
+	vb_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+
+	D3D11_SUBRESOURCE_DATA vb_init{};
+	vb_init.pSysMem = &vertices[0];
+
+	HRESULT res = device->CreateBuffer(&vb_desc, &vb_init, &vb_);
+	if (FAILED(res))
+	{
+		vb_ = old_vb;
+		return false;
+	}
+
+	DestroyCOM(old_vb);
+	vertex_stride_ = sizeof(inputvertex::PosNormalTexTangent::Vertex);
+
+	vertices_.clear();
+	vertices_.insert(vertices_.begin(), vertices.begin(), vertices.end());
+
+	return true;
+}
+
 bool ba::Mesh::BuildIndexBuffer(ID3D11Device* device, const std::vector<UINT> indices)
 {
 	ID3D11Buffer* old_ib = ib_;
@@ -56,19 +84,29 @@ bool ba::Mesh::BuildIndexBuffer(ID3D11Device* device, const std::vector<UINT> in
 	return true;
 }
 
-void ba::Mesh::set_transform(const XMMATRIX& matrix)
+void ba::Mesh::set_local_transform(const XMMATRIX& matrix)
 {
 	local_transform_ = matrix;
-}
-
-const DirectX::XMMATRIX& ba::Mesh::transform() const
-{
-	return local_transform_;
 }
 
 void ba::Mesh::set_material(const light::Material& material)
 {
 	material_ = material;
+}
+
+const std::vector<ba::inputvertex::PosNormalTexTangent::Vertex>& ba::Mesh::vertices() const
+{
+	return vertices_;
+}
+
+UINT ba::Mesh::vertex_stride() const
+{
+	return vertex_stride_;
+}
+
+const DirectX::XMMATRIX& ba::Mesh::local_transform() const
+{
+	return local_transform_;
 }
 
 const ba::light::Material& ba::Mesh::material() const

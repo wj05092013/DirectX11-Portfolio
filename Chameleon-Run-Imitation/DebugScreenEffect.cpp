@@ -21,7 +21,7 @@ bool ba::DebugScreenEffect::Init(ID3D11Device* device, const std::wstring& file_
 
 	ID3DX11Effect* e = effect();
 
-	techs_ = new ID3DX11EffectTechnique * [TechType::kMax];
+	techs_ = new ID3DX11EffectTechnique * [ETechType::kMax];
 
 	techs_[kViewRGBA] = e->GetTechniqueByName("ViewRGBA");
 	techs_[kViewRed] = e->GetTechniqueByName("ViewRed");
@@ -46,7 +46,7 @@ void ba::DebugScreenEffect::Destroy()
 	EffectWrapper::Destroy();
 }
 
-ID3DX11EffectTechnique* ba::DebugScreenEffect::tech(TechType type)
+ID3DX11EffectTechnique* ba::DebugScreenEffect::tech(ETechType type)
 {
 	return techs_[type];
 }

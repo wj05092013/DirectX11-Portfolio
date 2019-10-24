@@ -9,9 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Sources\Common">
-      <UniqueIdentifier>{607526fa-3508-418f-ba8d-26c4b0c578c9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Graphics">
       <UniqueIdentifier>{784224aa-95fd-4010-b82d-fa0770b10c5c}</UniqueIdentifier>
     </Filter>
@@ -23,9 +20,6 @@
     </Filter>
     <Filter Include="PCH">
       <UniqueIdentifier>{96a81eb2-48b3-4908-afa6-9cb46be40957}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Includes\Common">
-      <UniqueIdentifier>{80bb4778-8804-4377-b998-9a4f0dec846f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Includes\Etc">
       <UniqueIdentifier>{115d6a84-d73d-4f41-8525-c1e8f6796b68}</UniqueIdentifier>
@@ -58,6 +52,12 @@
     <Filter Include="Sources\Physics">
       <UniqueIdentifier>{37edcf32-8297-4b1a-92e9-93510e76bcf6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Includes\Util">
+      <UniqueIdentifier>{80bb4778-8804-4377-b998-9a4f0dec846f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Util">
+      <UniqueIdentifier>{607526fa-3508-418f-ba8d-26c4b0c578c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -70,22 +70,22 @@
       <Filter>Includes\Etc</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
-      <Filter>Includes\Common</Filter>
+      <Filter>Includes\Util</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
-      <Filter>Includes\Common</Filter>
+      <Filter>Includes\Util</Filter>
     </ClInclude>
     <ClInclude Include="MathHelper.h">
-      <Filter>Includes\Common</Filter>
+      <Filter>Includes\Util</Filter>
     </ClInclude>
     <ClInclude Include="Unconstructable.h">
-      <Filter>Includes\Common</Filter>
+      <Filter>Includes\Util</Filter>
     </ClInclude>
     <ClInclude Include="Uncopiable.h">
-      <Filter>Includes\Common</Filter>
+      <Filter>Includes\Util</Filter>
     </ClInclude>
     <ClInclude Include="UsingNamespace.h">
-      <Filter>Includes\Common</Filter>
+      <Filter>Includes\Util</Filter>
     </ClInclude>
     <ClInclude Include="BasicEffect.h">
       <Filter>Includes\Graphics\Effect</Filter>
@@ -147,17 +147,14 @@
     <ClInclude Include="Game.h">
       <Filter>Includes\Game</Filter>
     </ClInclude>
-    <ClInclude Include="Constants.h">
-      <Filter>Includes\Common</Filter>
-    </ClInclude>
     <ClInclude Include="Macros.h">
-      <Filter>Includes\Common</Filter>
+      <Filter>Includes\Util</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Includes\Game</Filter>
     </ClInclude>
     <ClInclude Include="GeometryGenerator.h">
-      <Filter>Includes\Common</Filter>
+      <Filter>Includes\Util</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Includes\Game</Filter>
@@ -195,14 +192,11 @@
     <ClInclude Include="CollisionManager.h">
       <Filter>Includes\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="DynamicCollider.h">
-      <Filter>Includes\Physics</Filter>
-    </ClInclude>
     <ClInclude Include="PhysicsModel.h">
       <Filter>Includes\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="StaticCollider.h">
-      <Filter>Includes\Physics</Filter>
+    <ClInclude Include="Constants.h">
+      <Filter>Includes\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -240,13 +234,13 @@
       <Filter>Sources\Game</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
-      <Filter>Sources\Common</Filter>
+      <Filter>Sources\Util</Filter>
     </ClCompile>
     <ClCompile Include="MathHelper.cpp">
-      <Filter>Sources\Common</Filter>
+      <Filter>Sources\Util</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
-      <Filter>Sources\Common</Filter>
+      <Filter>Sources\Util</Filter>
     </ClCompile>
     <ClCompile Include="DebugScreen.cpp">
       <Filter>Sources\Graphics</Filter>
@@ -288,7 +282,7 @@
       <Filter>Sources\Game</Filter>
     </ClCompile>
     <ClCompile Include="GeometryGenerator.cpp">
-      <Filter>Sources\Common</Filter>
+      <Filter>Sources\Util</Filter>
     </ClCompile>
     <ClCompile Include="GraphicComponent.cpp">
       <Filter>Sources\Graphics</Filter>
@@ -326,13 +320,7 @@
     <ClCompile Include="CollisionManager.cpp">
       <Filter>Sources\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="DynamicCollider.cpp">
-      <Filter>Sources\Physics</Filter>
-    </ClCompile>
     <ClCompile Include="PhysicsModel.cpp">
-      <Filter>Sources\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="StaticCollider.cpp">
       <Filter>Sources\Physics</Filter>
     </ClCompile>
   </ItemGroup>

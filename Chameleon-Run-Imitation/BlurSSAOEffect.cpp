@@ -23,7 +23,7 @@ bool ba::BlurSSAOEffect::Init(ID3D11Device* device, const std::wstring& file_nam
 
 	ID3DX11Effect* e = effect();
 
-	techs_ = new ID3DX11EffectTechnique * [TechType::kMax];
+	techs_ = new ID3DX11EffectTechnique * [ETechType::kMax];
 
 	techs_[kHorizontalBlur] = e->GetTechniqueByName("HorizontalBlur");
 	techs_[kVerticalBlur] = e->GetTechniqueByName("VerticalBlur");
@@ -48,7 +48,7 @@ void ba::BlurSSAOEffect::Destroy()
 	EffectWrapper::Destroy();
 }
 
-ID3DX11EffectTechnique* ba::BlurSSAOEffect::tech(TechType type)
+ID3DX11EffectTechnique* ba::BlurSSAOEffect::tech(ETechType type)
 {
 	return techs_[type];
 }

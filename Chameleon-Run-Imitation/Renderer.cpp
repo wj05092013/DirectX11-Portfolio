@@ -30,7 +30,7 @@ void ba::Renderer::Destroy()
 	renderstates::DestroyAll();
 }
 
-void ba::Renderer::RenderScene(const std::vector<ModelInstance>& model_instances, const EffectVariableBundlePerFrame& bundle)
+void ba::Renderer::RenderScene(const std::vector<Model>& model_instances, const EffectVariableBundlePerFrame& bundle)
 {
 	ID3D11RenderTargetView* rtvs_[1] = { screen_desc_.rtv };
 	dc_->OMSetRenderTargets(1, rtvs_, screen_desc_.dsv);
@@ -59,13 +59,9 @@ void ba::Renderer::RenderScene(const std::vector<ModelInstance>& model_instances
 	{
 		for (UINT model_idx = 0; model_idx < model_instances.size(); ++model_idx)
 		{
-			Model* model = model_instances[model_idx].model;
+			ModelData* model = model_instances[model_idx].model_data;
 
-			world = model->mesh.transform()
-				* model_instances[model_idx].scale
-				* model_instances[model_idx].rotation
-				* model_instances[model_idx].translation;
-
+			world = model->mesh.local_transform() * model_instances[model_idx].world_transform;
 			world_inv_trans = mathhelper::InverseTranspose(world);
 
 			effects::kBasicEffect.SetWorld(world);
@@ -85,7 +81,7 @@ void ba::Renderer::RenderScene(const std::vector<ModelInstance>& model_instances
 	}
 }
 
-void ba::Renderer::RenderShadowMap(const std::vector<ModelInstance>& model_instances, const EffectVariableBundlePerFrame& bundle)
+void ba::Renderer::RenderShadowMap(const std::vector<Model>& model_instances, const EffectVariableBundlePerFrame& bundle)
 {
 	ID3D11RenderTargetView* rtvs_[1] = { nullptr };
 	dc_->OMSetRenderTargets(1, rtvs_, shadow_map_->dsv());
@@ -109,13 +105,9 @@ void ba::Renderer::RenderShadowMap(const std::vector<ModelInstance>& model_insta
 	{
 		for (UINT model_idx = 0; model_idx < model_instances.size(); ++model_idx)
 		{
-			Model* model = model_instances[model_idx].model;
+			ModelData* model = model_instances[model_idx].model_data;
 
-			world = model->mesh.transform()
-				* model_instances[model_idx].scale
-				* model_instances[model_idx].rotation
-				* model_instances[model_idx].translation;
-
+			world = model->mesh.local_transform() * model_instances[model_idx].world_transform;
 			world_inv_trans = mathhelper::InverseTranspose(world);
 
 			effects::kShadowMapEffect.SetWorld(world);
@@ -130,7 +122,7 @@ void ba::Renderer::RenderShadowMap(const std::vector<ModelInstance>& model_insta
 	dc_->RSSetState(nullptr);
 }
 
-void ba::Renderer::RenderNormalDepthMap(const std::vector<ModelInstance>& model_instances, const EffectVariableBundlePerFrame& bundle)
+void ba::Renderer::RenderNormalDepthMap(const std::vector<Model>& model_instances, const EffectVariableBundlePerFrame& bundle)
 {
 	ID3D11RenderTargetView* rtvs_[1] = { ssao_map_->normal_depth_map_rtv() };
 	dc_->OMSetRenderTargets(1, rtvs_, ssao_map_->dsv());
@@ -156,13 +148,9 @@ void ba::Renderer::RenderNormalDepthMap(const std::vector<ModelInstance>& model_
 	{
 		for (UINT model_idx = 0; model_idx < model_instances.size(); ++model_idx)
 		{
-			Model* model = model_instances[model_idx].model;
+			ModelData* model = model_instances[model_idx].model_data;
 
-			world = model->mesh.transform()
-				* model_instances[model_idx].scale
-				* model_instances[model_idx].rotation
-				* model_instances[model_idx].translation;
-
+			world = model->mesh.local_transform() * model_instances[model_idx].world_transform;
 			world_inv_trans = mathhelper::InverseTranspose(world);
 
 			effects::kNormalDepthMapEffect.SetWorld(world);

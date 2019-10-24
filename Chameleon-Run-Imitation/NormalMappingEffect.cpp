@@ -43,7 +43,7 @@ bool ba::NormalMappingEffect::Init(ID3D11Device* device, const std::wstring& fil
 
 	ID3DX11Effect* e = effect();
 
-	techs_ = new ID3DX11EffectTechnique * [TechType::kMax];
+	techs_ = new ID3DX11EffectTechnique * [ETechType::kMax];
 
 	techs_[kLight1] = e->GetTechniqueByName("Light1");
 	techs_[kLight2] = e->GetTechniqueByName("Light2");
@@ -175,7 +175,7 @@ void ba::NormalMappingEffect::Destroy()
 	EffectWrapper::Destroy();
 }
 
-ID3DX11EffectTechnique* ba::NormalMappingEffect::tech(TechType type)
+ID3DX11EffectTechnique* ba::NormalMappingEffect::tech(ETechType type)
 {
 	return techs_[type];
 }

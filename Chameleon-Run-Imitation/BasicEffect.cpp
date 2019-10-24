@@ -42,7 +42,7 @@ bool ba::BasicEffect::Init(ID3D11Device* device, const std::wstring& file_name)
 
 	ID3DX11Effect* e = effect();
 
-	techs_ = new ID3DX11EffectTechnique * [TechType::kMax];
+	techs_ = new ID3DX11EffectTechnique * [ETechType::kMax];
 
 	techs_[kLight1] = e->GetTechniqueByName("Light1");
 	techs_[kLight2] = e->GetTechniqueByName("Light2");
@@ -173,7 +173,7 @@ void ba::BasicEffect::Destroy()
 	EffectWrapper::Destroy();
 }
 
-ID3DX11EffectTechnique* ba::BasicEffect::tech(TechType type)
+ID3DX11EffectTechnique* ba::BasicEffect::tech(ETechType type)
 {
 	return techs_[type];
 }

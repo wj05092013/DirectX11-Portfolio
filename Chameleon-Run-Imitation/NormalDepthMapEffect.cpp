@@ -27,7 +27,7 @@ bool ba::NormalDepthMapEffect::Init(ID3D11Device* device, const std::wstring& fi
 
 	ID3DX11Effect* e = effect();
 
-	techs_ = new ID3DX11EffectTechnique * [TechType::kMax];
+	techs_ = new ID3DX11EffectTechnique * [ETechType::kMax];
 
 	techs_[kNormalDepthMap] = e->GetTechniqueByName("NormalDepthMap");
 	techs_[kNormalDepthMapAlphaClip] = e->GetTechniqueByName("NormalDepthMapAlphaClip");
@@ -55,7 +55,7 @@ void ba::NormalDepthMapEffect::Destroy()
 	EffectWrapper::Destroy();
 }
 
-ID3DX11EffectTechnique* ba::NormalDepthMapEffect::tech(TechType type)
+ID3DX11EffectTechnique* ba::NormalDepthMapEffect::tech(ETechType type)
 {
 	return techs_[type];
 }

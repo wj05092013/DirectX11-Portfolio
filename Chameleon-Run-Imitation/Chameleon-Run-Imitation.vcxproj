@@ -166,7 +166,6 @@
     <ClInclude Include="d3dx11effect.h" />
     <ClInclude Include="DebugScreen.h" />
     <ClInclude Include="DebugScreenEffect.h" />
-    <ClInclude Include="DynamicCollider.h" />
     <ClInclude Include="Effects.h" />
     <ClInclude Include="EffectWrapper.h" />
     <ClInclude Include="FreeViewpointCamera.h" />
@@ -195,7 +194,6 @@
     <ClInclude Include="ShadowMapEffect.h" />
     <ClInclude Include="SSAOMap.h" />
     <ClInclude Include="SSAOMapEffect.h" />
-    <ClInclude Include="StaticCollider.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TextureManager.h" />
@@ -214,7 +212,6 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="DebugScreen.cpp" />
     <ClCompile Include="DebugScreenEffect.cpp" />
-    <ClCompile Include="DynamicCollider.cpp" />
     <ClCompile Include="Effects.cpp" />
     <ClCompile Include="EffectWrapper.cpp" />
     <ClCompile Include="FreeViewpointCamera.cpp" />
@@ -244,7 +241,6 @@
     <ClCompile Include="ShadowMapEffect.cpp" />
     <ClCompile Include="SSAOMap.cpp" />
     <ClCompile Include="SSAOMapEffect.cpp" />
-    <ClCompile Include="StaticCollider.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

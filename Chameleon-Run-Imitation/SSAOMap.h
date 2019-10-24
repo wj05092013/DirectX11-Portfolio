@@ -30,7 +30,7 @@ namespace ba
 		void BlurSSAOMap(
 			ID3D11ShaderResourceView* input_image_srv,
 			ID3D11RenderTargetView* output_image_rtv,
-			BlurSSAOEffect::TechType tech_type
+			BlurSSAOEffect::ETechType tech_type
 		);
 
 		bool BuildFullScreenQuad();

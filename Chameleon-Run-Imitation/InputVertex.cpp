@@ -17,7 +17,7 @@ bool ba::inputvertex::PosNormalTex::Init(ID3D11Device* device)
 	if (kInputLayout)
 		return false;
 
-	ID3DX11EffectTechnique* tech = effects::kBasicEffect.tech(BasicEffect::TechType::kLight1);
+	ID3DX11EffectTechnique* tech = effects::kBasicEffect.tech(BasicEffect::ETechType::kLight1);
 	D3DX11_PASS_DESC pass_desc;
 	tech->GetPassByIndex(0)->GetDesc(&pass_desc);
 
@@ -93,7 +93,7 @@ bool ba::inputvertex::PosNormalTexTanSkinned::Init(ID3D11Device* device)
 	if (kInputLayout)
 		return false;
 
-	ID3DX11EffectTechnique* tech = effects::kBasicEffect.tech(BasicEffect::TechType::kLight1Skinned);
+	ID3DX11EffectTechnique* tech = effects::kBasicEffect.tech(BasicEffect::ETechType::kLight1Skinned);
 	D3DX11_PASS_DESC pass_desc;
 	tech->GetPassByIndex(0)->GetDesc(&pass_desc);
 

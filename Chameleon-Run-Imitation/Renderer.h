@@ -55,9 +55,9 @@ namespace ba
 			XMMATRIX					to_tex;
 		};
 
-		void RenderScene(const std::vector<ModelInstance>& model_instances, const EffectVariableBundlePerFrame& bundle);
-		void RenderShadowMap(const std::vector<ModelInstance>& model_instances, const EffectVariableBundlePerFrame& bundle);
-		void RenderNormalDepthMap(const std::vector<ModelInstance>& model_instances, const EffectVariableBundlePerFrame& bundle);
+		void RenderScene(const std::vector<Model>& model_instances, const EffectVariableBundlePerFrame& bundle);
+		void RenderShadowMap(const std::vector<Model>& model_instances, const EffectVariableBundlePerFrame& bundle);
+		void RenderNormalDepthMap(const std::vector<Model>& model_instances, const EffectVariableBundlePerFrame& bundle);
 
 		void SetEffectVariablesOnStartAndResize(const EffectVariableBundleOnStartAndResize& bundle);
 

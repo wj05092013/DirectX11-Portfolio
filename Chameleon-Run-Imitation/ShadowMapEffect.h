@@ -9,7 +9,7 @@ namespace ba
 	class ShadowMapEffect final : public EffectWrapper
 	{
 	public:
-		enum TechType
+		enum ETechType
 		{
 			kBuildShadowMap = 0,
 			kBuildShadowMapAlphaClip,
@@ -25,7 +25,7 @@ namespace ba
 		bool Init(ID3D11Device* device, const std::wstring& file_name) override;
 		void Destroy() override;
 
-		ID3DX11EffectTechnique* tech(TechType type);
+		ID3DX11EffectTechnique* tech(ETechType type);
 
 
 		//

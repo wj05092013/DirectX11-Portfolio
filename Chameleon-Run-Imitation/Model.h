@@ -23,12 +23,12 @@ namespace ba
 		Model();
 		virtual ~Model();
 
-		void CalcTransform();
+		void CalcWorldTransform();
 
 		ModelData*	model_data;
 		XMVECTOR	scale;
 		XMVECTOR	rotation;
 		XMVECTOR	translation;
-		XMMATRIX	transform;
+		XMMATRIX	world_transform;
 	};
 }

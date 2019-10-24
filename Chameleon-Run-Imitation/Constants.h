@@ -20,4 +20,10 @@ namespace ba
 		const XMVECTOR kSilver = { 0.75f, 0.75f, 0.75f, 1.0f };
 		const XMVECTOR kLightSteelBlue = { 0.69f, 0.77f, 0.87f, 1.0f };
 	}
+
+	namespace collision
+	{
+		const float kDomainStartZ = 0.0f;
+		const float kDomainSizeZ = 10.0f;
+	}
 }

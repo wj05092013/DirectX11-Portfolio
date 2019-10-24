@@ -30,6 +30,7 @@
 #include <D3D11.h>
 #include <D3DX11.h>
 #include <DirectXMath.h>
+#include <DirectXCollision.h>
 
 // Other library header files.
 
@@ -59,11 +60,9 @@
 #include "GeometryGenerator.h"
 #include "Mesh.h"
 #include "Model.h"
-#include "CollisionManager.h"
-#include "PhysicsModel.h"
 #include "Collider.h"
-#include "StaticCollider.h"
-#include "DynamicCollider.h"
+#include "PhysicsModel.h"
+#include "CollisionManager.h"
 #include "Character.h"
 #include "DebugScreen.h"
 #include "TextureManager.h"

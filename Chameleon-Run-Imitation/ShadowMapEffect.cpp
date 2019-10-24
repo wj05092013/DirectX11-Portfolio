@@ -27,7 +27,7 @@ bool ba::ShadowMapEffect::Init(ID3D11Device* device, const std::wstring& file_na
 
 	ID3DX11Effect* e = effect();
 
-	techs_ = new ID3DX11EffectTechnique * [TechType::kMax];
+	techs_ = new ID3DX11EffectTechnique * [ETechType::kMax];
 
 	techs_[kBuildShadowMap] = e->GetTechniqueByName("BuildShadowMap");
 	techs_[kBuildShadowMapAlphaClip] = e->GetTechniqueByName("BuildShadowMapAlphaClip");
@@ -57,7 +57,7 @@ void ba::ShadowMapEffect::Destroy()
 	EffectWrapper::Destroy();
 }
 
-ID3DX11EffectTechnique* ba::ShadowMapEffect::tech(TechType type)
+ID3DX11EffectTechnique* ba::ShadowMapEffect::tech(ETechType type)
 {
 	return techs_[type];
 }
