@@ -57,6 +57,22 @@ namespace ba
 		{
 		}
 
+		void CollisionManager::Init()
+		{
+			Destroy();
+		}
+
+		void CollisionManager::Destroy()
+		{
+			for (auto iter = all_colliders_.begin(); iter != all_colliders_.end(); ++iter)
+			{
+				delete *iter;
+			}
+			all_colliders_.clear();
+			static_colliders_.clear();
+			dynamic_colliders_.clear();
+		}
+
 		void CollisionManager::CreateCollider(
 			Collider::EMovementType movement_type,
 			Collider::EPrimitiveType primitive_type,
@@ -100,19 +116,136 @@ namespace ba
 				collider = aabb_collider;
 			}
 
-			collider->CalcDomainIndices();
-
-			// 생성한 collider를 static, dynamic 배열에 넣기
-
-			int domain_idx_0 = -1;
-			int domain_idx_1 = -1;
+			collider->physics_model_ = in_physics_model;
+			collider->movement_type_ = movement_type;
+			collider->primitive_type_ = primitive_type;
 
 			collider->CalcDomainIndices();
 
-			static_colliders_.insert({ domain_idx_0, collider });
+			if (collider->movement_type_ == Collider::EMovementType::kStatic)
+			{
+				static_colliders_.insert({ collider->center_domain_idx, collider });
 
-			if (domain_idx_1 != -1)
-				static_colliders_.insert({ domain_idx_1, collider });
+				if (collider->center_domain_idx != collider->spread_domain_idx)
+					static_colliders_.insert({ collider->spread_domain_idx, collider });
+			}
+			else if (collider->movement_type_ == Collider::EMovementType::kDynamic)
+			{
+				dynamic_colliders_.push_back(collider);
+			}
+
+			all_colliders_.push_back(collider);
+		}
+
+		void CollisionManager::Collision()
+		{
+			// Perform collision check on all dynamic colliders.
+			for (auto main_iter = dynamic_colliders_.begin(); main_iter != dynamic_colliders_.end(); ++main_iter)
+			{
+				Collider* main = *main_iter;
+
+				// Check collision with other dynamic colliders in the array, from the next one of the 'main' to the last one.
+				for (auto target_iter = main_iter + 1; target_iter != dynamic_colliders_.end(); ++target_iter)
+				{
+					Collider* target = *target_iter;
+
+					// Check collision only when the two colliders' centers are in the same domain or in an domain next to each other.
+					//  Because all colliders cannot be larger than domain size.
+					if (std::abs(main->center_domain_idx - target->center_domain_idx) <= 1)
+					{
+						if (
+							main->center_domain_idx == target->center_domain_idx		// They are in the same domain.
+							|| main->center_domain_idx == target->spread_domain_idx		// 'target' collider is spread over two domains.
+							|| main->spread_domain_idx == target->center_domain_idx		// 'main' collider is spread over two domains.
+							)
+						{
+							Collision(main, target);
+						}
+					}
+				}
+
+				// Check collision with static colliders in the domain of which index is same as the 'main->center_domain_idx'.
+				auto lower_iter = static_colliders_.lower_bound(main->center_domain_idx);
+				if (lower_iter != static_colliders_.end())
+				{
+					auto upper_iter = static_colliders_.upper_bound(main->center_domain_idx);
+
+					for (auto target_iter = lower_iter; target_iter != upper_iter; ++target_iter)
+					{
+						Collider* target = target_iter->second;
+
+						Collision(main, target);
+					}
+				}
+				
+				// Check collision with static colliders in the domain of which index is same as the 'main->spread_domain_idx'.
+				if (main->center_domain_idx != main->spread_domain_idx)
+				{
+					auto lower_iter = static_colliders_.lower_bound(main->spread_domain_idx);
+					if (lower_iter != static_colliders_.end())
+					{
+						auto upper_iter = static_colliders_.upper_bound(main->spread_domain_idx);
+
+						for (auto target_iter = lower_iter; target_iter != upper_iter; ++target_iter)
+						{
+							Collider* target = target_iter->second;
+
+							Collision(main, target);
+						}
+					}
+				}
+			}
+		}
+
+		void CollisionManager::Collision(Collider* main, Collider* target)
+		{
+			// At the moment, perform nothing if any dynamic collider's primitive is box.
+			if (
+				main->primitive_type_ == Collider::kAxisAlignedBox
+				|| (target->movement_type_ == Collider::kDynamic && target->primitive_type_ == Collider::kAxisAlignedBox)
+				)
+				return;
+
+			// Dynamic collider VS Dynamic collider
+			//  == Sphere collider VS Sphere collider
+			if (target->movement_type_ == Collider::kDynamic)
+			{
+				SphereCollider* main_sphere = reinterpret_cast<SphereCollider*>(main);
+				SphereCollider* target_sphere = reinterpret_cast<SphereCollider*>(target);
+
+				CollisionInfo collision_info;
+
+				// Calculate restitution factor.
+				float restitution = main_sphere->restitution_ * target_sphere->restitution_;
+				collision_info.restitution = restitution;
+
+				// Set main collider's normal vector.
+				XMVECTOR normal = XMLoadFloat3(&main_sphere->dx_bounding_sphere_.Center) - XMLoadFloat3(&target_sphere->dx_bounding_sphere_.Center);
+				XMStoreFloat3(&collision_info.normal, normal);
+
+				// Deliver collision information to the main collider.
+				main_sphere->OnCollision(collision_info);
+
+				// Set target collider's normal vector.
+				XMStoreFloat3(&collision_info.normal, -normal);
+
+				// Deliver collision information to the target collider.
+				target_sphere->OnCollision(collision_info);
+			}
+			// Dynamic collider VS Static collider
+			else
+			{
+				// Sphere collider VS Sphere collider
+				if (target->primitive_type_ == Collider::kSphere)
+				{
+
+				}
+				// Sphere collider VS AABB collider
+				else
+				{
+
+				}
+			}
 		}
 	}
 }

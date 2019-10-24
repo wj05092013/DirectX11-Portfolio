@@ -293,13 +293,7 @@
     <ClCompile Include="GraphicComponent.cpp">
       <Filter>Sources\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="SceneComponent.cpp">
-      <Filter>Sources\Game</Filter>
-    </ClCompile>
     <ClCompile Include="SceneManager.cpp">
-      <Filter>Sources\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneComponentManager.cpp">
       <Filter>Sources\Game</Filter>
     </ClCompile>
     <ClCompile Include="GraphicComponentManager.cpp">

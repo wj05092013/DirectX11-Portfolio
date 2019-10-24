@@ -237,8 +237,6 @@
     <ClCompile Include="RotationalCamera.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Scene01.cpp" />
-    <ClCompile Include="SceneComponent.cpp" />
-    <ClCompile Include="SceneComponentManager.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ShadowMap.cpp" />
     <ClCompile Include="ShadowMapEffect.cpp" />

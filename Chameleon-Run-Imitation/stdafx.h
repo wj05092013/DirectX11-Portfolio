@@ -60,11 +60,13 @@
 #include "GeometryGenerator.h"
 #include "Mesh.h"
 #include "Model.h"
+
+#include "PhysicsModel.h"
+#include "CollisionManager.h"
 #include "Collider.h"
 #include "SphereCollider.h"
 #include "AABBCollider.h"
-#include "PhysicsModel.h"
-#include "CollisionManager.h"
+
 #include "Character.h"
 #include "DebugScreen.h"
 #include "TextureManager.h"

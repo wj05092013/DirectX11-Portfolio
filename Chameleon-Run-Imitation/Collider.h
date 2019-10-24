@@ -26,16 +26,21 @@ namespace ba
 				kAxisAlignedBox
 			};
 
-		public:
+		protected:
 			Collider();
+			friend class CollisionManager;
+
+		public:
 			virtual ~Collider();
 
 			// 현재 속한 영역의 인덱스 갱신
 			//  Dynamic type인 경우
 			void Update();
 
-			// The 'out_first_idx' is the index of the domain which the bounding shape is in.
-			//  If the shape is in just one domain, the 'out_second_idx' is -1,
+			void OnCollision(const CollisionInfo& info);
+
+			// The 'center_domain_idx' is the index of the domain which the bounding shape's center is in.
+			//  If the shape is in just one domain, the 'spread_domain_idx' is same as the 'center_domain_idx',
 			//  and if not, it is the other index different from the center index.
 			virtual void CalcDomainIndices() = 0;
 
@@ -45,8 +50,9 @@ namespace ba
 			EMovementType movement_type_;
 			EPrimitiveType primitive_type_;
 
-			int first_domain_idx_;
-			int second_domain_idx_;
+			// Collider can be in two domain.
+			int center_domain_idx;
+			int spread_domain_idx;
 		};
 	}
 }
