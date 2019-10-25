@@ -9,12 +9,15 @@ namespace ba
 	namespace collision
 	{
 		class Collider;
+		enum Collider::EMovementType;
+		enum Collider::EPrimitiveType;
 		class PhysicsModel;
 
 		struct CollisionInfo
 		{
+			float overlapped;
 			float restitution;
-			XMFLOAT3 normal;
+			XMVECTOR normal;
 		};
 
 		class CollisionManager
@@ -30,14 +33,14 @@ namespace ba
 			void Init();
 			void Destroy();
 
-			void CreateCollider(
+			Collider* CreateCollider(
 				Collider::EMovementType movement_type,
 				Collider::EPrimitiveType primitive_type,
 				const float* restitutions,
 				PhysicsModel* in_physics_model
 			);
 
-			void Collision();
+			void CheckCollision();
 
 		private:
 			// 'main' collider must be dynamic collider.

@@ -24,6 +24,15 @@ namespace ba
 
 		void Collider::OnCollision(const CollisionInfo& info)
 		{
+			physics_model_->OnCollision(info);
+		}
+		Collider::EMovementType Collider::movement_type() const
+		{
+			return movement_type_;
+		}
+		Collider::EPrimitiveType Collider::primitive_type() const
+		{
+			return primitive_type_;
 		}
 	}
 }

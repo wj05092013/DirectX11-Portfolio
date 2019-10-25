@@ -8,10 +8,8 @@ namespace ba
 {
 	namespace collision
 	{
-		// CollisionManager에 의해 생성, 관리
-		// CollisionManager에게 충돌 정보를 전달받고 받은 정보를 통해
-		//  PhysicsModel 갱신
-		// Collider의 크기는 Collision Domain보다 클 수 없음
+		class PhysicsModel;
+
 		class Collider
 		{
 		public:
@@ -43,6 +41,14 @@ namespace ba
 			//  If the shape is in just one domain, the 'spread_domain_idx' is same as the 'center_domain_idx',
 			//  and if not, it is the other index different from the center index.
 			virtual void CalcDomainIndices() = 0;
+
+
+			//
+			// Accessors.
+			//
+
+			EMovementType movement_type() const;
+			EPrimitiveType primitive_type() const;
 
 		protected:
 			PhysicsModel* physics_model_;

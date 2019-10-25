@@ -25,17 +25,25 @@ namespace ba
 			XMVECTOR p0 = center + extents;
 			for (int i = 0; i < 3; ++i)
 			{
-				d = -XMVectorGetX(XMVector3Dot(p0, normal[i]));		// d = dot(p0,n)
-				out_planes[i].plane_eq = XMVectorSetW(normal[i], d);			// plane: ax + by + cz + d = 0
+				d = -XMVectorGetX(XMVector3Dot(p0, normal[i]));			// d = dot(p0,n)
+				out_planes[i].plane_eq = XMVectorSetW(normal[i], d);	// plane: ax + by + cz + d = 0
 			}
 
 			// Planes of negative direction.
 			p0 = center - extents;
 			for (int i = 3; i < 6; ++i)
 			{
-				d = -XMVectorGetX(XMVector3Dot(p0, -normal[i]));	// d = dot(p0,n)
-				out_planes[i].plane_eq = XMVectorSetW(-normal[i], d);		// plane: ax + by + cz + d = 0
+				d = -XMVectorGetX(XMVector3Dot(p0, -normal[i]));		// d = dot(p0,n)
+				out_planes[i].plane_eq = XMVectorSetW(-normal[i], d);	// plane: ax + by + cz + d = 0
 			}
+		}
+
+		// Calculate a vector from 'plane' to 'point', using the intersection point between the 'plane'
+		//  and the line which passes the 'plane' perpendicularly.
+		XMVECTOR CalcVectorFromTo(const XMVECTOR& plane, const XMVECTOR& point)
+		{
+			float k = -XMVectorGetX(XMVector3Dot(plane, point)) - XMVectorGetW(plane);
+			return XMVectorSetW(-k * plane, 0.0f);
 		}
 
 
@@ -73,7 +81,7 @@ namespace ba
 			dynamic_colliders_.clear();
 		}
 
-		void CollisionManager::CreateCollider(
+		Collider* CollisionManager::CreateCollider(
 			Collider::EMovementType movement_type,
 			Collider::EPrimitiveType primitive_type,
 			const float* restitutions,
@@ -137,7 +145,7 @@ namespace ba
 			all_colliders_.push_back(collider);
 		}
 
-		void CollisionManager::Collision()
+		void CollisionManager::CheckCollision()
 		{
 			// Perform collision check on all dynamic colliders.
 			for (auto main_iter = dynamic_colliders_.begin(); main_iter != dynamic_colliders_.end(); ++main_iter)
@@ -199,51 +207,165 @@ namespace ba
 
 		void CollisionManager::Collision(Collider* main, Collider* target)
 		{
-			// At the moment, perform nothing if any dynamic collider's primitive is box.
-			if (
-				main->primitive_type_ == Collider::kAxisAlignedBox
-				|| (target->movement_type_ == Collider::kDynamic && target->primitive_type_ == Collider::kAxisAlignedBox)
-				)
-				return;
-
-			// Dynamic collider VS Dynamic collider
-			//  == Sphere collider VS Sphere collider
 			if (target->movement_type_ == Collider::kDynamic)
 			{
-				SphereCollider* main_sphere = reinterpret_cast<SphereCollider*>(main);
-				SphereCollider* target_sphere = reinterpret_cast<SphereCollider*>(target);
-
-				CollisionInfo collision_info;
-
-				// Calculate restitution factor.
-				float restitution = main_sphere->restitution_ * target_sphere->restitution_;
-				collision_info.restitution = restitution;
-
-				// Set main collider's normal vector.
-				XMVECTOR normal = XMLoadFloat3(&main_sphere->dx_bounding_sphere_.Center) - XMLoadFloat3(&target_sphere->dx_bounding_sphere_.Center);
-				XMStoreFloat3(&collision_info.normal, normal);
-
-				// Deliver collision information to the main collider.
-				main_sphere->OnCollision(collision_info);
-
-				// Set target collider's normal vector.
-				XMStoreFloat3(&collision_info.normal, -normal);
-
-				// Deliver collision information to the target collider.
-				target_sphere->OnCollision(collision_info);
-			}
-			// Dynamic collider VS Static collider
-			else
-			{
-				// Sphere collider VS Sphere collider
-				if (target->primitive_type_ == Collider::kSphere)
+				if (main->primitive_type_ == Collider::kSphere)
 				{
+					if (target->primitive_type_ == Collider::kSphere)
+					{
+						SphereCollider* main_sphere = reinterpret_cast<SphereCollider*>(main);
+						SphereCollider* target_sphere = reinterpret_cast<SphereCollider*>(target);
 
+						if (main_sphere->dx_bounding_sphere_.Intersects(target_sphere->dx_bounding_sphere_))
+						{
+							CollisionInfo collision_info;
+
+							// Calculate restitution factor.
+							float restitution = main_sphere->restitution_ * target_sphere->restitution_;
+							collision_info.restitution = restitution;
+
+							XMVECTOR center_to_center = XMLoadFloat3(&main_sphere->dx_bounding_sphere_.Center) - XMLoadFloat3(&target_sphere->dx_bounding_sphere_.Center);
+
+
+							// Set main collider's normal vector.
+							collision_info.normal = XMVector3Normalize(center_to_center);
+
+							// Calculate the overlapped distance between the two colliders.
+							collision_info.overlapped = main_sphere->dx_bounding_sphere_.Radius + target_sphere->dx_bounding_sphere_.Radius
+								- XMVectorGetX(XMVector3Length(center_to_center));
+							collision_info.overlapped *= 0.5f;
+
+							// Deliver collision information to the main collider.
+							main_sphere->OnCollision(collision_info);
+
+
+							// Set target collider's normal vector.
+							collision_info.normal = -collision_info.normal;
+
+							// Deliver collision information to the target collider.
+							target_sphere->OnCollision(collision_info);
+						}
+					}
+					else if (target->primitive_type_ == Collider::kAxisAlignedBox)
+					{
+						// Do nothing.
+					}
 				}
-				// Sphere collider VS AABB collider
-				else
+				else if (main->primitive_type_ == Collider::kAxisAlignedBox)
 				{
+					if (target->primitive_type_ == Collider::kSphere)
+					{
+						// Do nothing.
+					}
+					else if (target->primitive_type_ == Collider::kAxisAlignedBox)
+					{
+						// Do nothing.
+					}
+				}
+			}
+			else if (target->movement_type_ == Collider::kStatic)
+			{
+				if (main->primitive_type_ == Collider::kSphere)
+				{
+					if (target->primitive_type_ == Collider::kSphere)
+					{
+						SphereCollider* main_sphere = reinterpret_cast<SphereCollider*>(main);
+						SphereCollider* target_sphere = reinterpret_cast<SphereCollider*>(target);
 
+						if (main_sphere->dx_bounding_sphere_.Intersects(target_sphere->dx_bounding_sphere_))
+						{
+							CollisionInfo collision_info;
+
+							// Calculate restitution factor.
+							float restitution = main_sphere->restitution_ * target_sphere->restitution_;
+							collision_info.restitution = restitution;
+
+							XMVECTOR center_to_center = XMLoadFloat3(&main_sphere->dx_bounding_sphere_.Center) - XMLoadFloat3(&target_sphere->dx_bounding_sphere_.Center);
+
+							// Set main collider's normal vector.
+							collision_info.normal = XMVector3Normalize(center_to_center);
+
+							// Calculate the overlapped distance between the two colliders.
+							collision_info.overlapped = main_sphere->dx_bounding_sphere_.Radius + target_sphere->dx_bounding_sphere_.Radius
+								- XMVectorGetX(XMVector3Length(center_to_center));
+
+							// Deliver collision information to the main collider.
+							main_sphere->OnCollision(collision_info);
+						}
+					}
+					else if (target->primitive_type_ == Collider::kAxisAlignedBox)
+					{
+						SphereCollider* main_sphere = reinterpret_cast<SphereCollider*>(main);
+						AABBCollider* target_box = reinterpret_cast<AABBCollider*>(target);
+
+						if (main_sphere->dx_bounding_sphere_.Intersects(target_box->dx_bounding_box_))
+						{
+							CollisionInfo collision_info;
+
+							// Front planes' count cannot bigger than 3.
+							int front_plane_indices[3];
+							int front_plane_count = 0;
+
+							float front_plane_dist[3];
+							float dist_sum = 0.0f;
+							float dist_square_sum = 0.0f;
+
+							// Get planes' indices which the sphere's center is in front of.
+							for (int i = 0; i < 6; ++i)
+							{
+								XMVECTOR to_center = CalcVectorFromTo(target_box->planes_[i].plane_eq, XMLoadFloat3(&main_sphere->dx_bounding_sphere_.Center));
+
+								// The sphere's center point is in front of the plane.
+								if (XMVectorGetX(XMVector3Dot(to_center, target_box->planes_[i].plane_eq)) >= 0.0f)
+								{
+									front_plane_indices[front_plane_count];
+									
+									float dist = XMVectorGetX(XMVector3Length(to_center));
+									front_plane_dist[front_plane_count] = dist;
+
+									dist_sum += dist;
+									dist_square_sum += dist * dist;
+
+									++front_plane_count;
+								}
+							}
+
+							float result_restitution = 1.0f;
+							collision_info.normal = XMVectorZero();
+
+							// Interpolate normals, restitution factors.
+							for (int i = 0; i < front_plane_count; ++i)
+							{
+								// 'front_plane_indices[i]' is current plane's index.
+
+								float intp_factor = front_plane_dist[i] / dist_sum;
+
+								collision_info.normal += intp_factor * target_box->planes_[front_plane_indices[i]].plane_eq;
+								result_restitution += intp_factor * target_box->planes_[front_plane_indices[i]].restitution;
+							}
+
+							// Set collision info.
+							collision_info.normal = XMVector3Normalize(collision_info.normal);
+							collision_info.restitution = result_restitution;
+
+							// Calculate the overlapped distance in the main spherer collider.
+							collision_info.overlapped = main_sphere->dx_bounding_sphere_.Radius - std::sqrt(dist_square_sum);
+
+							// Deliver collision information to the main collider.
+							main_sphere->OnCollision(collision_info);
+						}
+					}
+				}
+				else if (main->primitive_type_ == Collider::kAxisAlignedBox)
+				{
+					if (target->primitive_type_ == Collider::kSphere)
+					{
+						// Do nothing.
+					}
+					else if (target->primitive_type_ == Collider::kAxisAlignedBox)
+					{
+						// Do nothing.
+					}
 				}
 			}
 		}
