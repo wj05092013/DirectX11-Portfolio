@@ -14,7 +14,7 @@ namespace ba
 			struct AABBPlane
 			{
 				float restitution;	// Restituion factor([0.0f, 1.0f]).
-				XMVECTOR plane_eq;
+				XMVECTOR plane_eq;	// Plane equation in the world space.
 			};
 
 		protected:
@@ -24,6 +24,8 @@ namespace ba
 
 		public:
 			~AABBCollider() override;
+
+			void Update() override;
 
 			void CalcDomainIndices() override;
 

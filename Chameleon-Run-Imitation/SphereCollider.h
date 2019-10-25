@@ -18,6 +18,8 @@ namespace ba
 		public:
 			~SphereCollider() override;
 
+			void Update() override;
+
 			void CalcDomainIndices() override;
 
 		private:

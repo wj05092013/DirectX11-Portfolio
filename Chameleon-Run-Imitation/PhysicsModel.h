@@ -26,15 +26,34 @@ namespace ba
 
 			void OnCollision(const CollisionInfo& info);
 
-			// 트랜스폼 갱신
-			void Update();
+			// Update this models position using velocity and net force.
+			//  Also update the world transform of this model, automatically.
+			//  Integration method is Modified Euler method.
+			void Update(float delta_time);
+
+			void AccumulateVelocity(const XMVECTOR& velocity);
+			void AccumulateForce(const XMVECTOR& force);
+
+			// Default is turned off.
+			void ToggleGravity();
+
+
+			//
+			// Mutators
+			//
+
+			void set_mass(float mass);
 
 		private:
+			static const XMVECTOR kGravityAcceleration;
+
 			Collider* collider_;
 
 			float mass_;
 			XMVECTOR velocity_;
-			XMVECTOR res_force_;
+			XMVECTOR net_force_;
+
+			bool b_gravity_;
 		};
 	}
 }

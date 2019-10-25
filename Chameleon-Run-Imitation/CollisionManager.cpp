@@ -5,49 +5,6 @@ namespace ba
 	namespace collision
 	{
 		//
-		// Helper Functions
-		//
-		
-		void SetPlaneEquations(const BoundingBox& box, AABBCollider::AABBPlane out_planes[6])
-		{
-			XMVECTOR normal[3] = {
-				XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f),	// Plane normal of positive x.
-				XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f),	// Plane normal of positive y.
-				XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f)		// Plane normal of positive z.
-			};
-
-			float d = 0.0f;
-
-			XMVECTOR center = XMLoadFloat3(&box.Center);
-			XMVECTOR extents = XMLoadFloat3(&box.Extents);
-
-			// Planes of positive direction.
-			XMVECTOR p0 = center + extents;
-			for (int i = 0; i < 3; ++i)
-			{
-				d = -XMVectorGetX(XMVector3Dot(p0, normal[i]));			// d = dot(p0,n)
-				out_planes[i].plane_eq = XMVectorSetW(normal[i], d);	// plane: ax + by + cz + d = 0
-			}
-
-			// Planes of negative direction.
-			p0 = center - extents;
-			for (int i = 3; i < 6; ++i)
-			{
-				d = -XMVectorGetX(XMVector3Dot(p0, -normal[i]));		// d = dot(p0,n)
-				out_planes[i].plane_eq = XMVectorSetW(-normal[i], d);	// plane: ax + by + cz + d = 0
-			}
-		}
-
-		// Calculate a vector from 'plane' to 'point', using the intersection point between the 'plane'
-		//  and the line which passes the 'plane' perpendicularly.
-		XMVECTOR CalcVectorFromTo(const XMVECTOR& plane, const XMVECTOR& point)
-		{
-			float k = -XMVectorGetX(XMVector3Dot(plane, point)) - XMVectorGetW(plane);
-			return XMVectorSetW(-k * plane, 0.0f);
-		}
-
-
-		//
 		// CollisionManager Class
 		//
 
@@ -132,10 +89,10 @@ namespace ba
 
 			if (collider->movement_type_ == Collider::EMovementType::kStatic)
 			{
-				static_colliders_.insert({ collider->center_domain_idx, collider });
+				static_colliders_.insert({ collider->center_domain_idx_, collider });
 
-				if (collider->center_domain_idx != collider->spread_domain_idx)
-					static_colliders_.insert({ collider->spread_domain_idx, collider });
+				if (collider->center_domain_idx_ != collider->spread_domain_idx_)
+					static_colliders_.insert({ collider->spread_domain_idx_, collider });
 			}
 			else if (collider->movement_type_ == Collider::EMovementType::kDynamic)
 			{
@@ -159,12 +116,12 @@ namespace ba
 
 					// Check collision only when the two colliders' centers are in the same domain or in an domain next to each other.
 					//  Because all colliders cannot be larger than domain size.
-					if (std::abs(main->center_domain_idx - target->center_domain_idx) <= 1)
+					if (std::abs(main->center_domain_idx_ - target->center_domain_idx_) <= 1)
 					{
 						if (
-							main->center_domain_idx == target->center_domain_idx		// They are in the same domain.
-							|| main->center_domain_idx == target->spread_domain_idx		// 'target' collider is spread over two domains.
-							|| main->spread_domain_idx == target->center_domain_idx		// 'main' collider is spread over two domains.
+							main->center_domain_idx_ == target->center_domain_idx_		// They are in the same domain.
+							|| main->center_domain_idx_ == target->spread_domain_idx_		// 'target' collider is spread over two domains.
+							|| main->spread_domain_idx_ == target->center_domain_idx_		// 'main' collider is spread over two domains.
 							)
 						{
 							Collision(main, target);
@@ -172,11 +129,11 @@ namespace ba
 					}
 				}
 
-				// Check collision with static colliders in the domain of which index is same as the 'main->center_domain_idx'.
-				auto lower_iter = static_colliders_.lower_bound(main->center_domain_idx);
+				// Check collision with static colliders in the domain of which index is same as the 'main->center_domain_idx_'.
+				auto lower_iter = static_colliders_.lower_bound(main->center_domain_idx_);
 				if (lower_iter != static_colliders_.end())
 				{
-					auto upper_iter = static_colliders_.upper_bound(main->center_domain_idx);
+					auto upper_iter = static_colliders_.upper_bound(main->center_domain_idx_);
 
 					for (auto target_iter = lower_iter; target_iter != upper_iter; ++target_iter)
 					{
@@ -186,13 +143,13 @@ namespace ba
 					}
 				}
 				
-				// Check collision with static colliders in the domain of which index is same as the 'main->spread_domain_idx'.
-				if (main->center_domain_idx != main->spread_domain_idx)
+				// Check collision with static colliders in the domain of which index is same as the 'main->spread_domain_idx_'.
+				if (main->center_domain_idx_ != main->spread_domain_idx_)
 				{
-					auto lower_iter = static_colliders_.lower_bound(main->spread_domain_idx);
+					auto lower_iter = static_colliders_.lower_bound(main->spread_domain_idx_);
 					if (lower_iter != static_colliders_.end())
 					{
-						auto upper_iter = static_colliders_.upper_bound(main->spread_domain_idx);
+						auto upper_iter = static_colliders_.upper_bound(main->spread_domain_idx_);
 
 						for (auto target_iter = lower_iter; target_iter != upper_iter; ++target_iter)
 						{

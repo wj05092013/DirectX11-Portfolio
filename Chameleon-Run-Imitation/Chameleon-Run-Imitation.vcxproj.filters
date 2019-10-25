@@ -204,6 +204,9 @@
     <ClInclude Include="AABBCollider.h">
       <Filter>Includes\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionHelper.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Effects.cpp">
@@ -328,6 +331,9 @@
     </ClCompile>
     <ClCompile Include="AABBCollider.cpp">
       <Filter>Sources\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionHelper.cpp">
+      <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

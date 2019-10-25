@@ -23,6 +23,7 @@ namespace ba
 		Model();
 		virtual ~Model();
 
+		// Update the world transform matrix using the scale, rotation, translation vectors.
 		void CalcWorldTransform();
 
 		ModelData*	model_data;
