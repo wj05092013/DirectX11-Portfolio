@@ -183,6 +183,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="NormalDepthMapEffect.h" />
     <ClInclude Include="NormalMappingEffect.h" />
+    <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="PhysicsModel.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="RenderStates.h" />
@@ -232,6 +233,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="NormalDepthMapEffect.cpp" />
     <ClCompile Include="NormalMappingEffect.cpp" />
+    <ClCompile Include="PhysicsManager.cpp" />
     <ClCompile Include="PhysicsModel.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="RenderStates.cpp" />

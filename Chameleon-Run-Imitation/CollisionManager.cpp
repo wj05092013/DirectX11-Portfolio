@@ -4,10 +4,6 @@ namespace ba
 {
 	namespace collision
 	{
-		//
-		// CollisionManager Class
-		//
-
 		CollisionManager::CollisionManager()
 		{
 		}
@@ -34,21 +30,20 @@ namespace ba
 				delete *iter;
 			}
 			all_colliders_.clear();
-			static_colliders_.clear();
-			dynamic_colliders_.clear();
+			static_model_colliders_.clear();
+			physics_model_collider.clear();
 		}
 
-		Collider* CollisionManager::CreateCollider(
-			Collider::EMovementType movement_type,
+		void CollisionManager::CreateCollider(
 			Collider::EPrimitiveType primitive_type,
 			const float* restitutions,
-			PhysicsModel* in_physics_model
+			Model* model
 		)
 		{
 			Collider* collider = nullptr;
 
-			auto& vertices = in_physics_model->model_data->mesh.vertices();
-			UINT stride = in_physics_model->model_data->mesh.vertex_stride();
+			auto& vertices = model->model_data->mesh.vertices();
+			UINT stride = model->model_data->mesh.vertex_stride();
 
 			if (primitive_type == Collider::kSphere)
 			{
@@ -58,7 +53,7 @@ namespace ba
 				BoundingSphere::CreateFromPoints(sphere_collider->dx_bounding_sphere_, vertices.size(), reinterpret_cast<const XMFLOAT3*>(&vertices[0]), stride);
 
 				// Set restitution factor.
-				sphere_collider->restitution_ = restitutions[0];
+				sphere_collider->restitution_ = *restitutions;
 
 				collider = sphere_collider;
 			}
@@ -69,7 +64,7 @@ namespace ba
 				// Create a bounding box for this AABBCollider.
 				BoundingBox::CreateFromPoints(aabb_collider->dx_bounding_box_, vertices.size(), reinterpret_cast<const XMFLOAT3*>(&vertices[0]), stride);
 
-				// Compute and store each planes' plane equations.
+				// Compute and store each planes' equations.
 				SetPlaneEquations(aabb_collider->dx_bounding_box_, aabb_collider->planes_);
 
 				// Set restitution factors for each planes.
@@ -81,22 +76,20 @@ namespace ba
 				collider = aabb_collider;
 			}
 
-			collider->physics_model_ = in_physics_model;
-			collider->movement_type_ = movement_type;
-			collider->primitive_type_ = primitive_type;
+			collider->model_ = model;
 
 			collider->CalcDomainIndices();
 
-			if (collider->movement_type_ == Collider::EMovementType::kStatic)
+			if (model->model_type() == Model::kStatic)
 			{
-				static_colliders_.insert({ collider->center_domain_idx_, collider });
+				static_model_colliders_.insert({ collider->center_domain_idx_, collider });
 
 				if (collider->center_domain_idx_ != collider->spread_domain_idx_)
-					static_colliders_.insert({ collider->spread_domain_idx_, collider });
+					static_model_colliders_.insert({ collider->spread_domain_idx_, collider });
 			}
-			else if (collider->movement_type_ == Collider::EMovementType::kDynamic)
+			else if (model->model_type() == Model::kPhysics)
 			{
-				dynamic_colliders_.push_back(collider);
+				physics_model_collider.push_back(collider);
 			}
 
 			all_colliders_.push_back(collider);
@@ -104,13 +97,13 @@ namespace ba
 
 		void CollisionManager::CheckCollision()
 		{
-			// Perform collision check on all dynamic colliders.
-			for (auto main_iter = dynamic_colliders_.begin(); main_iter != dynamic_colliders_.end(); ++main_iter)
+			// Perform collision check on all colliders of physics models.
+			for (auto main_iter = physics_model_collider.begin(); main_iter != physics_model_collider.end(); ++main_iter)
 			{
 				Collider* main = *main_iter;
 
-				// Check collision with other dynamic colliders in the array, from the next one of the 'main' to the last one.
-				for (auto target_iter = main_iter + 1; target_iter != dynamic_colliders_.end(); ++target_iter)
+				// Check collision with other physics model colliders in the array, from the next one of the 'main' to the last one.
+				for (auto target_iter = main_iter + 1; target_iter != physics_model_collider.end(); ++target_iter)
 				{
 					Collider* target = *target_iter;
 
@@ -129,11 +122,11 @@ namespace ba
 					}
 				}
 
-				// Check collision with static colliders in the domain of which index is same as the 'main->center_domain_idx_'.
-				auto lower_iter = static_colliders_.lower_bound(main->center_domain_idx_);
-				if (lower_iter != static_colliders_.end())
+				// Check collision with static model colliders in the domain of which index is same as the 'main->center_domain_idx_'.
+				auto lower_iter = static_model_colliders_.lower_bound(main->center_domain_idx_);
+				if (lower_iter != static_model_colliders_.end())
 				{
-					auto upper_iter = static_colliders_.upper_bound(main->center_domain_idx_);
+					auto upper_iter = static_model_colliders_.upper_bound(main->center_domain_idx_);
 
 					for (auto target_iter = lower_iter; target_iter != upper_iter; ++target_iter)
 					{
@@ -143,13 +136,13 @@ namespace ba
 					}
 				}
 				
-				// Check collision with static colliders in the domain of which index is same as the 'main->spread_domain_idx_'.
+				// Check collision with static model colliders in the domain of which index is same as the 'main->spread_domain_idx_'.
 				if (main->center_domain_idx_ != main->spread_domain_idx_)
 				{
-					auto lower_iter = static_colliders_.lower_bound(main->spread_domain_idx_);
-					if (lower_iter != static_colliders_.end())
+					auto lower_iter = static_model_colliders_.lower_bound(main->spread_domain_idx_);
+					if (lower_iter != static_model_colliders_.end())
 					{
-						auto upper_iter = static_colliders_.upper_bound(main->spread_domain_idx_);
+						auto upper_iter = static_model_colliders_.upper_bound(main->spread_domain_idx_);
 
 						for (auto target_iter = lower_iter; target_iter != upper_iter; ++target_iter)
 						{
@@ -164,7 +157,7 @@ namespace ba
 
 		void CollisionManager::Collision(Collider* main, Collider* target)
 		{
-			if (target->movement_type_ == Collider::kDynamic)
+			if (target->model_->model_type() == Model::kPhysics)
 			{
 				if (main->primitive_type_ == Collider::kSphere)
 				{
@@ -220,7 +213,7 @@ namespace ba
 					}
 				}
 			}
-			else if (target->movement_type_ == Collider::kStatic)
+			else if (target->model_->model_type() == Model::kStatic)
 			{
 				if (main->primitive_type_ == Collider::kSphere)
 				{

@@ -299,7 +299,7 @@ bool ba::Scene01::LoadCharacter()
 	if (!sphere_->Init(device_, geo, local_transform, material))
 		return false;
 	
-	Character character_inst;
+	collision::PhysicsModel character_inst;
 
 	character_inst.model_data = sphere_;
 	character_inst.scale = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);

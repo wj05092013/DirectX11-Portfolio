@@ -2,12 +2,12 @@
 
 namespace ba
 {
-	namespace collision
+	namespace physics
 	{
 		const XMVECTOR PhysicsModel::kGravityAcceleration = XMVectorSet(0.0f, -9.8f, 0.0f, 0.0f);
 
 		PhysicsModel::PhysicsModel() :
-			collider_(nullptr),
+			Model(kPhysics),
 			mass_(0.0f),
 			velocity_(XMVectorZero()),
 			net_force_(XMVectorZero()),
@@ -19,12 +19,7 @@ namespace ba
 		{
 		}
 
-		void PhysicsModel::CreateCollider(Collider::EMovementType movement_type, Collider::EPrimitiveType primitive_type, const float* restitutions)
-		{
-			collider_ = CollisionManager::GetInstance().CreateCollider(movement_type, primitive_type, restitutions, this);
-		}
-
-		void PhysicsModel::OnCollision(const CollisionInfo& info)
+		void PhysicsModel::OnCollision(const collision::CollisionInfo& info)
 		{
 			translation += info.overlapped * info.normal;
 			velocity_ = velocity_ - (1.0f + info.restitution) * XMVector3Reflect(velocity_, info.normal);
@@ -32,18 +27,12 @@ namespace ba
 
 		void PhysicsModel::Update(float delta_time)
 		{
-			if (!collider_)
-				return;
+			// Apply the Modified Euler Method.
+			velocity_ += delta_time * net_force_ / mass_;
+			translation += delta_time * velocity_;
 
-			if (collider_->movement_type() == Collider::kDynamic)
-			{
-				// Apply the Modified Euler Method.
-				velocity_ += delta_time * net_force_ / mass_;
-				translation += delta_time * velocity_;
-
-				// Maintain homogeneous coordinates of translation.
-				translation = XMVectorSetW(translation, 1.0f);
-			}
+			// Maintain homogeneous coordinates of translation.
+			translation = XMVectorSetW(translation, 1.0f);
 
 			// Update the world transform of this model.
 			CalcWorldTransform();
@@ -65,6 +54,23 @@ namespace ba
 
 			if (b_gravity_ == true)
 				AccumulateForce(mass_ * kGravityAcceleration);
+			else
+				AccumulateForce(-mass_ * kGravityAcceleration);
+		}
+
+		float PhysicsModel::mass() const
+		{
+			return mass_;
+		}
+
+		const XMVECTOR& PhysicsModel::velocity() const
+		{
+			return velocity_;
+		}
+
+		const XMVECTOR& PhysicsModel::net_force() const
+		{
+			return net_force_;
 		}
 
 		void PhysicsModel::set_mass(float mass)

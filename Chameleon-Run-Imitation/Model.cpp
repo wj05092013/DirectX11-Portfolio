@@ -46,7 +46,18 @@ ba::Model::Model() :
 	scale(XMVectorZero()),
 	rotation(XMVectorZero()),
 	translation(XMVectorZero()),
-	world_transform(XMMatrixIdentity())
+	world_transform(XMMatrixIdentity()),
+	model_type_(kStatic)
+{
+}
+
+ba::Model::Model(EModelType type) :
+	model_data(nullptr),
+	scale(XMVectorZero()),
+	rotation(XMVectorZero()),
+	translation(XMVectorZero()),
+	world_transform(XMMatrixIdentity()),
+	model_type_(type)
 {
 }
 
@@ -54,9 +65,19 @@ ba::Model::~Model()
 {
 }
 
+void ba::Model::OnCollision(const collision::CollisionInfo& info)
+{
+	// Do nothing.
+}
+
 void ba::Model::CalcWorldTransform()
 {
 	world_transform = XMMatrixScalingFromVector(scale)
 		* XMMatrixRotationQuaternion(rotation)
 		* XMMatrixTranslationFromVector(translation);
+}
+
+ba::Model::EModelType ba::Model::model_type() const
+{
+	return model_type_;
 }

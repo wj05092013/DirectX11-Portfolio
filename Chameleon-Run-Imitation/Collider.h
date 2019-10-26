@@ -8,16 +8,9 @@ namespace ba
 {
 	namespace collision
 	{
-		class PhysicsModel;
-
 		class Collider
 		{
 		public:
-			enum EMovementType
-			{
-				kStatic,
-				kDynamic
-			};
 			enum EPrimitiveType
 			{
 				kSphere,
@@ -42,18 +35,8 @@ namespace ba
 			//  and if not, it is the other index different from the center index.
 			virtual void CalcDomainIndices() = 0;
 
-
-			//
-			// Accessors.
-			//
-
-			EMovementType movement_type() const;
-			EPrimitiveType primitive_type() const;
-
 		protected:
-			PhysicsModel* physics_model_;
-
-			EMovementType movement_type_;
+			Model* model_;
 			EPrimitiveType primitive_type_;
 
 			// Collider can be in two domain.

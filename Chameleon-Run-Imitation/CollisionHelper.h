@@ -9,7 +9,6 @@ namespace ba
 	namespace collision
 	{
 		class AABBCollider;
-		struct AABBCollider::AABBPlane;
 
 		// Calculate equations of all planes of an axis aligned box, and store in the member of instances
 		//  of AABBCollider::AABBPlane structure.
