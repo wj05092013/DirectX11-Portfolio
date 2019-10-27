@@ -24,22 +24,12 @@ namespace ba
 			void AccumulateVelocity(const XMVECTOR& velocity);
 			void AccumulateForce(const XMVECTOR& force);
 
-			// Default is turned off.
-			void ToggleGravity();
-
-
-			//
-			// Accessors
-			//
+			// Default is gravity disabled.
+			void SetGravity(bool enable);
 
 			float mass() const;
 			const XMVECTOR& velocity() const;
 			const XMVECTOR& net_force() const;
-
-
-			//
-			// Mutators
-			//
 
 			void set_mass(float mass);
 

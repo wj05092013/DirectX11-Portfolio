@@ -61,7 +61,7 @@ void ba::Renderer::RenderScene(const std::vector<Model>& model_instances, const 
 		{
 			ModelData* model = model_instances[model_idx].model_data;
 
-			world = model->mesh.local_transform() * model_instances[model_idx].world_transform;
+			world = model_instances[model_idx].local_world;
 			world_inv_trans = mathhelper::InverseTranspose(world);
 
 			effects::kBasicEffect.SetWorld(world);
@@ -107,7 +107,7 @@ void ba::Renderer::RenderShadowMap(const std::vector<Model>& model_instances, co
 		{
 			ModelData* model = model_instances[model_idx].model_data;
 
-			world = model->mesh.local_transform() * model_instances[model_idx].world_transform;
+			world = model_instances[model_idx].local_world;
 			world_inv_trans = mathhelper::InverseTranspose(world);
 
 			effects::kShadowMapEffect.SetWorld(world);
@@ -150,7 +150,7 @@ void ba::Renderer::RenderNormalDepthMap(const std::vector<Model>& model_instance
 		{
 			ModelData* model = model_instances[model_idx].model_data;
 
-			world = model->mesh.local_transform() * model_instances[model_idx].world_transform;
+			world = model_instances[model_idx].local_world;
 			world_inv_trans = mathhelper::InverseTranspose(world);
 
 			effects::kNormalDepthMapEffect.SetWorld(world);

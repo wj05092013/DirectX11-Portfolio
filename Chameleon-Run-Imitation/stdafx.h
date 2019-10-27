@@ -60,7 +60,9 @@
 #include "GeometryGenerator.h"
 #include "Mesh.h"
 #include "Model.h"
+
 #include "PhysicsModel.h"
+#include "PhysicsManager.h"
 
 #include "CollisionHelper.h"
 #include "Collider.h"

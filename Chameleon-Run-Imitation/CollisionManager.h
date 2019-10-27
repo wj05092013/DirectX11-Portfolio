@@ -30,7 +30,8 @@ namespace ba
 
 			// If 'primitive_type' is 'kSphere', just one element of the array 'restitutions' will be used.
 			//  If it is 'kAxisAlignedBox', the array must contain 6 elements.
-			void CreateCollider(
+			//  Before calling this function, the 'model' must have the intended transform, especially in the case of static model's collider.
+			bool CreateCollider(
 				Collider::EPrimitiveType primitive_type,
 				const float* restitutions,
 				Model* model

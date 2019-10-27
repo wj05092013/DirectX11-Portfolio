@@ -1,1 +1,9 @@
-#include "PhysicsManager.h"
+#include "stdafx.h"
+
+namespace ba
+{
+	namespace physics
+	{
+
+	}
+}

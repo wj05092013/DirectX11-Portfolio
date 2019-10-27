@@ -21,7 +21,7 @@ namespace ba
 
 		void PhysicsModel::OnCollision(const collision::CollisionInfo& info)
 		{
-			translation += info.overlapped * info.normal;
+			translation_ += info.overlapped * info.normal;
 			velocity_ = velocity_ - (1.0f + info.restitution) * XMVector3Reflect(velocity_, info.normal);
 		}
 
@@ -29,13 +29,13 @@ namespace ba
 		{
 			// Apply the Modified Euler Method.
 			velocity_ += delta_time * net_force_ / mass_;
-			translation += delta_time * velocity_;
+			translation_ += delta_time * velocity_;
 
 			// Maintain homogeneous coordinates of translation.
-			translation = XMVectorSetW(translation, 1.0f);
+			translation_ = XMVectorSetW(translation_, 1.0f);
 
 			// Update the world transform of this model.
-			CalcWorldTransform();
+			UpdateWorldTransform();
 		}
 
 		void PhysicsModel::AccumulateVelocity(const XMVECTOR& velocity)
@@ -48,10 +48,12 @@ namespace ba
 			net_force_ += XMVectorSetW(force, 0.0f);
 		}
 
-		void PhysicsModel::ToggleGravity()
+		void PhysicsModel::SetGravity(bool enable)
 		{
-			b_gravity_ = !b_gravity_;
+			if (b_gravity_ == enable)
+				return;
 
+			b_gravity_ = enable;
 			if (b_gravity_ == true)
 				AccumulateForce(mass_ * kGravityAcceleration);
 			else

@@ -13,19 +13,15 @@ namespace ba
 		{
 		}
 
-		void SphereCollider::Update()
+		void SphereCollider::UpdateDomainIndices()
 		{
-			Collider::Update();
+			// Transform the bounding sphere to world space.
+			XMVECTOR center = XMVector3TransformCoord(XMLoadFloat3(&dx_bounding_sphere_.Center), model_->local_world);
+			float center_z = XMVectorGetZ(center);
 
-			XMVECTOR center = XMVector3Transform(XMLoadFloat3(&dx_bounding_sphere_.Center), transform_);
-			XMStoreFloat3(&dx_bounding_sphere_.Center, center);
-		}
-
-		void SphereCollider::CalcDomainIndices()
-		{
-			int center_idx = static_cast<int>(dx_bounding_sphere_.Center.z / kDomainSizeZ);
-			int near_idx = static_cast<int>((dx_bounding_sphere_.Center.z - dx_bounding_sphere_.Radius) / kDomainSizeZ);
-			int far_idx = static_cast<int>((dx_bounding_sphere_.Center.z + dx_bounding_sphere_.Radius) / kDomainSizeZ);
+			int center_idx = static_cast<int>(center_z / kDomainSizeZ);
+			int near_idx = static_cast<int>((center_z - dx_bounding_sphere_.Radius) / kDomainSizeZ);
+			int far_idx = static_cast<int>((center_z + dx_bounding_sphere_.Radius) / kDomainSizeZ);
 
 			center_domain_idx_ = center_idx;
 

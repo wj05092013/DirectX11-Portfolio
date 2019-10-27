@@ -13,22 +13,17 @@ namespace ba
 		{
 		}
 
-		void AABBCollider::Update()
+		void AABBCollider::UpdateDomainIndices()
 		{
-			Collider::Update();
+			// Transform the bounding box to world space.
+			XMVECTOR center = XMVector3TransformCoord(XMLoadFloat3(&dx_bounding_box_.Center), model_->local_world);
+			XMVECTOR extents = XMVector3Transform(XMLoadFloat3(&dx_bounding_box_.Extents), model_->local_world);
+			float center_z = XMVectorGetZ(center);
+			float extents_z = XMVectorGetZ(extents);
 
-			XMVECTOR center = XMVector3Transform(XMLoadFloat3(&dx_bounding_box_.Center), transform_);
-			XMStoreFloat3(&dx_bounding_box_.Center, center);
-
-			// Build new equations of planes for the transformed box collider.
-			SetPlaneEquations(dx_bounding_box_, planes_);
-		}
-
-		void AABBCollider::CalcDomainIndices()
-		{
-			int center_idx = static_cast<int>(dx_bounding_box_.Center.z / kDomainSizeZ);
-			int near_idx = static_cast<int>((dx_bounding_box_.Center.z - dx_bounding_box_.Extents.z) / kDomainSizeZ);
-			int far_idx = static_cast<int>((dx_bounding_box_.Center.z + dx_bounding_box_.Extents.z) / kDomainSizeZ);
+			int center_idx = static_cast<int>(center_z / kDomainSizeZ);
+			int near_idx = static_cast<int>((center_z - extents_z) / kDomainSizeZ);
+			int far_idx = static_cast<int>((center_z + extents_z) / kDomainSizeZ);
 
 			center_domain_idx_ = center_idx;
 

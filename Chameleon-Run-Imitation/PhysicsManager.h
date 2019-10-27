@@ -1,5 +1,9 @@
 #pragma once
 
+/*
+PCH: Yes
+*/
+
 namespace ba
 {
 	namespace physics
@@ -17,7 +21,12 @@ namespace ba
 			void Update(float delta_time);
 
 			// Default is turned off.
-			void ToggleGravity();
+			void SetGravity(bool enable);
+
+			void AddPhysicsModel(PhysicsModel* model);
+
+		private:
+			std::vector<PhysicsModel*> models_;
 		};
 	}
 }

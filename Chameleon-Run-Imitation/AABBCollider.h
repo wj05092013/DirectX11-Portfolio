@@ -14,7 +14,7 @@ namespace ba
 			struct AABBPlane
 			{
 				float restitution;	// Restituion factor([0.0f, 1.0f]).
-				XMVECTOR plane_eq;	// Plane equation in the world space.
+				XMVECTOR plane_eq;	// Plane equation in local space.
 			};
 
 		protected:
@@ -25,12 +25,11 @@ namespace ba
 		public:
 			~AABBCollider() override;
 
-			void Update() override;
-
-			void CalcDomainIndices() override;
+			void UpdateDomainIndices() override;
 
 		private:
-			// Plane order: +x, +y, +z, -x, -y, -z
+			// These variables are based on local space.
+			//  Plane order: +x, +y, +z, -x, -y, -z
 			AABBPlane planes_[6];
 			BoundingBox dx_bounding_box_;
 		};

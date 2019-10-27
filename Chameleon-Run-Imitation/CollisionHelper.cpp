@@ -12,8 +12,6 @@ namespace ba
 
 		void SetPlaneEquations(const BoundingBox& box, AABBCollider::AABBPlane out_planes[6])
 		{
-			float d = 0.0f;
-
 			XMVECTOR center = XMLoadFloat3(&box.Center);
 			XMVECTOR extents = XMLoadFloat3(&box.Extents);
 
@@ -21,16 +19,14 @@ namespace ba
 			XMVECTOR p0 = center + extents;
 			for (int i = 0; i < 3; ++i)
 			{
-				d = -XMVectorGetX(XMVector3Dot(p0, kBoxNormal[i]));			// d = dot(p0, n)
-				out_planes[i].plane_eq = XMVectorSetW(kBoxNormal[i], d);	// plane: ax + by + cz + d = 0
+				XMPlaneFromPointNormal(p0, kBoxNormal[i]);
 			}
 
 			// Planes of negative direction.
 			p0 = center - extents;
 			for (int i = 3; i < 6; ++i)
 			{
-				d = -XMVectorGetX(XMVector3Dot(p0, -kBoxNormal[i]));		// d = dot(p0,n)
-				out_planes[i].plane_eq = XMVectorSetW(-kBoxNormal[i], d);	// plane: ax + by + cz + d = 0
+				XMPlaneFromPointNormal(p0, kBoxNormal[i]);
 			}
 		}
 

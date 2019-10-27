@@ -306,7 +306,7 @@ bool ba::Scene01::LoadCharacter()
 	character_inst.rotation = XMQuaternionIdentity();
 	character_inst.translation = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
-	character_inst.CalcWorldTransform();
+	character_inst.UpdateWorldTransform();
 
 	model_inst_.push_back(character_inst);
 	character_ = dynamic_cast<Character*>(&model_inst_[model_inst_.size() - 1]);
@@ -356,28 +356,28 @@ bool ba::Scene01::LoadModels()
 	instance.scale = XMVectorSet(1.0f, 1.0f, 6.0f, 0.0f);
 	instance.rotation = identity_quat;
 	instance.translation = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-	instance.CalcWorldTransform();
+	instance.UpdateWorldTransform();
 	model_inst_.push_back(instance);
 
 	instance.model_data = ylw_box_;
 	instance.scale = XMVectorSet(1.0f, 1.0f, 3.0f, 0.0f);
 	instance.rotation = identity_quat;
 	instance.translation = XMVectorSet(0.0f, 1.0f, 9.0f, 0.0f);
-	instance.CalcWorldTransform();
+	instance.UpdateWorldTransform();
 	model_inst_.push_back(instance);
 
 	instance.model_data = ylw_box_;
 	instance.scale = XMVectorSet(1.0f, 1.0f, 3.0f, 0.0f);
 	instance.rotation = identity_quat;
 	instance.translation = XMVectorSet(0.0f, 1.0f, 15.0f, 0.0f);
-	instance.CalcWorldTransform();
+	instance.UpdateWorldTransform();
 	model_inst_.push_back(instance);
 
 	instance.model_data = red_box_;
 	instance.scale = XMVectorSet(1.0f, 1.0f, 2.0f, 0.0f);
 	instance.rotation = identity_quat;
 	instance.translation = XMVectorSet(0.0f, 0.0f, 20.0f, 0.0f);
-	instance.CalcWorldTransform();
+	instance.UpdateWorldTransform();
 	model_inst_.push_back(instance);
 
 	return true;

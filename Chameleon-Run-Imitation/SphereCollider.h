@@ -18,13 +18,11 @@ namespace ba
 		public:
 			~SphereCollider() override;
 
-			void Update() override;
-
-			void CalcDomainIndices() override;
+			void UpdateDomainIndices() override;
 
 		private:
 			float restitution_;						// Restituion factor([0.0f, 1.0f]).
-			BoundingSphere dx_bounding_sphere_;
+			BoundingSphere dx_bounding_sphere_;		// Based on local space.
 		};
 	}
 }
