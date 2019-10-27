@@ -68,7 +68,12 @@ namespace ba
 				BoundingBox::CreateFromPoints(aabb_collider->dx_bounding_box_, vertices.size(), reinterpret_cast<const XMFLOAT3*>(&vertices[0]), stride);
 
 				// Compute and store each planes' equations in local space.
-				SetPlaneEquations(aabb_collider->dx_bounding_box_, aabb_collider->planes_);
+				XMVECTOR plane_eq[6];
+				SetAABBPlaneEquations(aabb_collider->dx_bounding_box_, plane_eq);
+				for (int i = 0; i < 6; ++i)
+				{
+					aabb_collider->planes_[i].plane_eq = plane_eq[i];
+				}
 				
 				// Set restitution factors for each planes.
 				for (int i = 0; i < 6; ++i)
@@ -288,10 +293,7 @@ namespace ba
 						target_collider->dx_bounding_box_.Transform(target_bounding_box, target_collider->model_->local_world());
 
 						XMVECTOR target_planes[6];
-						for (int i = 0; i < 6; ++i)
-						{
-							target_planes[i] = XMPlaneTransform(target_collider->planes_[i].plane_eq, target_collider->model_->local_world());
-						}
+						SetAABBPlaneEquations(target_bounding_box, target_planes);
 						//__
 
 						if (main_bounding_sphere.Intersects(target_bounding_box))

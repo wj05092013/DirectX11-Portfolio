@@ -11,13 +11,8 @@ namespace ba
 	public:
 		struct RotationalCameraDesc
 		{
-			XMFLOAT3 center_pos;
-			float view_theta;
-			float view_phi;
-			bool b_clamp_view_phi;
-			float view_phi_clamp;
+			XMVECTOR center_pos;
 			float rotation_rate;
-			float view_radius;
 			float min_view_radius;
 			float max_view_radius;
 			float approach_rate;
@@ -44,13 +39,8 @@ namespace ba
 		// Mutators.
 		//
 
-		void set_center_pos(const XMFLOAT3& pos);
-		void set_view_theta(float radian);
-		void set_view_phi(float radian);
-		void set_b_clamp_view_phi(bool b_clamp);
-		void set_view_phi_clamp(float radian);
+		void set_center_pos(const XMVECTOR& pos);
 		void set_rotation_rate(float rate);
-		void set_view_radius(float radius);
 		void set_min_view_radius(float radius);
 		void set_max_view_radius(float radius);
 		void set_approach_rate(float rate);
@@ -60,13 +50,8 @@ namespace ba
 		// Accessors.
 		//
 
-		const XMFLOAT3& center_pos() const;
-		float view_theta() const;
-		float view_phi() const;
-		bool b_clamp_view_phi() const;
-		float view_phi_clamp() const;
+		const XMVECTOR& center_pos() const;
 		float rotation_rate() const;
-		float view_radius() const;
 		float min_view_radius() const;
 		float max_view_radius() const;
 		float approach_rate() const;

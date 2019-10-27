@@ -56,7 +56,7 @@ bool ba::Game::InitDirectX()
 	screen_desc.viewport = &viewport_;
 	renderer_.set_screen_desc(screen_desc);
 	
-	SceneManager::GetInstance().AddScene<Scene01>();
+	SceneManager::GetInstance().AddScene<scene01::Scene01>();
 
 	if (!SceneManager::GetInstance().LoadNextScene(&current_scene_, client_width_, client_height_))
 		return false;

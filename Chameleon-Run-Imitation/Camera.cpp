@@ -178,6 +178,25 @@ void ba::Camera::RotateWorldZ(float radian)
 	XMStoreFloat3(&look_w_, XMVector3TransformNormal(XMLoadFloat3(&look_w_), rot));
 }
 
+void ba::Camera::RotateTheta(const XMVECTOR& target, float radian)
+{
+	XMMATRIX rot = XMMatrixRotationY(radian);
+
+	XMStoreFloat3(&pos_w_, target + XMVector3Transform(XMLoadFloat3(&pos_w_) - target, rot));
+	XMStoreFloat3(&up_w_, XMVector3TransformNormal(XMLoadFloat3(&up_w_), rot));
+	XMStoreFloat3(&right_w_, XMVector3TransformNormal(XMLoadFloat3(&right_w_), rot));
+	XMStoreFloat3(&look_w_, XMVector3TransformNormal(XMLoadFloat3(&look_w_), rot));
+}
+
+void ba::Camera::RotatePhi(const XMVECTOR& target, float radian)
+{
+	XMMATRIX rot = XMMatrixRotationAxis(XMLoadFloat3(&right_w_), -radian);
+
+	XMStoreFloat3(&pos_w_, target + XMVector3Transform(XMLoadFloat3(&pos_w_) - target, rot));
+	XMStoreFloat3(&up_w_, XMVector3TransformNormal(XMLoadFloat3(&up_w_), rot));
+	XMStoreFloat3(&look_w_, XMVector3TransformNormal(XMLoadFloat3(&look_w_), rot));
+}
+
 void ba::Camera::set_position_w(float x, float y, float z)
 {
 	set_position_w(XMFLOAT3(x, y, z));
@@ -186,6 +205,11 @@ void ba::Camera::set_position_w(float x, float y, float z)
 void ba::Camera::set_position_w(const XMFLOAT3& pos)
 {
 	pos_w_ = pos;
+}
+
+void ba::Camera::set_position_w(const XMVECTOR& pos)
+{
+	XMStoreFloat3(&pos_w_, pos);
 }
 
 DirectX::XMVECTOR ba::Camera::position_w_xv() const

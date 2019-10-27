@@ -6,8 +6,12 @@ PCH: Yes
 
 namespace ba
 {
+	class Model;
+
 	namespace collision
 	{
+		struct CollisionInfo;
+		
 		class Collider
 		{
 		public:

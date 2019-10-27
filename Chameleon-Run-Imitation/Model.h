@@ -36,7 +36,9 @@ namespace ba
 		virtual void OnCollision(const collision::CollisionInfo& info);
 
 		// Should update the world transform matrix manually after changing the scaling, rotation and translation of thins model.
-		void UpdateWorldTransform();
+		void RecalculateWorldTransform();
+
+		virtual void Update(float delta_time);
 
 		//
 		// Mutators

@@ -11,7 +11,7 @@ namespace ba
 		class PhysicsModel : public Model
 		{
 		public:
-			PhysicsModel();
+			PhysicsModel(ModelData* model_data);
 			~PhysicsModel() override;
 
 			void OnCollision(const collision::CollisionInfo& info) override;
@@ -19,7 +19,7 @@ namespace ba
 			// Update this models position using velocity and net force.
 			//  Also update the world transform of this model, automatically.
 			//  Integration method used is Modified Euler method.
-			void Update(float delta_time);
+			void Update(float delta_time) override;
 
 			void AccumulateVelocity(const XMVECTOR& velocity);
 			void AccumulateForce(const XMVECTOR& force);

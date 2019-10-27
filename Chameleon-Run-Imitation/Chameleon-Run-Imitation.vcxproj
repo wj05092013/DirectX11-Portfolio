@@ -160,7 +160,6 @@
     <ClInclude Include="BasicEffect.h" />
     <ClInclude Include="BlurSSAOEffect.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Character.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="CollisionHelper.h" />
     <ClInclude Include="CollisionManager.h" />
@@ -183,7 +182,6 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="NormalDepthMapEffect.h" />
     <ClInclude Include="NormalMappingEffect.h" />
-    <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="PhysicsModel.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="RenderStates.h" />
@@ -212,7 +210,6 @@
     <ClCompile Include="BasicEffect.cpp" />
     <ClCompile Include="BlurSSAOEffect.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Character.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="CollisionHelper.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
@@ -233,7 +230,6 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="NormalDepthMapEffect.cpp" />
     <ClCompile Include="NormalMappingEffect.cpp" />
-    <ClCompile Include="PhysicsManager.cpp" />
     <ClCompile Include="PhysicsModel.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="RenderStates.cpp" />

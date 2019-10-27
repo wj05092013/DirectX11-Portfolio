@@ -189,9 +189,6 @@
     <ClInclude Include="Scene01.h">
       <Filter>Includes\Game</Filter>
     </ClInclude>
-    <ClInclude Include="Character.h">
-      <Filter>Includes\Game</Filter>
-    </ClInclude>
     <ClInclude Include="PhysicsModel.h">
       <Filter>Includes\Physics</Filter>
     </ClInclude>
@@ -209,9 +206,6 @@
     </ClInclude>
     <ClInclude Include="SphereCollider.h">
       <Filter>Includes\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsManager.h">
-      <Filter>Includes\Physics</Filter>
     </ClInclude>
     <ClInclude Include="CollisionHelper.h">
       <Filter>Includes\Collision</Filter>
@@ -323,13 +317,7 @@
     <ClCompile Include="Scene01.cpp">
       <Filter>Sources\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Character.cpp">
-      <Filter>Sources\Game</Filter>
-    </ClCompile>
     <ClCompile Include="PhysicsModel.cpp">
-      <Filter>Sources\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysicsManager.cpp">
       <Filter>Sources\Physics</Filter>
     </ClCompile>
     <ClCompile Include="SphereCollider.cpp">

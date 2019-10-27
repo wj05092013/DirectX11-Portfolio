@@ -66,7 +66,7 @@ bool ba::Mesh::BuildIndexBuffer(ID3D11Device* device, const std::vector<UINT> in
 	D3D11_BUFFER_DESC ib_desc{};
 	ib_desc.ByteWidth = indices.size() * sizeof(UINT);
 	ib_desc.Usage = D3D11_USAGE_IMMUTABLE;
-	ib_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	ib_desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 
 	D3D11_SUBRESOURCE_DATA ib_init{};
 	ib_init.pSysMem = &indices[0];

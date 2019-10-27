@@ -4,6 +4,8 @@
 PCH: Yes
 */
 
+#include "GraphicComponentManager.h"
+
 namespace ba
 {
 	class GraphicComponent : private Uncopiable
@@ -11,7 +13,7 @@ namespace ba
 	protected:
 		// Only the class 'GraphicComponentManager' can call this constructor.
 		GraphicComponent();
-		friend class ba::GraphicComponentManager;
+		friend class GraphicComponentManager;
 
 	public:
 		virtual ~GraphicComponent() = 0;

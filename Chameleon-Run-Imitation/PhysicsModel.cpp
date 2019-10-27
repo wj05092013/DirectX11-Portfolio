@@ -6,8 +6,8 @@ namespace ba
 	{
 		const XMVECTOR PhysicsModel::kGravityAcceleration = XMVectorSet(0.0f, -9.8f, 0.0f, 0.0f);
 
-		PhysicsModel::PhysicsModel() :
-			Model(kPhysics),
+		PhysicsModel::PhysicsModel(ModelData* model_data) :
+			Model(model_data, kPhysics),
 			mass_(0.0f),
 			velocity_(XMVectorZero()),
 			net_force_(XMVectorZero()),
@@ -22,20 +22,19 @@ namespace ba
 		void PhysicsModel::OnCollision(const collision::CollisionInfo& info)
 		{
 			translation_ += info.overlapped * info.normal;
-			velocity_ = velocity_ - (1.0f + info.restitution) * XMVector3Reflect(velocity_, info.normal);
+			velocity_ = velocity_ - (1.0f + info.restitution) * XMVector3Dot(velocity_, info.normal)*info.normal;
 		}
 
 		void PhysicsModel::Update(float delta_time)
 		{
+			Model::Update(delta_time);
+
 			// Apply the Modified Euler Method.
 			velocity_ += delta_time * net_force_ / mass_;
 			translation_ += delta_time * velocity_;
 
-			// Maintain homogeneous coordinates of translation.
-			translation_ = XMVectorSetW(translation_, 1.0f);
-
 			// Update the world transform of this model.
-			UpdateWorldTransform();
+			RecalculateWorldTransform();
 		}
 
 		void PhysicsModel::AccumulateVelocity(const XMVECTOR& velocity)

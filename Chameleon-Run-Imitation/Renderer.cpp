@@ -30,7 +30,7 @@ void ba::Renderer::Destroy()
 	renderstates::DestroyAll();
 }
 
-void ba::Renderer::RenderScene(const std::vector<Model>& model_instances, const EffectVariableBundlePerFrame& bundle)
+void ba::Renderer::RenderScene(const std::vector<Model*>& models, const EffectVariableBundlePerFrame& bundle)
 {
 	ID3D11RenderTargetView* rtvs_[1] = { screen_desc_.rtv };
 	dc_->OMSetRenderTargets(1, rtvs_, screen_desc_.dsv);
@@ -57,21 +57,21 @@ void ba::Renderer::RenderScene(const std::vector<Model>& model_instances, const 
 	tech->GetDesc(&tech_desc);
 	for (UINT p = 0; p < tech_desc.Passes; ++p)
 	{
-		for (UINT model_idx = 0; model_idx < model_instances.size(); ++model_idx)
+		for (UINT model_idx = 0; model_idx < models.size(); ++model_idx)
 		{
-			ModelData* model = model_instances[model_idx].model_data;
+			const ModelData* model_data = models[model_idx]->model_data();
 
-			world = model_instances[model_idx].local_world;
+			world = models[model_idx]->local_world();
 			world_inv_trans = mathhelper::InverseTranspose(world);
 
 			effects::kBasicEffect.SetWorld(world);
 			effects::kBasicEffect.SetWorldInvTrans(world_inv_trans);
 			effects::kBasicEffect.SetTexMapping(XMMatrixIdentity());
-			effects::kBasicEffect.SetMaterial(model->mesh.material());
-			effects::kBasicEffect.SetDiffuseMap(model->diffuse_map);
+			effects::kBasicEffect.SetMaterial(model_data->mesh.material());
+			effects::kBasicEffect.SetDiffuseMap(model_data->diffuse_map);
 
 			tech->GetPassByIndex(p)->Apply(0, dc_);
-			model->mesh.Draw(dc_);
+			model_data->mesh.Draw(dc_);
 		}
 
 		// Unbind the SRVs in case the resources are bound as render targets.
@@ -81,7 +81,7 @@ void ba::Renderer::RenderScene(const std::vector<Model>& model_instances, const 
 	}
 }
 
-void ba::Renderer::RenderShadowMap(const std::vector<Model>& model_instances, const EffectVariableBundlePerFrame& bundle)
+void ba::Renderer::RenderShadowMap(const std::vector<Model*>& models, const EffectVariableBundlePerFrame& bundle)
 {
 	ID3D11RenderTargetView* rtvs_[1] = { nullptr };
 	dc_->OMSetRenderTargets(1, rtvs_, shadow_map_->dsv());
@@ -103,26 +103,26 @@ void ba::Renderer::RenderShadowMap(const std::vector<Model>& model_instances, co
 	tech->GetDesc(&tech_desc);
 	for (UINT p = 0; p < tech_desc.Passes; ++p)
 	{
-		for (UINT model_idx = 0; model_idx < model_instances.size(); ++model_idx)
+		for (UINT model_idx = 0; model_idx < models.size(); ++model_idx)
 		{
-			ModelData* model = model_instances[model_idx].model_data;
+			const ModelData* model_data = models[model_idx]->model_data();
 
-			world = model_instances[model_idx].local_world;
+			world = models[model_idx]->local_world();
 			world_inv_trans = mathhelper::InverseTranspose(world);
 
 			effects::kShadowMapEffect.SetWorld(world);
 			effects::kShadowMapEffect.SetWorldInvTrans(world_inv_trans);
 			effects::kShadowMapEffect.SetTexMapping(XMMatrixIdentity());
-			effects::kShadowMapEffect.SetDiffuseMap(model->diffuse_map);
+			effects::kShadowMapEffect.SetDiffuseMap(model_data->diffuse_map);
 
 			tech->GetPassByIndex(p)->Apply(0, dc_);
-			model->mesh.Draw(dc_);
+			model_data->mesh.Draw(dc_);
 		}
 	}
 	dc_->RSSetState(nullptr);
 }
 
-void ba::Renderer::RenderNormalDepthMap(const std::vector<Model>& model_instances, const EffectVariableBundlePerFrame& bundle)
+void ba::Renderer::RenderNormalDepthMap(const std::vector<Model*>& models, const EffectVariableBundlePerFrame& bundle)
 {
 	ID3D11RenderTargetView* rtvs_[1] = { ssao_map_->normal_depth_map_rtv() };
 	dc_->OMSetRenderTargets(1, rtvs_, ssao_map_->dsv());
@@ -146,20 +146,20 @@ void ba::Renderer::RenderNormalDepthMap(const std::vector<Model>& model_instance
 	tech->GetDesc(&tech_desc);
 	for (UINT p = 0; p < tech_desc.Passes; ++p)
 	{
-		for (UINT model_idx = 0; model_idx < model_instances.size(); ++model_idx)
+		for (UINT model_idx = 0; model_idx < models.size(); ++model_idx)
 		{
-			ModelData* model = model_instances[model_idx].model_data;
+			const ModelData* model_data = models[model_idx]->model_data();
 
-			world = model_instances[model_idx].local_world;
+			world = models[model_idx]->local_world();
 			world_inv_trans = mathhelper::InverseTranspose(world);
 
 			effects::kNormalDepthMapEffect.SetWorld(world);
 			effects::kNormalDepthMapEffect.SetWorldInvTrans(world_inv_trans);
 			effects::kNormalDepthMapEffect.SetTexMapping(XMMatrixIdentity());
-			effects::kNormalDepthMapEffect.SetDiffuseMap(model->diffuse_map);
+			effects::kNormalDepthMapEffect.SetDiffuseMap(model_data->diffuse_map);
 
 			tech->GetPassByIndex(p)->Apply(0, dc_);
-			model->mesh.Draw(dc_);
+			model_data->mesh.Draw(dc_);
 		}
 	}
 }

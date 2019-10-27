@@ -4,6 +4,8 @@
 PCH: Yes
 */
 
+#include "Camera.h"
+
 namespace ba
 {
 	class FreeViewpointCamera : public Camera

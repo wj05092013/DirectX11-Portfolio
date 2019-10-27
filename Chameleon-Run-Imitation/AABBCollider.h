@@ -4,6 +4,8 @@
 PCH: Yes
 */
 
+#include "Collider.h"
+
 namespace ba
 {
 	namespace collision

@@ -40,3 +40,11 @@ ba::light::Material::Material() :
 	reflection(0.0f, 0.0f, 0.0f, 0.0f)
 {
 }
+
+ba::light::Material::Material(const XMFLOAT4& ambient, const XMFLOAT4& diffuse, const XMFLOAT4& specular, const XMFLOAT4& reflection) :
+	ambient(ambient),
+	diffuse(diffuse),
+	specular(specular),
+	reflection(reflection)
+{
+}

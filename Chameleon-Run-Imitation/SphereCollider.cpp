@@ -16,7 +16,7 @@ namespace ba
 		void SphereCollider::UpdateDomainIndices()
 		{
 			// Transform the bounding sphere to world space.
-			XMVECTOR center = XMVector3TransformCoord(XMLoadFloat3(&dx_bounding_sphere_.Center), model_->local_world);
+			XMVECTOR center = XMVector3TransformCoord(XMLoadFloat3(&dx_bounding_sphere_.Center), model_->local_world());
 			float center_z = XMVectorGetZ(center);
 
 			int center_idx = static_cast<int>(center_z / kDomainSizeZ);

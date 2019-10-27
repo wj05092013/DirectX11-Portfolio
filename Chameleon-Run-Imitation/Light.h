@@ -57,6 +57,7 @@ namespace ba
 			XMFLOAT4 reflection;
 
 			Material();
+			Material(const XMFLOAT4& ambient, const XMFLOAT4& diffuse, const XMFLOAT4& specular, const XMFLOAT4& reflection);
 		};
 	}
 }

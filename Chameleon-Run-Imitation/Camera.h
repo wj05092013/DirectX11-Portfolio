@@ -4,6 +4,8 @@
 PCH: Yes
 */
 
+#include "GraphicComponent.h"
+
 namespace ba
 {
 	class Camera : public GraphicComponent
@@ -13,7 +15,6 @@ namespace ba
 		~Camera() override;
 
 		void Destroy() override;
-
 
 		//
 		// Functions for Update
@@ -27,7 +28,6 @@ namespace ba
 		//  Set frustum.
 		void SetLens(float fov_y, float aspect_ratio, float near_z, float far_z);
 
-
 		//
 		// Modulate Camera Transform
 		//
@@ -35,7 +35,7 @@ namespace ba
 		// Define camera space.
 		void LookAt(const XMVECTOR& pos, const XMVECTOR& target, const XMVECTOR& up);
 		void LookAt(const XMFLOAT3& pos, const XMFLOAT3& target, const XMFLOAT3& up);
-
+		
 		// Camera translation.
 		void MoveCameraX(float d);
 		void MoveCameraZ(float d);
@@ -50,6 +50,8 @@ namespace ba
 		void RotateWorldY(float radian);
 		void RotateWorldZ(float radian);
 
+		void RotateTheta(const XMVECTOR& target, float radian);
+		void RotatePhi(const XMVECTOR& target, float radian);
 
 		//
 		// Mutators
@@ -58,7 +60,7 @@ namespace ba
 		// Mutators for the camera position.
 		void set_position_w(float x, float y, float z);
 		void set_position_w(const XMFLOAT3& pos);
-
+		void set_position_w(const XMVECTOR& pos);
 
 		//
 		// Accessors

@@ -16,8 +16,8 @@ namespace ba
 		void AABBCollider::UpdateDomainIndices()
 		{
 			// Transform the bounding box to world space.
-			XMVECTOR center = XMVector3TransformCoord(XMLoadFloat3(&dx_bounding_box_.Center), model_->local_world);
-			XMVECTOR extents = XMVector3Transform(XMLoadFloat3(&dx_bounding_box_.Extents), model_->local_world);
+			XMVECTOR center = XMVector3TransformCoord(XMLoadFloat3(&dx_bounding_box_.Center), model_->local_world());
+			XMVECTOR extents = XMVector3Transform(XMLoadFloat3(&dx_bounding_box_.Extents), model_->local_world());
 			float center_z = XMVectorGetZ(center);
 			float extents_z = XMVectorGetZ(extents);
 

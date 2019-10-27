@@ -31,7 +31,7 @@ namespace ba
 	private:
 		ID3D11Buffer* vb_;
 		UINT vertex_stride_;
-		std::vector<inputvertex::PosNormalTexTangent::Vertex>& vertices_;
+		std::vector<inputvertex::PosNormalTexTangent::Vertex> vertices_;
 
 		ID3D11Buffer* ib_;
 		UINT idx_count_;

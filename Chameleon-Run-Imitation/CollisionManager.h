@@ -8,13 +8,6 @@ namespace ba
 {
 	namespace collision
 	{
-		struct CollisionInfo
-		{
-			float overlapped;
-			float restitution;
-			XMVECTOR normal;
-		};
-
 		class CollisionManager
 		{
 		private:

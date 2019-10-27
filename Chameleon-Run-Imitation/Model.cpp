@@ -44,7 +44,7 @@ namespace ba
 	Model::Model(ModelData* model_data) :
 		model_data_(model_data),
 		scale_(XMVectorZero()),
-		rotation_(XMVectorZero()),
+		rotation_(XMQuaternionIdentity()),
 		translation_(XMVectorZero()),
 		local_world_(XMMatrixIdentity()),
 		model_type_(kStatic)
@@ -54,7 +54,7 @@ namespace ba
 	Model::Model(ModelData* model_data, EModelType type) :
 		model_data_(model_data),
 		scale_(XMVectorZero()),
-		rotation_(XMVectorZero()),
+		rotation_(XMQuaternionIdentity()),
 		translation_(XMVectorZero()),
 		local_world_(XMMatrixIdentity()),
 		model_type_(type)
@@ -70,12 +70,17 @@ namespace ba
 		// Do nothing.
 	}
 
-	void Model::UpdateWorldTransform()
+	void Model::RecalculateWorldTransform()
 	{
 		local_world_ = model_data_->mesh.local_transform()
 			* XMMatrixScalingFromVector(scale_)
 			* XMMatrixRotationQuaternion(rotation_)
 			* XMMatrixTranslationFromVector(translation_);
+	}
+
+	void Model::Update(float delta_time)
+	{
+		// Do nothing.
 	}
 
 	void Model::set_model_data(ModelData* model_data)
