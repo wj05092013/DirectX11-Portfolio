@@ -47,8 +47,10 @@ namespace ba
 		bounding_sphere_{ XMFLOAT3(0.0f, 0.0f, 0.0f), 100.0f },
 		last_mouse_pos_{},
 
+		sphere_(nullptr),
 		red_box_(nullptr),
-		ylw_box_(nullptr)
+		ylw_box_(nullptr),
+		character_(nullptr)
 	{
 	}
 
@@ -159,14 +161,16 @@ namespace ba
 
 	void scene01::Scene01::Update()
 	{
-		// Rotational camera's target is always the character.
-		rt_camera_->set_center_pos(character_->translation());
+		// The z-value of the rotational camera's target is always same as that of the character.
+		XMFLOAT3 pos = kRTCamInitTarget;
+		pos.z = character_->translation_xf().z;
+		rt_camera_->set_center_pos(pos);
+
+		shadow_map_->BuildShadowTransform();
+		rt_camera_->UpdateViewMatrix();
 
 		if (scene_state_ == kRun)
 		{
-			shadow_map_->BuildShadowTransform();
-			rt_camera_->UpdateViewMatrix();
-
 			for (UINT i = 0; i < models_.size(); ++i)
 			{
 				models_[i]->Update(static_cast<float>(timer_->get_delta_time()));
@@ -255,7 +259,7 @@ namespace ba
 		if (!sphere_->Init(device_, geo, kSphereLocalTransform, kRedMaterial))
 			return false;
 
-		character_ = new physics::PhysicsModel(sphere_);
+		character_ = new Character(sphere_);
 
 		character_->set_scale(kCharacterInitScale);
 		character_->set_rotation(kCharacterInitRotation);
@@ -263,6 +267,9 @@ namespace ba
 		character_->RecalculateWorldTransform();
 		character_->set_mass(kCharacterInitMass);
 		character_->SetGravity(kCharacterInitGravityEnable);
+		character_->set_acceleration_z(kCharacterInitAccelerationZ);
+		character_->set_max_velocity_z(kCharacterInitMaxVelocityZ);
+		character_->set_jump_velocity(kCharacterJumpVelocity);
 
 		if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kSphere, &kCharacterInitRestitution, character_))
 			return false;

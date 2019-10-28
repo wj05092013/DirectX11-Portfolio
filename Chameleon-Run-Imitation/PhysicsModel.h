@@ -21,24 +21,30 @@ namespace ba
 			//  Integration method used is Modified Euler method.
 			void Update(float delta_time) override;
 
+			void AccumulateVelocity(const XMFLOAT3& velocity);
 			void AccumulateVelocity(const XMVECTOR& velocity);
+			void AccumulateForce(const XMFLOAT3& force);
 			void AccumulateForce(const XMVECTOR& force);
 
 			// Default is gravity disabled.
 			void SetGravity(bool enable);
 
 			float mass() const;
-			const XMVECTOR& velocity() const;
-			const XMVECTOR& net_force() const;
+			const XMFLOAT3& velocity_xf() const;
+			const XMVECTOR velocity_xv() const;
+			const XMFLOAT3& net_force_xf() const;
+			const XMVECTOR net_force_xv() const;
 
 			void set_mass(float mass);
+			void set_velocity(const XMFLOAT3& velocity);
+			void set_velocity(const XMVECTOR& velocity);
 
 		private:
 			static const XMVECTOR kGravityAcceleration;
 
 			float mass_;
-			XMVECTOR velocity_;
-			XMVECTOR net_force_;
+			XMFLOAT3 velocity_;
+			XMFLOAT3 net_force_;
 
 			bool b_gravity_;
 		};

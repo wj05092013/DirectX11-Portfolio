@@ -1,7 +1,8 @@
 #include "stdafx.h"
 
 ba::RotationalCamera::RotationalCamera() :
-	desc_{}
+	desc_{},
+	center_pos_(0.0f, 0.0f, 0.0f)
 {
 }
 
@@ -21,18 +22,18 @@ void ba::RotationalCamera::Destroy()
 
 void ba::RotationalCamera::Rotate(const POINT& start, const POINT& end)
 {
-	float d_theta = -XMConvertToRadians(desc_.rotation_rate * static_cast<float>(start.x - end.x));
+	float d_theta = XMConvertToRadians(desc_.rotation_rate * static_cast<float>(start.x - end.x));
 	float d_phi = -XMConvertToRadians(desc_.rotation_rate * static_cast<float>(start.y - end.y));
 
-	RotateTheta(desc_.center_pos, d_theta);
-	RotatePhi(desc_.center_pos, d_phi);
+	RotateTheta(center_pos_xv(), d_theta);
+	RotatePhi(center_pos_xv(), d_phi);
 }
 
 void ba::RotationalCamera::Approach(float delta_time)
 {
 	float dist = desc_.approach_rate * delta_time;
 
-	float view_radius = XMVectorGetX(XMVector3Length(position_w_xv() - desc_.center_pos));
+	float view_radius = XMVectorGetX(XMVector3Length(position_w_xv() - center_pos_xv()));
 
 	if (view_radius - dist < desc_.min_view_radius)
 	{
@@ -46,7 +47,7 @@ void ba::RotationalCamera::StepBack(float delta_time)
 {
 	float dist = desc_.approach_rate * delta_time;
 
-	float view_radius = XMVectorGetX(XMVector3Length(position_w_xv() - desc_.center_pos));
+	float view_radius = XMVectorGetX(XMVector3Length(position_w_xv() - center_pos_xv()));
 
 	if (view_radius + dist > desc_.max_view_radius)
 	{
@@ -56,10 +57,17 @@ void ba::RotationalCamera::StepBack(float delta_time)
 	MoveCameraZ(-dist);
 }
 
+void ba::RotationalCamera::set_center_pos(const XMFLOAT3& pos)
+{
+	set_center_pos(XMLoadFloat3(&pos));
+}
+
 void ba::RotationalCamera::set_center_pos(const XMVECTOR& pos)
 {
-	desc_.center_pos = pos;
-	LookAt(position_w_xv(), desc_.center_pos, XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
+	XMVECTOR diff = pos - center_pos_xv();
+
+	XMStoreFloat3(&center_pos_, pos);
+	LookAt(position_w_xv() + diff, pos, XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
 }
 
 void ba::RotationalCamera::set_rotation_rate(float rate)
@@ -82,9 +90,14 @@ void ba::RotationalCamera::set_approach_rate(float rate)
 	desc_.approach_rate = rate;
 }
 
-const DirectX::XMVECTOR& ba::RotationalCamera::center_pos() const
+const DirectX::XMFLOAT3& ba::RotationalCamera::center_pos_xf() const
 {
-	return desc_.center_pos;
+	return center_pos_;
+}
+
+const DirectX::XMVECTOR ba::RotationalCamera::center_pos_xv() const
+{
+	return XMLoadFloat3(&center_pos_);
 }
 
 float ba::RotationalCamera::rotation_rate() const

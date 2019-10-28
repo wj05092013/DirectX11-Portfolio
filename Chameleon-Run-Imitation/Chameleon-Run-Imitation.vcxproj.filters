@@ -210,6 +210,9 @@
     <ClInclude Include="CollisionHelper.h">
       <Filter>Includes\Collision</Filter>
     </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>Includes\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Effects.cpp">
@@ -334,6 +337,12 @@
     </ClCompile>
     <ClCompile Include="CollisionHelper.cpp">
       <Filter>Sources\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>Sources\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Constants.cpp">
+      <Filter>Sources\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

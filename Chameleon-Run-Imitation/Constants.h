@@ -11,23 +11,23 @@ namespace ba
 {
 	namespace color
 	{
-		const XMVECTOR kWhite = { 1.0f, 1.0f, 1.0f, 1.0f };
-		const XMVECTOR kBlack = { 0.0f, 0.0f, 0.0f, 1.0f };
-		const XMVECTOR kRed = { 1.0f, 0.0f, 0.0f, 1.0f };
-		const XMVECTOR kGreen = { 0.0f, 1.0f, 0.0f, 1.0f };
-		const XMVECTOR kBlue = { 0.0f, 0.0f, 1.0f, 1.0f };
-		const XMVECTOR kYellow = { 1.0f, 1.0f, 0.0f, 1.0f };
-		const XMVECTOR kCyan = { 0.0f, 1.0f, 1.0f, 1.0f };
-		const XMVECTOR kMagenta = { 1.0f, 0.0f, 1.0f, 1.0f };
+		extern const XMVECTOR kWhite;
+		extern const XMVECTOR kBlack;
+		extern const XMVECTOR kRed;
+		extern const XMVECTOR kGreen;
+		extern const XMVECTOR kBlue;
+		extern const XMVECTOR kYellow;
+		extern const XMVECTOR kCyan;
+		extern const XMVECTOR kMagenta;
 
-		const XMVECTOR kSilver = { 0.75f, 0.75f, 0.75f, 1.0f };
-		const XMVECTOR kLightSteelBlue = { 0.69f, 0.77f, 0.87f, 1.0f };
+		extern const XMVECTOR kSilver;
+		extern const XMVECTOR kLightSteelBlue;
 	}
 
 	namespace collision
 	{
-		const float kDomainStartZ = 0.0f;
-		const float kDomainSizeZ = 10.0f;
+		extern const float kDomainStartZ;
+		extern const float kDomainSizeZ;
 	}
 
 	namespace scene01
@@ -37,101 +37,87 @@ namespace ba
 		//
 
 		// Model data of spheres.
-		static const float kSphereRadius = 0.5f;
-		static const int kSphereSubdivisionCount = 3;
-		static const XMMATRIX kSphereLocalTransform = XMMatrixTranslation(0.5f, 0.5f, 0.5f);
+		extern const float kSphereRadius;
+		extern const int kSphereSubdivisionCount;
+		extern const XMMATRIX kSphereLocalTransform;
 
 		// Model data of boxes.
-		static const XMFLOAT3 kBoxSize = XMFLOAT3(1.0f, 1.0f, 1.0f);
-		static const XMMATRIX kBoxLocalTransform = XMMatrixTranslation(0.5f, 0.5f, 0.5f);
-		static const float kBoxRestitutions[6] = { 0.8f, 0.0f, 0.8f, 0.8f, 0.8f, 0.8f };
+		extern const XMFLOAT3 kBoxSize;
+		extern const XMMATRIX kBoxLocalTransform;
+		extern const float kBoxRestitutions[6];
 
 		// Materials.
-		static const light::Material kRedMaterial = {
-			XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f),				// ambient
-			XMFLOAT4(1.0f, 0.0f, 0.501960f, 1.0f),			// diffuse
-			XMFLOAT4(0.4f, 0.4f, 0.4f, 8.0f),				// specular
-			XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f)				// reflection
-		};
-		static const light::Material kYellowMaterial = {
-			XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f),
-			XMFLOAT4(1.0f, 0.925490f, 0.015686f, 1.0f),
-			XMFLOAT4(0.4f, 0.4f, 0.4f, 8.0f),
-			XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f)
-		};
-		static const light::Material kBlackMaterial = {
-			XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f),
-			XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f),
-			XMFLOAT4(0.4f, 0.4f, 0.4f, 8.0f),
-			XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f)
-		};
+		extern const light::Material kRedMaterial;
+		extern const light::Material kYellowMaterial;
+		extern const light::Material kBlackMaterial;
 
 		// Main character.
-		static const XMVECTOR kCharacterInitScale = XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
-		static const XMVECTOR kCharacterInitRotation = XMQuaternionIdentity();
-		static const XMVECTOR kCharacterInitTranslation = XMVectorSet(0.0f, 5.0f, 0.0f, 0.0f);
-		static const float kCharacterInitMass = 1.0f;
-		static const bool kCharacterInitGravityEnable = true;
-		static const float kCharacterInitRestitution = 0.8f;
+		//
+		extern const XMFLOAT3 kCharacterInitScale;
+		extern const XMFLOAT4 kCharacterInitRotation;
+		extern const XMFLOAT3 kCharacterInitTranslation;
+
+		extern const float kCharacterInitMass;
+		extern const bool kCharacterInitGravityEnable;
+		extern const float kCharacterInitRestitution;
+
+		extern const float kCharacterInitAccelerationZ;
+		extern const float kCharacterInitMaxVelocityZ;
+
+		extern const XMFLOAT3 kCharacterJumpVelocity;
+		//__
 
 		// Spheres.
 
 		// Boxes.
 		//
-		static const XMVECTOR kBox01InitScale = XMVectorSet(1.0f, 1.0f, 6.0f, 0.0f);
-		static const XMVECTOR kBox01InitRotation = XMQuaternionIdentity();
-		static const XMVECTOR kBox01InitTranslation = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+		extern const XMFLOAT3 kBox01InitScale;
+		extern const XMFLOAT4 kBox01InitRotation;
+		extern const XMFLOAT3 kBox01InitTranslation;
 		
-		static const XMVECTOR kBox02InitScale = XMVectorSet(1.0f, 1.0f, 3.0f, 0.0f);
-		static const XMVECTOR kBox02InitRotation = XMQuaternionIdentity();
-		static const XMVECTOR kBox02InitTranslation = XMVectorSet(0.0f, 1.0f, 9.0f, 0.0f);
+		extern const XMFLOAT3 kBox02InitScale;
+		extern const XMFLOAT4 kBox02InitRotation;
+		extern const XMFLOAT3 kBox02InitTranslation;
 
-		static const XMVECTOR kBox03InitScale = XMVectorSet(1.0f, 1.0f, 3.0f, 0.0f);
-		static const XMVECTOR kBox03InitRotation = XMQuaternionIdentity();
-		static const XMVECTOR kBox03InitTranslation = XMVectorSet(0.0f, 1.0f, 15.0f, 0.0f);
+		extern const XMFLOAT3 kBox03InitScale;
+		extern const XMFLOAT4 kBox03InitRotation;
+		extern const XMFLOAT3 kBox03InitTranslation;
 
-		static const XMVECTOR kBox04InitScale = XMVectorSet(1.0f, 1.0f, 2.0f, 0.0f);
-		static const XMVECTOR kBox04InitRotation = XMQuaternionIdentity();
-		static const XMVECTOR kBox04InitTranslation = XMVectorSet(0.0f, 0.0f, 20.0f, 0.0f);
+		extern const XMFLOAT3 kBox04InitScale;
+		extern const XMFLOAT4 kBox04InitRotation;
+		extern const XMFLOAT3 kBox04InitTranslation;
 		//__
 
 		//
 		// Scene Settings for Rendering
 		//
 
-		static const UINT kShadowMapSize = 2048U;
+		extern const UINT kShadowMapSize;
 
-		static const float kFogStart = 5.0f;
-		static const float kFogRange = 20.0f;
-		static const XMVECTOR kFogColor = color::kSilver;
+		extern const float kFogStart;
+		extern const float kFogRange;
+		extern const XMVECTOR kFogColor;
 
-		static const XMMATRIX kToTex = XMMATRIX(
-			0.5f, 0.0f, 0.0f, 0.0f,
-			0.0f, -0.5f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f, 0.0f,
-			0.5f, 0.5f, 0.0f, 1.0f
-		);
+		extern const XMMATRIX kToTex;
 
 		//
 		// Cameras Settings
 		//
 
-		static const float kCamFovY = 0.25f * XM_PI;
-		static const float kCamNearZ = 0.1f;
-		static const float kCamFarZ = 1000.0f;
+		extern const float kCamFovY;
+		extern const float kCamNearZ;
+		extern const float kCamFarZ;
 
 		// Free-view camera.
-		static const XMVECTOR kFVCamInitPos = XMVectorSet(10.0f, 10.0f, -10.0f, 1.0f);
-		static const XMVECTOR kFVCamInitTarget = XMVectorSet(0.0f, 2.0f, 5.0f, 1.0f);
-		static const XMVECTOR kFVCamInitUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-		static const FreeViewpointCamera::FreeViewpointCameraDesc kFVCamInitDesc = { 20.0f, 20.0f, 20.0f, 0.1f };
+		extern const XMFLOAT3 kFVCamInitPos;
+		extern const XMFLOAT3 kFVCamInitTarget;
+		extern const XMFLOAT3 kFVCamInitUp;
+		extern const FreeViewpointCamera::FreeViewpointCameraDesc kFVCamInitDesc;
 
 		// Rotational camera.
-		static const XMVECTOR kRTCamInitPos = XMVectorSet(10.0f, 10.0f, -10.0f, 1.0f);
-		static const XMVECTOR kRTCamInitTarget = kCharacterInitTranslation;
-		static const XMVECTOR kRTCamInitUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-		static const RotationalCamera::RotationalCameraDesc kRTCamInitDesc = {
-			kCharacterInitTranslation, 0.1f, 5.0f, 20.0f, 20.0f
-		};
+		extern const XMFLOAT3 kRTCamInitPos;
+		extern const XMFLOAT3 kRTCamInitTarget;
+		extern const XMFLOAT3 kRTCamInitUp;
+		extern const RotationalCamera::RotationalCameraDesc kRTCamInitDesc;
 	}
 }

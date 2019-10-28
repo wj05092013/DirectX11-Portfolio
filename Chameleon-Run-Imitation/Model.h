@@ -45,8 +45,11 @@ namespace ba
 		//
 
 		void set_model_data(ModelData* model_data);
+		void set_scale(const XMFLOAT3& scale);
 		void set_scale(const XMVECTOR& scale);
+		void set_rotation(const XMFLOAT4& rotation);
 		void set_rotation(const XMVECTOR& rotation);
+		void set_translation(const XMFLOAT3& translation);
 		void set_translation(const XMVECTOR& translation);
 
 		//
@@ -54,18 +57,21 @@ namespace ba
 		//
 
 		const ModelData* model_data() const;
-		const XMVECTOR& scale() const;
-		const XMVECTOR& rotation() const;
-		const XMVECTOR& translation() const;
+		const XMFLOAT3& scale_xf() const;
+		const XMVECTOR scale_xv() const;
+		const XMFLOAT4& rotation_xf() const;
+		const XMVECTOR rotation_xv() const;
+		const XMFLOAT3& translation_xf() const;
+		const XMVECTOR translation_xv() const;
 		const XMMATRIX& local_world() const;
 		EModelType model_type() const;
 
 	protected:
 		ModelData*	model_data_;
 		
-		XMVECTOR	scale_;
-		XMVECTOR	rotation_;
-		XMVECTOR	translation_;
+		XMFLOAT3	scale_;
+		XMFLOAT4	rotation_;
+		XMFLOAT3	translation_;
 		XMMATRIX	local_world_;
 
 	private:

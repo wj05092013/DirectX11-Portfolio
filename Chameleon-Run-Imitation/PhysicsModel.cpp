@@ -9,8 +9,8 @@ namespace ba
 		PhysicsModel::PhysicsModel(ModelData* model_data) :
 			Model(model_data, kPhysics),
 			mass_(0.0f),
-			velocity_(XMVectorZero()),
-			net_force_(XMVectorZero()),
+			velocity_(0.0f, 0.0f, 0.0f),
+			net_force_(0.0f, 0.0f, 0.0f),
 			b_gravity_(false)
 		{
 		}
@@ -21,30 +21,52 @@ namespace ba
 
 		void PhysicsModel::OnCollision(const collision::CollisionInfo& info)
 		{
-			translation_ += info.overlapped * info.normal;
-			velocity_ = velocity_ - (1.0f + info.restitution) * XMVector3Dot(velocity_, info.normal)*info.normal;
+			set_translation(translation_xv() + info.overlapped * info.normal);
+
+			XMVECTOR velocity = velocity_xv();
+			velocity = velocity - (1.0f + info.restitution) * XMVector3Dot(velocity, info.normal)*info.normal;
+			set_velocity(velocity);
 		}
 
 		void PhysicsModel::Update(float delta_time)
 		{
 			Model::Update(delta_time);
 
+			XMVECTOR velocity = velocity_xv();
+			XMVECTOR translation = translation_xv();
+
 			// Apply the Modified Euler Method.
-			velocity_ += delta_time * net_force_ / mass_;
-			translation_ += delta_time * velocity_;
+			//
+			velocity += delta_time * XMLoadFloat3(&net_force_) / mass_;
+
+			translation += delta_time * velocity;
+			//__
+			
+			set_velocity(velocity);
+			set_translation(translation);
 
 			// Update the world transform of this model.
 			RecalculateWorldTransform();
 		}
 
+		void PhysicsModel::AccumulateVelocity(const XMFLOAT3& velocity)
+		{
+			AccumulateVelocity(XMLoadFloat3(&velocity));
+		}
+
 		void PhysicsModel::AccumulateVelocity(const XMVECTOR& velocity)
 		{
-			velocity_ += XMVectorSetW(velocity, 0.0f);
+			set_velocity(velocity_xv() + velocity);
+		}
+
+		void PhysicsModel::AccumulateForce(const XMFLOAT3& force)
+		{
+			AccumulateForce(XMLoadFloat3(&force));
 		}
 
 		void PhysicsModel::AccumulateForce(const XMVECTOR& force)
 		{
-			net_force_ += XMVectorSetW(force, 0.0f);
+			XMStoreFloat3(&net_force_, net_force_xv() + force);
 		}
 
 		void PhysicsModel::SetGravity(bool enable)
@@ -64,19 +86,39 @@ namespace ba
 			return mass_;
 		}
 
-		const XMVECTOR& PhysicsModel::velocity() const
+		const XMFLOAT3& PhysicsModel::velocity_xf() const
 		{
 			return velocity_;
 		}
 
-		const XMVECTOR& PhysicsModel::net_force() const
+		const XMVECTOR PhysicsModel::velocity_xv() const
+		{
+			return XMLoadFloat3(&velocity_);
+		}
+
+		const XMFLOAT3& PhysicsModel::net_force_xf() const
 		{
 			return net_force_;
+		}
+
+		const XMVECTOR PhysicsModel::net_force_xv() const
+		{
+			return XMLoadFloat3(&net_force_);
 		}
 
 		void PhysicsModel::set_mass(float mass)
 		{
 			mass_ = mass;
+		}
+
+		void PhysicsModel::set_velocity(const XMFLOAT3& velocity)
+		{
+			velocity_ = velocity;
+		}
+
+		void PhysicsModel::set_velocity(const XMVECTOR& velocity)
+		{
+			XMStoreFloat3(&velocity_, velocity);
 		}
 	}
 }

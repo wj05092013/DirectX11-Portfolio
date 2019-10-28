@@ -43,9 +43,9 @@ namespace ba
 
 	Model::Model(ModelData* model_data) :
 		model_data_(model_data),
-		scale_(XMVectorZero()),
-		rotation_(XMQuaternionIdentity()),
-		translation_(XMVectorZero()),
+		scale_(0.0f, 0.0f, 0.0f),
+		rotation_(0.0f, 0.0f, 0.0f, 1.0f),
+		translation_(0.0f, 0.0f, 0.0f),
 		local_world_(XMMatrixIdentity()),
 		model_type_(kStatic)
 	{
@@ -53,9 +53,9 @@ namespace ba
 
 	Model::Model(ModelData* model_data, EModelType type) :
 		model_data_(model_data),
-		scale_(XMVectorZero()),
-		rotation_(XMQuaternionIdentity()),
-		translation_(XMVectorZero()),
+		scale_(0.0f, 0.0f, 0.0f),
+		rotation_(0.0f, 0.0f, 0.0f, 1.0f),
+		translation_(0.0f, 0.0f, 0.0f),
 		local_world_(XMMatrixIdentity()),
 		model_type_(type)
 	{
@@ -73,9 +73,9 @@ namespace ba
 	void Model::RecalculateWorldTransform()
 	{
 		local_world_ = model_data_->mesh.local_transform()
-			* XMMatrixScalingFromVector(scale_)
-			* XMMatrixRotationQuaternion(rotation_)
-			* XMMatrixTranslationFromVector(translation_);
+			* XMMatrixScalingFromVector(XMLoadFloat3(&scale_))
+			* XMMatrixRotationQuaternion(XMLoadFloat4(&rotation_))
+			* XMMatrixTranslationFromVector(XMLoadFloat3(&translation_));
 	}
 
 	void Model::Update(float delta_time)
@@ -88,19 +88,34 @@ namespace ba
 		model_data_ = model_data;
 	}
 
-	void Model::set_scale(const XMVECTOR& scale)
+	void Model::set_scale(const XMFLOAT3& scale)
 	{
 		scale_ = scale;
 	}
 
-	void Model::set_rotation(const XMVECTOR& rotation)
+	void Model::set_scale(const XMVECTOR& scale)
+	{
+		XMStoreFloat3(&scale_, scale);
+	}
+
+	void Model::set_rotation(const XMFLOAT4& rotation)
 	{
 		rotation_ = rotation;
 	}
 
-	void Model::set_translation(const XMVECTOR& translation)
+	void Model::set_rotation(const XMVECTOR& rotation)
+	{
+		XMStoreFloat4(&rotation_, rotation);
+	}
+
+	void Model::set_translation(const XMFLOAT3& translation)
 	{
 		translation_ = translation;
+	}
+
+	void Model::set_translation(const XMVECTOR& translation)
+	{
+		XMStoreFloat3(&translation_, translation);
 	}
 
 	const ModelData* Model::model_data() const
@@ -108,19 +123,34 @@ namespace ba
 		return model_data_;
 	}
 
-	const XMVECTOR& Model::scale() const
+	const XMFLOAT3& Model::scale_xf() const
 	{
 		return scale_;
 	}
 
-	const XMVECTOR& Model::rotation() const
+	const XMVECTOR Model::scale_xv() const
+	{
+		return XMLoadFloat3(&scale_);
+	}
+
+	const XMFLOAT4& Model::rotation_xf() const
 	{
 		return rotation_;
 	}
 
-	const XMVECTOR& Model::translation() const
+	const XMVECTOR Model::rotation_xv() const
+	{
+		return XMLoadFloat4(&rotation_);
+	}
+
+	const XMFLOAT3& Model::translation_xf() const
 	{
 		return translation_;
+	}
+
+	const XMVECTOR Model::translation_xv() const
+	{
+		return XMLoadFloat3(&translation_);
 	}
 
 	const XMMATRIX& Model::local_world() const

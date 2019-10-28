@@ -4,6 +4,8 @@
 PCH: No
 */
 
+#include "Character.h"
+
 namespace ba
 {
 	namespace scene01
@@ -77,7 +79,7 @@ namespace ba
 			ModelData* red_box_;
 			ModelData* ylw_box_;
 			std::vector<Model*> models_;
-			physics::PhysicsModel* character_;
+			Character* character_;
 		};
 	}
 }
