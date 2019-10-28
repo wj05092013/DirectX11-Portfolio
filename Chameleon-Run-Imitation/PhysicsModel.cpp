@@ -6,8 +6,8 @@ namespace ba
 	{
 		const XMVECTOR PhysicsModel::kGravityAcceleration = XMVectorSet(0.0f, -9.8f, 0.0f, 0.0f);
 
-		PhysicsModel::PhysicsModel(ModelData* model_data) :
-			Model(model_data, kPhysics),
+		PhysicsModel::PhysicsModel(ModelData* model_data, Timer* timer) :
+			Model(model_data, timer, kPhysics),
 			mass_(0.0f),
 			velocity_(0.0f, 0.0f, 0.0f),
 			net_force_(0.0f, 0.0f, 0.0f),
@@ -28,18 +28,18 @@ namespace ba
 			set_velocity(velocity);
 		}
 
-		void PhysicsModel::Update(float delta_time)
+		void PhysicsModel::Update()
 		{
-			Model::Update(delta_time);
+			Model::Update();
 
 			XMVECTOR velocity = velocity_xv();
 			XMVECTOR translation = translation_xv();
 
 			// Apply the Modified Euler Method.
 			//
-			velocity += delta_time * XMLoadFloat3(&net_force_) / mass_;
+			velocity += static_cast<float>(timer_->get_delta_time()) * XMLoadFloat3(&net_force_) / mass_;
 
-			translation += delta_time * velocity;
+			translation += static_cast<float>(timer_->get_delta_time()) * velocity;
 			//__
 			
 			set_velocity(velocity);

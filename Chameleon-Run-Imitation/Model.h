@@ -9,17 +9,29 @@ namespace ba
 	class ModelData
 	{
 	public:
+		enum EColorType
+		{
+			kDefault,
+			kRed,
+			kYellow,
+			kBlack
+		};
+
+	public:
 		ModelData();
 
-		bool Init(ID3D11Device* device, const GeometryGenerator::Geometry& geo, const XMMATRIX& local_transform, const light::Material& material);
+		bool Init(ID3D11Device* device, const GeometryGenerator::Geometry& geo, const XMMATRIX& local_transform, EColorType type);
+
+		// Change color type and the model's material automatically.
+		void ChangeColor(EColorType type);
 
 		Mesh mesh;
 		ID3D11ShaderResourceView* diffuse_map;
+		EColorType color_type;
 	};
 
 	class Model
 	{
-
 	public:
 		enum EModelType
 		{
@@ -28,8 +40,8 @@ namespace ba
 		};
 
 	public:
-		Model(ModelData* model_data);
-		Model(ModelData* model_data, EModelType type);
+		Model(ModelData* model_data, Timer* timer);
+		Model(ModelData* model_data, Timer* timer, EModelType type);
 		virtual ~Model();
 
 		// If a collider for this model was created, this function would be called on collision.
@@ -38,7 +50,7 @@ namespace ba
 		// Should update the world transform matrix manually after changing the scaling, rotation and translation of thins model.
 		void RecalculateWorldTransform();
 
-		virtual void Update(float delta_time);
+		virtual void Update();
 
 		//
 		// Mutators
@@ -73,6 +85,8 @@ namespace ba
 		XMFLOAT4	rotation_;
 		XMFLOAT3	translation_;
 		XMMATRIX	local_world_;
+
+		Timer* timer_;
 
 	private:
 		EModelType	model_type_;

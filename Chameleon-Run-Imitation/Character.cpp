@@ -3,11 +3,13 @@
 
 namespace ba
 {
-	Character::Character(ModelData* model_data) :
-		PhysicsModel(model_data),
+	Character::Character(ModelData* model_data, Timer* timer) :
+		PhysicsModel(model_data, timer),
 		acc_z_(0.0f),
 		max_vel_z_(0.0f),
-		jump_vel_(0.0f, 0.0f, 0.0f)
+		jump_vel_(0.0f, 0.0f, 0.0f),
+		b_jump_enable_(true),
+		jump_started_time_(0.0f)
 	{
 	}
 
@@ -15,27 +17,37 @@ namespace ba
 	{
 	}
 
-	void Character::Update(float delta_time)
+	void Character::Update()
 	{
-		PhysicsModel::Update(delta_time);
+		PhysicsModel::Update();
 
+		// Accelerate character.
+		//
 		XMFLOAT3 vel = velocity_xf();
-
-		vel.z += delta_time * acc_z_;
-
+		vel.z += static_cast<float>(timer_->get_delta_time()) * acc_z_;
 		if (vel.z > max_vel_z_)
 		{
 			vel.z = max_vel_z_;
 		}
 
 		set_velocity(vel);
+		//__
+
+		if (static_cast<float>(timer_->get_total_time()) - jump_started_time_ > 0.1f)
+		{
+			b_jump_enable_ = true;
+		}
 	}
 
 	void Character::UpdateOnKeyInput(bool key_pressed[256], bool key_switch[256])
 	{
-		if (key_pressed[VK_SPACE])
+		if (b_jump_enable_ && key_pressed[VK_SPACE])
 		{
+			b_jump_enable_ = false;
 
+			jump_started_time_ = static_cast<float>(timer_->get_total_time());
+
+			Jump();
 		}
 	}
 

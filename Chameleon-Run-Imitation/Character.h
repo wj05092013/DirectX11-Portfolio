@@ -4,18 +4,20 @@
 PCH: No
 */
 
-#include "Model.h"
 #include "PhysicsModel.h"
 
 namespace ba
 {
+	class Timer;
+	class ModelData;
+
 	class Character : public physics::PhysicsModel
 	{
 	public:
-		Character(ModelData* model_data);
+		Character(ModelData* model_data, Timer* timer);
 		~Character() override;
 
-		void Update(float delta_time) override;
+		void Update() override;
 
 		void UpdateOnKeyInput(bool key_pressed[256], bool key_switch[256]);
 
@@ -33,5 +35,8 @@ namespace ba
 		float acc_z_;
 		float max_vel_z_;
 		XMFLOAT3 jump_vel_;
+
+		bool b_jump_enable_;
+		float jump_started_time_;
 	};
 }

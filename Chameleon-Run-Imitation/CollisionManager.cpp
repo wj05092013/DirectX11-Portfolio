@@ -214,11 +214,17 @@ namespace ba
 							collision_info.overlapped = main_bounding_sphere.Radius + target_bounding_sphere.Radius - XMVectorGetX(XMVector3Length(center_to_center));
 							collision_info.overlapped *= 0.5f;
 
+							// Set opponent collider.
+							collision_info.opponent = target_collider;
+
 							// Deliver collision information to the main collider.
 							main_collider->OnCollision(collision_info);
 
 							// Set target collider's normal vector.
 							collision_info.normal = -collision_info.normal;
+
+							// Set opponent collider.
+							collision_info.opponent = main_collider;
 
 							// Deliver collision information to the target collider.
 							target_collider->OnCollision(collision_info);
@@ -275,8 +281,21 @@ namespace ba
 							// Calculate the overlapped distance between the two colliders.
 							collision_info.overlapped = main_bounding_sphere.Radius + target_bounding_sphere.Radius - XMVectorGetX(XMVector3Length(center_to_center));
 
+							// Set opponent collider.
+							collision_info.opponent = target_collider;
+
 							// Deliver collision information to the main collider.
 							main_collider->OnCollision(collision_info);
+
+							collision_info.overlapped = 0.0f;
+							collision_info.restitution = 0.0f;
+							collision_info.normal = XMVectorZero();
+
+							// Set opponent collider.
+							collision_info.opponent = main_collider;
+
+							// Deliver collision information to the target collider.
+							target_collider->OnCollision(collision_info);
 						}
 					}
 					else if (target->primitive_type_ == Collider::kAxisAlignedBox)
@@ -349,8 +368,21 @@ namespace ba
 							// Calculate the overlapped distance in the main spherer collider.
 							collision_info.overlapped = main_collider->dx_bounding_sphere_.Radius - std::sqrt(dist_square_sum);
 
+							// Set opponent collider.
+							collision_info.opponent = target_collider;
+
 							// Deliver collision information to the main collider.
 							main_collider->OnCollision(collision_info);
+
+							collision_info.overlapped = 0.0f;
+							collision_info.restitution = 0.0f;
+							collision_info.normal = XMVectorZero();
+
+							// Set opponent collider.
+							collision_info.opponent = main_collider;
+
+							// Deliver collision information to the target collider.
+							target_collider->OnCollision(collision_info);
 						}
 					}
 				}

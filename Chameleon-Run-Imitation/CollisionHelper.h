@@ -8,11 +8,14 @@ namespace ba
 {
 	namespace collision
 	{
+		class Collider;
+
 		struct CollisionInfo
 		{
 			float overlapped;
 			float restitution;
 			XMVECTOR normal;
+			Collider* opponent;
 		};
 
 		// Calculate equations of all planes of an axis aligned box.

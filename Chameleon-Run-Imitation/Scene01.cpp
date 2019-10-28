@@ -173,7 +173,7 @@ namespace ba
 		{
 			for (UINT i = 0; i < models_.size(); ++i)
 			{
-				models_[i]->Update(static_cast<float>(timer_->get_delta_time()));
+				models_[i]->Update();
 			}
 			collision::CollisionManager::GetInstance().CheckCollision();
 		}
@@ -200,6 +200,8 @@ namespace ba
 
 	void scene01::Scene01::UpdateOnKeyInput(bool key_pressed[256], bool key_switch[256])
 	{
+		character_->UpdateOnKeyInput(key_pressed, key_switch);
+
 		if (key_pressed['W'])
 			rt_camera_->Approach(static_cast<float>(timer_->get_delta_time()));
 		if (key_pressed['S'])
@@ -259,7 +261,7 @@ namespace ba
 		if (!sphere_->Init(device_, geo, kSphereLocalTransform, kRedMaterial))
 			return false;
 
-		character_ = new Character(sphere_);
+		character_ = new Character(sphere_, timer_);
 
 		character_->set_scale(kCharacterInitScale);
 		character_->set_rotation(kCharacterInitRotation);
@@ -304,7 +306,7 @@ namespace ba
 		//__
 
 
-		Model* model = new Model(red_box_);
+		Model* model = new Model(red_box_, timer_);
 
 		model->set_scale(kBox01InitScale);
 		model->set_rotation(kBox01InitRotation);
@@ -316,7 +318,7 @@ namespace ba
 		models_.push_back(model);
 
 
-		model = new Model(ylw_box_);
+		model = new Model(ylw_box_, timer_);
 
 		model->set_scale(kBox02InitScale);
 		model->set_rotation(kBox02InitRotation);
@@ -328,7 +330,7 @@ namespace ba
 		models_.push_back(model);
 
 
-		model = new Model(ylw_box_);
+		model = new Model(ylw_box_, timer_);
 
 		model->set_scale(kBox03InitScale);
 		model->set_rotation(kBox03InitRotation);
@@ -340,7 +342,7 @@ namespace ba
 		models_.push_back(model);
 
 
-		model = new Model(red_box_);
+		model = new Model(red_box_, timer_);
 
 		model->set_scale(kBox04InitScale);
 		model->set_rotation(kBox04InitRotation);

@@ -30,8 +30,20 @@ namespace ba
 		extern const float kDomainSizeZ;
 	}
 
-	namespace scene01
+	namespace game
 	{
+		//
+		// Rendering Settings
+		//
+
+		extern const UINT kShadowMapSize;
+
+		extern const float kFogStart;
+		extern const float kFogRange;
+		extern const XMVECTOR kFogColor;
+
+		extern const XMMATRIX kToTex;
+
 		//
 		// Models
 		//
@@ -47,10 +59,15 @@ namespace ba
 		extern const float kBoxRestitutions[6];
 
 		// Materials.
+		//
+		extern const light::Material kDefaultMaterial;
 		extern const light::Material kRedMaterial;
 		extern const light::Material kYellowMaterial;
 		extern const light::Material kBlackMaterial;
 
+		extern const light::Material kMaterials[4];
+		//__
+		
 		// Main character.
 		//
 		extern const XMFLOAT3 kCharacterInitScale;
@@ -66,7 +83,10 @@ namespace ba
 
 		extern const XMFLOAT3 kCharacterJumpVelocity;
 		//__
+	}
 
+	namespace scene01
+	{
 		// Spheres.
 
 		// Boxes.
@@ -87,18 +107,6 @@ namespace ba
 		extern const XMFLOAT4 kBox04InitRotation;
 		extern const XMFLOAT3 kBox04InitTranslation;
 		//__
-
-		//
-		// Scene Settings for Rendering
-		//
-
-		extern const UINT kShadowMapSize;
-
-		extern const float kFogStart;
-		extern const float kFogRange;
-		extern const XMVECTOR kFogColor;
-
-		extern const XMMATRIX kToTex;
 
 		//
 		// Cameras Settings

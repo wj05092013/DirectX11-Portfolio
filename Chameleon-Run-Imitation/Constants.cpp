@@ -23,8 +23,25 @@ namespace ba
 		const float kDomainSizeZ = 10.0f;
 	}
 
-	namespace scene01
+	namespace game
 	{
+		//
+		// Rendering Settings
+		//
+
+		const UINT kShadowMapSize = 2048U;
+
+		const float kFogStart = 5.0f;
+		const float kFogRange = 20.0f;
+		const XMVECTOR kFogColor = color::kSilver;
+
+		const XMMATRIX kToTex = XMMATRIX(
+			0.5f, 0.0f, 0.0f, 0.0f,
+			0.0f, -0.5f, 0.0f, 0.0f,
+			0.0f, 0.0f, 1.0f, 0.0f,
+			0.5f, 0.5f, 0.0f, 1.0f
+		);
+
 		//
 		// Models
 		//
@@ -40,11 +57,17 @@ namespace ba
 		const float kBoxRestitutions[6] = { 0.8f, 0.0f, 0.8f, 0.8f, 0.8f, 0.8f };
 
 		// Materials.
-		const light::Material kRedMaterial = {
+		const light::Material kDefaultMaterial = {
 			XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f),				// ambient
-			XMFLOAT4(1.0f, 0.0f, 0.501960f, 1.0f),			// diffuse
+			XMFLOAT4(0.6f, 0.6f, 0.6f, 1.0f),				// diffuse
 			XMFLOAT4(0.4f, 0.4f, 0.4f, 8.0f),				// specular
 			XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f)				// reflection
+		};
+		const light::Material kRedMaterial = {
+			XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f),
+			XMFLOAT4(1.0f, 0.0f, 0.501960f, 1.0f),
+			XMFLOAT4(0.4f, 0.4f, 0.4f, 8.0f),
+			XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f)
 		};
 		const light::Material kYellowMaterial = {
 			XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f),
@@ -57,6 +80,9 @@ namespace ba
 			XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f),
 			XMFLOAT4(0.4f, 0.4f, 0.4f, 8.0f),
 			XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f)
+		};
+		const light::Material kMaterials[4] = {
+			kDefaultMaterial, kRedMaterial, kYellowMaterial, kBlackMaterial
 		};
 
 		// Main character.
@@ -74,7 +100,10 @@ namespace ba
 
 		const XMFLOAT3 kCharacterJumpVelocity(0.0f, 15.0f, 0.0f);
 		//__
+	}
 
+	namespace scene01
+	{
 		// Spheres.
 
 		// Boxes.
@@ -95,23 +124,6 @@ namespace ba
 		const XMFLOAT4 kBox04InitRotation(0.0f, 0.0f, 0.0f, 1.0f);
 		const XMFLOAT3 kBox04InitTranslation(0.0f, 0.0f, 20.0f);
 		//__
-
-		//
-		// Scene Settings for Rendering
-		//
-
-		const UINT kShadowMapSize = 2048U;
-
-		const float kFogStart = 5.0f;
-		const float kFogRange = 20.0f;
-		const XMVECTOR kFogColor = color::kSilver;
-
-		const XMMATRIX kToTex = XMMATRIX(
-			0.5f, 0.0f, 0.0f, 0.0f,
-			0.0f, -0.5f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f, 0.0f,
-			0.5f, 0.5f, 0.0f, 1.0f
-		);
 
 		//
 		// Cameras Settings

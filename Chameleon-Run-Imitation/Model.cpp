@@ -7,11 +7,12 @@ namespace ba
 	//
 
 	ModelData::ModelData() :
-		diffuse_map(nullptr)
+		diffuse_map(nullptr),
+		color_type(kDefault)
 	{
 	}
 
-	bool ModelData::Init(ID3D11Device* device, const GeometryGenerator::Geometry& geo, const XMMATRIX& local_transform, const light::Material& material)
+	bool ModelData::Init(ID3D11Device* device, const GeometryGenerator::Geometry& geo, const XMMATRIX& local_transform, EColorType type)
 	{
 		UINT vtx_count = geo.vertices.size();
 
@@ -32,31 +33,40 @@ namespace ba
 		if (!mesh.BuildIndexBuffer(device, indices))
 			return false;
 		mesh.set_local_transform(local_transform);
-		mesh.set_material(material);
+
+		ChangeColor(type);
 
 		return true;
+	}
+
+	void ModelData::ChangeColor(EColorType type)
+	{
+		color_type = type;
+		mesh.set_material(game::kMaterials[color_type]);
 	}
 
 	//
 	// Model class
 	//
 
-	Model::Model(ModelData* model_data) :
+	Model::Model(ModelData* model_data, Timer* timer) :
 		model_data_(model_data),
 		scale_(0.0f, 0.0f, 0.0f),
 		rotation_(0.0f, 0.0f, 0.0f, 1.0f),
 		translation_(0.0f, 0.0f, 0.0f),
 		local_world_(XMMatrixIdentity()),
+		timer_(timer),
 		model_type_(kStatic)
 	{
 	}
 
-	Model::Model(ModelData* model_data, EModelType type) :
+	Model::Model(ModelData* model_data, Timer* timer, EModelType type) :
 		model_data_(model_data),
 		scale_(0.0f, 0.0f, 0.0f),
 		rotation_(0.0f, 0.0f, 0.0f, 1.0f),
 		translation_(0.0f, 0.0f, 0.0f),
 		local_world_(XMMatrixIdentity()),
+		timer_(timer),
 		model_type_(type)
 	{
 	}
@@ -78,7 +88,7 @@ namespace ba
 			* XMMatrixTranslationFromVector(XMLoadFloat3(&translation_));
 	}
 
-	void Model::Update(float delta_time)
+	void Model::Update()
 	{
 		// Do nothing.
 	}
