@@ -96,9 +96,11 @@ namespace ba
 		const float kCharacterInitRestitution = 0.8f;
 
 		const float kCharacterInitAccelerationZ = 3.0f;
-		const float kCharacterInitMaxVelocityZ = 10.0f;
+		const float kCharacterInitMaxVelocityZ = 6.0f;
 
-		const XMFLOAT3 kCharacterJumpVelocity(0.0f, 15.0f, 0.0f);
+		const float kJumpEnableTime = 0.2f;
+		const int kMaxJumpCount = 2;
+		const XMFLOAT3 kCharacterJumpVelocity(0.0f, 5.0f, 0.0f);
 		//__
 	}
 
@@ -141,7 +143,7 @@ namespace ba
 
 		// Rotational camera.
 		const XMFLOAT3 kRTCamInitPos(10.0f, 10.0f, -20.0f);
-		const XMFLOAT3 kRTCamInitTarget = kCharacterInitTranslation;
+		const XMFLOAT3 kRTCamInitTarget = game::kCharacterInitTranslation;
 		const XMFLOAT3 kRTCamInitUp(0.0f, 1.0f, 0.0f);
 		const RotationalCamera::RotationalCameraDesc kRTCamInitDesc = {
 			0.1f, 10.0f, 40.0f, 20.0f

@@ -81,6 +81,8 @@ namespace ba
 		extern const float kCharacterInitAccelerationZ;
 		extern const float kCharacterInitMaxVelocityZ;
 
+		extern const float kJumpEnableTime;
+		extern const int kMaxJumpCount;
 		extern const XMFLOAT3 kCharacterJumpVelocity;
 		//__
 	}

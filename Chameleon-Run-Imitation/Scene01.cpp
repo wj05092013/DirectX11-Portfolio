@@ -89,7 +89,7 @@ namespace ba
 		ssao_map_ = GraphicComponentManager::GetInstance().CreateComponent<SSAOMap>("SSAO_MAP");
 		rt_camera_ = GraphicComponentManager::GetInstance().CreateComponent<RotationalCamera>("RT_CAMERA");
 
-		if (!shadow_map_->Init(device_, kShadowMapSize, kShadowMapSize))
+		if (!shadow_map_->Init(device_, game::kShadowMapSize, game::kShadowMapSize))
 			return false;
 		if (!ssao_map_->Init(device_, dc_, client_width_, client_height_, kCamFovY, kCamFarZ))
 			return false;
@@ -109,11 +109,11 @@ namespace ba
 
 		// Set effect variables' values to be used for all time.
 		evb_change_rarely_.directional_lights = lights_;
-		evb_change_rarely_.fog_start = kFogStart;
-		evb_change_rarely_.fog_range = kFogRange;
-		evb_change_rarely_.fog_color = kFogColor;
-		evb_change_rarely_.shadow_map_size = kShadowMapSize;
-		evb_change_rarely_.to_tex = kToTex;
+		evb_change_rarely_.fog_start = game::kFogStart;
+		evb_change_rarely_.fog_range = game::kFogRange;
+		evb_change_rarely_.fog_color = game::kFogColor;
+		evb_change_rarely_.shadow_map_size = static_cast<float>(game::kShadowMapSize);
+		evb_change_rarely_.to_tex = game::kToTex;
 		renderer_->SetEffectVariablesChangeRarely(evb_change_rarely_);
 
 		// Set effect variables' values to be used on start and resizing screen.
@@ -255,25 +255,25 @@ namespace ba
 	bool scene01::Scene01::LoadCharacter()
 	{
 		GeometryGenerator::Geometry geo;
-		GeometryGenerator::CreateGeosphere(kSphereRadius, kSphereSubdivisionCount, geo);
+		GeometryGenerator::CreateGeosphere(game::kSphereRadius, game::kSphereSubdivisionCount, geo);
 
 		sphere_ = new ModelData;
-		if (!sphere_->Init(device_, geo, kSphereLocalTransform, kRedMaterial))
+		if (!sphere_->Init(device_, geo, game::kSphereLocalTransform, ModelData::kRed))
 			return false;
 
 		character_ = new Character(sphere_, timer_);
 
-		character_->set_scale(kCharacterInitScale);
-		character_->set_rotation(kCharacterInitRotation);
-		character_->set_translation(kCharacterInitTranslation);
+		character_->set_scale(game::kCharacterInitScale);
+		character_->set_rotation(game::kCharacterInitRotation);
+		character_->set_translation(game::kCharacterInitTranslation);
 		character_->RecalculateWorldTransform();
-		character_->set_mass(kCharacterInitMass);
-		character_->SetGravity(kCharacterInitGravityEnable);
-		character_->set_acceleration_z(kCharacterInitAccelerationZ);
-		character_->set_max_velocity_z(kCharacterInitMaxVelocityZ);
-		character_->set_jump_velocity(kCharacterJumpVelocity);
+		character_->set_mass(game::kCharacterInitMass);
+		character_->SetGravity(game::kCharacterInitGravityEnable);
+		character_->set_acceleration_z(game::kCharacterInitAccelerationZ);
+		character_->set_max_velocity_z(game::kCharacterInitMaxVelocityZ);
+		character_->set_jump_velocity(game::kCharacterJumpVelocity);
 
-		if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kSphere, &kCharacterInitRestitution, character_))
+		if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kSphere, &game::kCharacterInitRestitution, character_))
 			return false;
 
 		models_.push_back(character_);
@@ -289,11 +289,11 @@ namespace ba
 		// Create a red box 'ModelData'.
 		//
 		GeometryGenerator::Geometry geo;
-		GeometryGenerator::CreateBox(kBoxSize.x, kBoxSize.y, kBoxSize.z, geo);
+		GeometryGenerator::CreateBox(game::kBoxSize.x, game::kBoxSize.y, game::kBoxSize.z, geo);
 
 		red_box_ = new ModelData;
 
-		if (!red_box_->Init(device_, geo, kBoxLocalTransform, kRedMaterial))
+		if (!red_box_->Init(device_, geo, game::kBoxLocalTransform, ModelData::kRed))
 			return false;
 		//__
 
@@ -301,7 +301,15 @@ namespace ba
 		//
 		ylw_box_ = new ModelData;
 
-		if (!ylw_box_->Init(device_, geo, kBoxLocalTransform, kYellowMaterial))
+		if (!ylw_box_->Init(device_, geo, game::kBoxLocalTransform, ModelData::kYellow))
+			return false;
+		//__
+
+		// Create a black box 'ModelData'.
+		//
+		blk_box_ = new ModelData;
+
+		if (!blk_box_->Init(device_, geo, game::kBoxLocalTransform, ModelData::kBlack))
 			return false;
 		//__
 
@@ -312,7 +320,7 @@ namespace ba
 		model->set_rotation(kBox01InitRotation);
 		model->set_translation(kBox01InitTranslation);
 		model->RecalculateWorldTransform();
-		if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kAxisAlignedBox, kBoxRestitutions, model))
+		if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kAxisAlignedBox, game::kBoxRestitutions, model))
 			return false;
 
 		models_.push_back(model);
@@ -324,19 +332,19 @@ namespace ba
 		model->set_rotation(kBox02InitRotation);
 		model->set_translation(kBox02InitTranslation);
 		model->RecalculateWorldTransform();
-		if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kAxisAlignedBox, kBoxRestitutions, model))
+		if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kAxisAlignedBox, game::kBoxRestitutions, model))
 			return false;
 
 		models_.push_back(model);
 
 
-		model = new Model(ylw_box_, timer_);
+		model = new Model(blk_box_, timer_);
 
 		model->set_scale(kBox03InitScale);
 		model->set_rotation(kBox03InitRotation);
 		model->set_translation(kBox03InitTranslation);
 		model->RecalculateWorldTransform();
-		if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kAxisAlignedBox, kBoxRestitutions, model))
+		if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kAxisAlignedBox, game::kBoxRestitutions, model))
 			return false;
 
 		models_.push_back(model);
@@ -348,7 +356,7 @@ namespace ba
 		model->set_rotation(kBox04InitRotation);
 		model->set_translation(kBox04InitTranslation);
 		model->RecalculateWorldTransform();
-		if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kAxisAlignedBox, kBoxRestitutions, model))
+		if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kAxisAlignedBox, game::kBoxRestitutions, model))
 			return false;
 
 		models_.push_back(model);
@@ -373,6 +381,11 @@ namespace ba
 		{
 			delete ylw_box_;
 			ylw_box_ = nullptr;
+		}
+		if (blk_box_)
+		{
+			delete blk_box_;
+			blk_box_ = nullptr;
 		}
 
 		// Destroy models.
