@@ -103,7 +103,7 @@ namespace ba
 		// Main character.
 		//
 		const std::string kCharacterName = "character";
-		const XMFLOAT3 kCharacterInitScale(1.0f, 1.0f, 1.0f);
+		const XMFLOAT3 kCharacterInitScale(0.5f, 0.5f, 0.5f);
 		const XMFLOAT4 kCharacterInitRotation(0.0f, 0.0f, 0.0f, 1.0f);
 		const XMFLOAT3 kCharacterInitTranslation(0.0f, 2.0f, 0.0f);
 
@@ -125,8 +125,8 @@ namespace ba
 			"sphere00", "sphere01"
 		};
 		const XMFLOAT3 kSphereInitScales[2] = {
-			{0.6f, 0.6f, 0.6f},
-			{1.0f, 1.0f, 1.0f}
+			{0.5f, 0.5f, 0.5f},
+			{0.5f, 0.5f, 0.5f}
 		};
 		const XMFLOAT4 kSphereInitRotations[2] = {
 			{0.0f, 0.0f, 0.0f, 1.0f},
