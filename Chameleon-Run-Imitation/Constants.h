@@ -54,6 +54,7 @@ namespace ba
 		extern const float kSphereRadius;
 		extern const int kSphereSubdivisionCount;
 		extern const XMMATRIX kSphereLocalTransform;
+		extern const float kSphereRestitution;
 
 		// Model data of boxes.
 		extern const XMFLOAT3 kBoxSize;
@@ -104,6 +105,12 @@ namespace ba
 		//__
 
 		// Spheres.
+		extern const int kSphereCount;
+		extern const std::string kSphereNames[2];
+		extern const XMFLOAT3 kSphereInitScales[2];
+		extern const XMFLOAT4 kSphereInitRotations[2];
+		extern const XMFLOAT3 kSphereInitTranslations[2];
+		extern const Model::EColorType kSphereInitColorType[2];
 
 		// Boxes.
 		//

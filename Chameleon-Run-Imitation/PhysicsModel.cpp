@@ -21,14 +21,6 @@ namespace ba
 
 		void PhysicsModel::OnCollision(const collision::CollisionInfo& info)
 		{
-			// Debug
-			//
-			if (info.opponent->model()->name() == "box07")
-			{
-				int a = 0;
-			}
-			//__
-
 			set_translation(translation_xv() + info.overlapped * info.normal);
 
 			XMVECTOR velocity = velocity_xv();

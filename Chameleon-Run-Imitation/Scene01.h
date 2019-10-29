@@ -76,7 +76,7 @@ namespace ba
 			POINT last_mouse_pos_;
 
 			ModelData* sphere_;
-			ModelData* red_box_;
+			ModelData* box_;
 			ModelData* ground_;
 			std::vector<Model*> models_;
 			Character* character_;

@@ -52,6 +52,7 @@ namespace ba
 		const float kSphereRadius = 0.5f;
 		const int kSphereSubdivisionCount = 3;
 		const XMMATRIX kSphereLocalTransform = XMMatrixTranslation(0.5f, 0.5f, 0.5f);
+		const float kSphereRestitution = 0.5f;
 
 		// Model data of boxes.
 		const XMFLOAT3 kBoxSize = XMFLOAT3(1.0f, 1.0f, 1.0f);
@@ -119,6 +120,26 @@ namespace ba
 		//__
 
 		// Spheres.
+		const int kSphereCount = 2;
+		const std::string kSphereNames[2] = {
+			"sphere00", "sphere01"
+		};
+		const XMFLOAT3 kSphereInitScales[2] = {
+			{0.6f, 0.6f, 0.6f},
+			{1.0f, 1.0f, 1.0f}
+		};
+		const XMFLOAT4 kSphereInitRotations[2] = {
+			{0.0f, 0.0f, 0.0f, 1.0f},
+			{0.0f, 0.0f, 0.0f, 1.0f}
+		};
+		const XMFLOAT3 kSphereInitTranslations[2] = {
+			{0.0f, 4.0f, 11.0f},
+			{0.0f, 6.0f, 64.0f}
+		};
+		const Model::EColorType kSphereInitColorType[2] = {
+			Model::kYellow,
+			Model::kRed
+		};
 
 		// Boxes.
 		//
@@ -127,7 +148,7 @@ namespace ba
 			"box00", "box01", "box02", "box03", "box04", "box05", "box06", "box07", "box08", "box09"
 		};
 		const XMFLOAT3 kBoxInitScales[10] = {
-			{1.0f, 1.0f, 9.0f},		// 0
+			{1.0f, 1.0f, 9.0f},			// 0
 			{1.0f, 1.0f, 3.0f},
 			{1.0f, 1.0f, 3.0f},
 			{1.0f, 1.0f, 2.0},

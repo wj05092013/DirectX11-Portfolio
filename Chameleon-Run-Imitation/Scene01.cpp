@@ -49,7 +49,7 @@ namespace ba
 		last_mouse_pos_{},
 
 		sphere_(nullptr),
-		red_box_(nullptr),
+		box_(nullptr),
 		ground_(nullptr),
 		character_(nullptr)
 	{
@@ -256,13 +256,6 @@ namespace ba
 
 	bool scene01::Scene01::LoadCharacter()
 	{
-		GeometryGenerator::Geometry geo;
-		GeometryGenerator::CreateGeosphere(game::kSphereRadius, game::kSphereSubdivisionCount, geo);
-
-		sphere_ = new ModelData;
-		if (!sphere_->Init(device_, geo, game::kSphereLocalTransform))
-			return false;
-
 		character_ = new Character(kCharacterName, sphere_, timer_);
 
 		// Model class.
@@ -291,8 +284,8 @@ namespace ba
 
 	bool scene01::Scene01::LoadModels()
 	{
-		if (!LoadCharacter())
-			return false;
+		GeometryGenerator::Geometry sphere_geo;
+		GeometryGenerator::CreateGeosphere(game::kSphereRadius, game::kSphereSubdivisionCount, sphere_geo);
 
 		GeometryGenerator::Geometry box_geo;
 		GeometryGenerator::CreateBox(game::kBoxSize.x, game::kBoxSize.y, game::kBoxSize.z, box_geo);
@@ -301,14 +294,22 @@ namespace ba
 		// Create 'ModelData'
 		//
 
+		// Model data for sphere.
+		sphere_ = new ModelData;
+		if (!sphere_->Init(device_, sphere_geo, game::kSphereLocalTransform))
+			return false;
+
 		// Model data for box.
-		red_box_ = new ModelData;
-		if (!red_box_->Init(device_, box_geo, game::kBoxLocalTransform))
+		box_ = new ModelData;
+		if (!box_->Init(device_, box_geo, game::kBoxLocalTransform))
 			return false;
 
 		// Model data for ground.
 		ground_ = new ModelData;
 		if (!ground_->Init(device_, box_geo, game::kGroundLocalTransform))
+			return false;
+
+		if (!LoadCharacter())
 			return false;
 
 		//
@@ -330,11 +331,35 @@ namespace ba
 		models_.push_back(model);
 		//__
 
+		// Sphere models.
+		//
+		for (int i = 0; i < kSphereCount; ++i)
+		{
+			physics::PhysicsModel* model = new physics::PhysicsModel(kSphereNames[i], sphere_, timer_);
+
+			// Model class.
+			model->set_scale(kSphereInitScales[i]);
+			model->set_rotation(kSphereInitRotations[i]);
+			model->set_translation(kSphereInitTranslations[i]);
+			model->RecalculateWorldTransform();
+			model->set_color_type(kSphereInitColorType[i]);
+
+			// PhysicsModel class.
+			model->set_mass(1.0f);
+			model->EnableGravity(true);
+
+			if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kSphere, &game::kSphereRestitution, model))
+				return false;
+
+			models_.push_back(model);
+		}
+		//__
+
 		// Box models.
 		//
 		for (int i = 0; i < kBoxCount; ++i)
 		{
-			model = new Model(kBoxNames[i], red_box_, timer_);
+			model = new Model(kBoxNames[i], box_, timer_);
 
 			model->set_scale(kBoxInitScales[i]);
 			model->set_rotation(kBoxInitRotations[i]);
@@ -348,6 +373,7 @@ namespace ba
 
 			models_.push_back(model);
 		}
+		//__
 
 		return true;
 	}
@@ -360,10 +386,10 @@ namespace ba
 			delete sphere_;
 			sphere_ = nullptr;
 		}
-		if (red_box_)
+		if (box_)
 		{
-			delete red_box_;
-			red_box_ = nullptr;
+			delete box_;
+			box_ = nullptr;
 		}
 
 		// Destroy models.
