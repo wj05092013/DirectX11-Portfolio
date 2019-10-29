@@ -1,6 +1,8 @@
 impl
-	bug: box07 ÀúÇ×·Â ÀÛ¿ë ¾ÈÇÔ
+	bug: box07 ì €í•­ë ¥ ì‘ìš© ì•ˆí•¨
 	Renderer
-		shadow map, ssao map »ç¿ë ¿©ºÎ¿¡ µû¶ó ´Ù¸£°Ô Ã³¸®
+		shadow map, ssao map ì‚¬ìš© ì—¬ë¶€ì— ë”°ë¼ ë‹¤ë¥´ê²Œ ì²˜ë¦¬
 	Collision
-		Á¤È®ÇÑ ¹°¸® ¹ıÄ¢ Àû¿ë
+		ì •í™•í•œ ë¬¼ë¦¬ ë²•ì¹™ ì ìš©
+
+scale, rotation, translation ì •ë³´ë¥¼ Transform  í´ë˜ìŠ¤ë¡œ ë¬¶ì–´ì„œ ê´€ë¦¬
