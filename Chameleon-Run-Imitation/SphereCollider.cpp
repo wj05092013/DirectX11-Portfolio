@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Constants.h"
 
 namespace ba
 {

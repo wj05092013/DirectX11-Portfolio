@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Constants.h"
 
 ba::Renderer::Renderer() :
 	dc_(nullptr),
@@ -67,7 +68,7 @@ void ba::Renderer::RenderScene(const std::vector<Model*>& models, const EffectVa
 			effects::kBasicEffect.SetWorld(world);
 			effects::kBasicEffect.SetWorldInvTrans(world_inv_trans);
 			effects::kBasicEffect.SetTexMapping(XMMatrixIdentity());
-			effects::kBasicEffect.SetMaterial(model_data->mesh.material());
+			effects::kBasicEffect.SetMaterial(models[model_idx]->material());
 			effects::kBasicEffect.SetDiffuseMap(model_data->diffuse_map);
 
 			tech->GetPassByIndex(p)->Apply(0, dc_);

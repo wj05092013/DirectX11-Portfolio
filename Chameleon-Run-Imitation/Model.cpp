@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Constants.h"
 
 namespace ba
 {
@@ -7,12 +8,11 @@ namespace ba
 	//
 
 	ModelData::ModelData() :
-		diffuse_map(nullptr),
-		color_type(kDefault)
+		diffuse_map(nullptr)
 	{
 	}
 
-	bool ModelData::Init(ID3D11Device* device, const GeometryGenerator::Geometry& geo, const XMMATRIX& local_transform, EColorType type)
+	bool ModelData::Init(ID3D11Device* device, const GeometryGenerator::Geometry& geo, const XMMATRIX& local_transform)
 	{
 		UINT vtx_count = geo.vertices.size();
 
@@ -34,22 +34,18 @@ namespace ba
 			return false;
 		mesh.set_local_transform(local_transform);
 
-		ChangeColor(type);
-
 		return true;
-	}
-
-	void ModelData::ChangeColor(EColorType type)
-	{
-		color_type = type;
-		mesh.set_material(game::kMaterials[color_type]);
 	}
 
 	//
 	// Model class
 	//
 
-	Model::Model(ModelData* model_data, Timer* timer) :
+	Model::Model(const std::string& name, ModelData* model_data, Timer* timer) :
+		name_(name),
+		color_type_(kDefault),
+		material_(game::kMaterials[color_type_]),
+
 		model_data_(model_data),
 		scale_(0.0f, 0.0f, 0.0f),
 		rotation_(0.0f, 0.0f, 0.0f, 1.0f),
@@ -60,7 +56,11 @@ namespace ba
 	{
 	}
 
-	Model::Model(ModelData* model_data, Timer* timer, EModelType type) :
+	Model::Model(const std::string& name, ModelData* model_data, Timer* timer, EModelType type) :
+		name_(name),
+		color_type_(kDefault),
+		material_(game::kMaterials[color_type_]),
+
 		model_data_(model_data),
 		scale_(0.0f, 0.0f, 0.0f),
 		rotation_(0.0f, 0.0f, 0.0f, 1.0f),
@@ -91,6 +91,17 @@ namespace ba
 	void Model::Update()
 	{
 		// Do nothing.
+	}
+
+	void Model::set_color_type(EColorType type)
+	{
+		color_type_ = type;
+		material_ = game::kMaterials[color_type_];
+	}
+
+	void Model::set_material(const light::Material& material)
+	{
+		material_ = material;
 	}
 
 	void Model::set_model_data(ModelData* model_data)
@@ -126,6 +137,21 @@ namespace ba
 	void Model::set_translation(const XMVECTOR& translation)
 	{
 		XMStoreFloat3(&translation_, translation);
+	}
+
+	const std::string& Model::name() const
+	{
+		return name_;
+	}
+
+	Model::EColorType Model::color_type() const
+	{
+		return color_type_;
+	}
+
+	const light::Material& Model::material() const
+	{
+		return material_;
 	}
 
 	const ModelData* Model::model_data() const

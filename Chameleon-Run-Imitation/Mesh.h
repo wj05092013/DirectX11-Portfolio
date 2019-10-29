@@ -20,13 +20,11 @@ namespace ba
 
 		// Mutators.
 		void set_local_transform(const XMMATRIX& matrix);
-		void set_material(const light::Material& material);
 
 		// Accessors.
 		const std::vector<inputvertex::PosNormalTexTangent::Vertex>& vertices() const;
 		UINT vertex_stride() const;
 		const XMMATRIX& local_transform() const;
-		const light::Material& material() const;
 
 	private:
 		ID3D11Buffer* vb_;
@@ -37,7 +35,5 @@ namespace ba
 		UINT idx_count_;
 		
 		XMMATRIX local_transform_;
-		
-		light::Material material_;
 	};
 }

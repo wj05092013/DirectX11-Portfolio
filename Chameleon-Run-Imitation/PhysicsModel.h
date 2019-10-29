@@ -11,7 +11,7 @@ namespace ba
 		class PhysicsModel : public Model
 		{
 		public:
-			PhysicsModel(ModelData* model_data, Timer* timer);
+			PhysicsModel(const std::string& name, ModelData* model_data, Timer* timer);
 			~PhysicsModel() override;
 
 			void OnCollision(const collision::CollisionInfo& info) override;
@@ -27,7 +27,7 @@ namespace ba
 			void AccumulateForce(const XMVECTOR& force);
 
 			// Default is gravity disabled.
-			void SetGravity(bool enable);
+			void EnableGravity(bool enable);
 
 			float mass() const;
 			const XMFLOAT3& velocity_xf() const;

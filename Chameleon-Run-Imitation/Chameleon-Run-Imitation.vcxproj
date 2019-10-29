@@ -261,7 +261,6 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\Composition.txt" />
     <Text Include="..\TODO_LIST.txt" />
   </ItemGroup>
   <ItemGroup>

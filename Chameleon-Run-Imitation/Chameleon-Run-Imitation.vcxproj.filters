@@ -362,9 +362,6 @@
     <Text Include="..\TODO_LIST.txt">
       <Filter>Document</Filter>
     </Text>
-    <Text Include="..\Composition.txt">
-      <Filter>Document</Filter>
-    </Text>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="FX\NormalMapping.fx">

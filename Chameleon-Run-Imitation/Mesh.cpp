@@ -9,8 +9,7 @@ ba::Mesh::Mesh() :
 	vertex_stride_(0),
 	ib_(nullptr),
 	idx_count_(0),
-	local_transform_(XMMatrixIdentity()),
-	material_{}
+	local_transform_(XMMatrixIdentity())
 {
 }
 
@@ -89,11 +88,6 @@ void ba::Mesh::set_local_transform(const XMMATRIX& matrix)
 	local_transform_ = matrix;
 }
 
-void ba::Mesh::set_material(const light::Material& material)
-{
-	material_ = material;
-}
-
 const std::vector<ba::inputvertex::PosNormalTexTangent::Vertex>& ba::Mesh::vertices() const
 {
 	return vertices_;
@@ -107,9 +101,4 @@ UINT ba::Mesh::vertex_stride() const
 const DirectX::XMMATRIX& ba::Mesh::local_transform() const
 {
 	return local_transform_;
-}
-
-const ba::light::Material& ba::Mesh::material() const
-{
-	return material_;
 }

@@ -20,5 +20,10 @@ namespace ba
 		{
 			model_->OnCollision(info);
 		}
+
+		Model* Collider::model()
+		{
+			return model_;
+		}
 	}
 }

@@ -77,8 +77,7 @@ namespace ba
 
 			ModelData* sphere_;
 			ModelData* red_box_;
-			ModelData* ylw_box_;
-			ModelData* blk_box_;
+			ModelData* ground_;
 			std::vector<Model*> models_;
 			Character* character_;
 		};

@@ -2,6 +2,9 @@
 
 void ba::GeometryGenerator::CreateBox(float width, float height, float depth, Geometry& mesh_data)
 {
+	mesh_data.vertices.clear();
+	mesh_data.indices.clear();
+
 	// Create the vertices.
 	//
 	Vertex v[24];

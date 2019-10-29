@@ -42,7 +42,6 @@
 #include "Macros.h"
 #include "MathHelper.h"
 #include "Timer.h"
-#include "Constants.h"
 
 #include "d3dx11effect.h"
 #include "EffectWrapper.h"

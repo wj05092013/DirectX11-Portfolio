@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Constants.h"
 
 namespace ba
 {
@@ -17,7 +18,7 @@ namespace ba
 		{
 			// Transform the bounding box to world space.
 			XMVECTOR center = XMVector3TransformCoord(XMLoadFloat3(&dx_bounding_box_.Center), model_->local_world());
-			XMVECTOR extents = XMVector3Transform(XMLoadFloat3(&dx_bounding_box_.Extents), model_->local_world());
+			XMVECTOR extents = XMVector3TransformNormal(XMLoadFloat3(&dx_bounding_box_.Extents), model_->local_world());
 			float center_z = XMVectorGetZ(center);
 			float extents_z = XMVectorGetZ(extents);
 

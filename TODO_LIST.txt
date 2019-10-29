@@ -1,7 +1,4 @@
 impl
-	Scene별 상수 헤더에 따로 모으기
+	bug: box07 저항력 작용 안함
 	Renderer
 		shadow map, ssao map 사용 여부에 따라 다르게 처리
-	Model을 상속한 Character 클래스
-		SceneBounds의 중심은 Character의 중심
-	Game과 Scene 연결

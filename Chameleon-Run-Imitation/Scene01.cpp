@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Constants.h"
 #include "Scene01.h"
 
 namespace ba
@@ -44,12 +45,12 @@ namespace ba
 		evb_on_start_and_resize_{},
 		evb_per_frame_{},
 
-		bounding_sphere_{ XMFLOAT3(0.0f, 0.0f, 0.0f), 100.0f },
+		bounding_sphere_{ XMFLOAT3(0.0f, 0.0f, 0.0f), game::kSceneBoundsRadius },
 		last_mouse_pos_{},
 
 		sphere_(nullptr),
 		red_box_(nullptr),
-		ylw_box_(nullptr),
+		ground_(nullptr),
 		character_(nullptr)
 	{
 	}
@@ -163,9 +164,10 @@ namespace ba
 	{
 		// The z-value of the rotational camera's target is always same as that of the character.
 		XMFLOAT3 pos = kRTCamInitTarget;
-		pos.z = character_->translation_xf().z;
+		pos.z = character_->translation_xf().z + kRTCamInitTargetDiffZ;
 		rt_camera_->set_center_pos(pos);
 
+		bounding_sphere_.center = rt_camera_->center_pos_xf();
 		shadow_map_->BuildShadowTransform();
 		rt_camera_->UpdateViewMatrix();
 
@@ -258,22 +260,28 @@ namespace ba
 		GeometryGenerator::CreateGeosphere(game::kSphereRadius, game::kSphereSubdivisionCount, geo);
 
 		sphere_ = new ModelData;
-		if (!sphere_->Init(device_, geo, game::kSphereLocalTransform, ModelData::kRed))
+		if (!sphere_->Init(device_, geo, game::kSphereLocalTransform))
 			return false;
 
-		character_ = new Character(sphere_, timer_);
+		character_ = new Character(kCharacterName, sphere_, timer_);
 
-		character_->set_scale(game::kCharacterInitScale);
-		character_->set_rotation(game::kCharacterInitRotation);
-		character_->set_translation(game::kCharacterInitTranslation);
+		// Model class.
+		character_->set_scale(scene01::kCharacterInitScale);
+		character_->set_rotation(scene01::kCharacterInitRotation);
+		character_->set_translation(scene01::kCharacterInitTranslation);
 		character_->RecalculateWorldTransform();
-		character_->set_mass(game::kCharacterInitMass);
-		character_->SetGravity(game::kCharacterInitGravityEnable);
-		character_->set_acceleration_z(game::kCharacterInitAccelerationZ);
-		character_->set_max_velocity_z(game::kCharacterInitMaxVelocityZ);
-		character_->set_jump_velocity(game::kCharacterJumpVelocity);
+		character_->set_color_type(Model::kRed);
 
-		if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kSphere, &game::kCharacterInitRestitution, character_))
+		// PhysicsModel class.
+		character_->set_mass(scene01::kCharacterInitMass);
+		character_->EnableGravity(scene01::kCharacterInitGravityEnable);
+
+		// Character class.
+		character_->set_acceleration_z(scene01::kCharacterInitAccelerationZ);
+		character_->set_max_velocity_z(scene01::kCharacterInitMaxVelocityZ);
+		character_->set_jump_velocity(scene01::kCharacterJumpVelocity);
+
+		if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kSphere, &scene01::kCharacterInitRestitution, character_))
 			return false;
 
 		models_.push_back(character_);
@@ -286,80 +294,60 @@ namespace ba
 		if (!LoadCharacter())
 			return false;
 
-		// Create a red box 'ModelData'.
-		//
-		GeometryGenerator::Geometry geo;
-		GeometryGenerator::CreateBox(game::kBoxSize.x, game::kBoxSize.y, game::kBoxSize.z, geo);
+		GeometryGenerator::Geometry box_geo;
+		GeometryGenerator::CreateBox(game::kBoxSize.x, game::kBoxSize.y, game::kBoxSize.z, box_geo);
 
+		//
+		// Create 'ModelData'
+		//
+
+		// Model data for box.
 		red_box_ = new ModelData;
-
-		if (!red_box_->Init(device_, geo, game::kBoxLocalTransform, ModelData::kRed))
+		if (!red_box_->Init(device_, box_geo, game::kBoxLocalTransform))
 			return false;
-		//__
 
-		// Create a yellow box 'ModelData'.
+		// Model data for ground.
+		ground_ = new ModelData;
+		if (!ground_->Init(device_, box_geo, game::kGroundLocalTransform))
+			return false;
+
 		//
-		ylw_box_ = new ModelData;
-
-		if (!ylw_box_->Init(device_, geo, game::kBoxLocalTransform, ModelData::kYellow))
-			return false;
-		//__
-
-		// Create a black box 'ModelData'.
+		// Create Models
 		//
-		blk_box_ = new ModelData;
 
-		if (!blk_box_->Init(device_, geo, game::kBoxLocalTransform, ModelData::kBlack))
+		// Ground model.
+		//
+		Model* model = new Model(kGroundName, ground_, timer_);
+
+		model->set_scale(kGroundInitScale);
+		model->set_rotation(kGroundInitRotation);
+		model->set_translation(kGroundInitTranslation);
+		model->RecalculateWorldTransform();
+		model->set_color_type(kGroundInitColorType);
+		if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kAxisAlignedBox, game::kBoxRestitutions, model))
 			return false;
+
+		models_.push_back(model);
 		//__
 
+		// Box models.
+		//
+		for (int i = 0; i < kBoxCount; ++i)
+		{
+			model = new Model(kBoxNames[i], red_box_, timer_);
 
-		Model* model = new Model(red_box_, timer_);
+			model->set_scale(kBoxInitScales[i]);
+			model->set_rotation(kBoxInitRotations[i]);
+			model->set_translation(kBoxInitTranslations[i]);
+			model->RecalculateWorldTransform();
 
-		model->set_scale(kBox01InitScale);
-		model->set_rotation(kBox01InitRotation);
-		model->set_translation(kBox01InitTranslation);
-		model->RecalculateWorldTransform();
-		if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kAxisAlignedBox, game::kBoxRestitutions, model))
-			return false;
+			model->set_color_type(kBoxInitColorType[i]);
 
-		models_.push_back(model);
+			if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kAxisAlignedBox, game::kBoxRestitutions, model))
+				return false;
 
-
-		model = new Model(ylw_box_, timer_);
-
-		model->set_scale(kBox02InitScale);
-		model->set_rotation(kBox02InitRotation);
-		model->set_translation(kBox02InitTranslation);
-		model->RecalculateWorldTransform();
-		if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kAxisAlignedBox, game::kBoxRestitutions, model))
-			return false;
-
-		models_.push_back(model);
-
-
-		model = new Model(blk_box_, timer_);
-
-		model->set_scale(kBox03InitScale);
-		model->set_rotation(kBox03InitRotation);
-		model->set_translation(kBox03InitTranslation);
-		model->RecalculateWorldTransform();
-		if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kAxisAlignedBox, game::kBoxRestitutions, model))
-			return false;
-
-		models_.push_back(model);
-
-
-		model = new Model(red_box_, timer_);
-
-		model->set_scale(kBox04InitScale);
-		model->set_rotation(kBox04InitRotation);
-		model->set_translation(kBox04InitTranslation);
-		model->RecalculateWorldTransform();
-		if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kAxisAlignedBox, game::kBoxRestitutions, model))
-			return false;
-
-		models_.push_back(model);
+			models_.push_back(model);
+		}
 
 		return true;
 	}
@@ -376,16 +364,6 @@ namespace ba
 		{
 			delete red_box_;
 			red_box_ = nullptr;
-		}
-		if (ylw_box_)
-		{
-			delete ylw_box_;
-			ylw_box_ = nullptr;
-		}
-		if (blk_box_)
-		{
-			delete blk_box_;
-			blk_box_ = nullptr;
 		}
 
 		// Destroy models.

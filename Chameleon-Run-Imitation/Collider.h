@@ -35,6 +35,12 @@ namespace ba
 			//  and if not, it is the other index different from the center index.
 			virtual void UpdateDomainIndices() = 0;
 
+			//
+			// Accessors
+			//
+
+			Model* model();
+
 		protected:
 			Model* model_;
 			EPrimitiveType primitive_type_;

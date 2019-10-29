@@ -1,10 +1,11 @@
 #include "stdafx.h"
+#include "Constants.h"
 #include "Character.h"
 
 namespace ba
 {
-	Character::Character(ModelData* model_data, Timer* timer) :
-		PhysicsModel(model_data, timer),
+	Character::Character(const std::string& name, ModelData* model_data, Timer* timer) :
+		PhysicsModel(name, model_data, timer),
 		acc_z_(0.0f),
 		max_vel_z_(0.0f),
 		jump_vel_(0.0f, 0.0f, 0.0f),
@@ -34,7 +35,7 @@ namespace ba
 		set_velocity(vel);
 		//__
 
-		if (static_cast<float>(timer_->get_total_time()) - jump_started_time_ > game::kJumpEnableTime)
+		if (static_cast<float>(timer_->get_total_time()) - jump_started_time_ > scene01::kJumpEnableTime)
 		{
 			b_jump_btn_enable_ = true;
 		}
@@ -44,18 +45,18 @@ namespace ba
 	{
 		PhysicsModel::OnCollision(info);
 
-		rest_jump_count_ = game::kMaxJumpCount;
+		rest_jump_count_ = scene01::kMaxJumpCount;
 	}
 
 	void Character::UpdateOnKeyInput(bool key_pressed[256], bool key_switch[256])
 	{
 		if (key_switch['A'])
 		{
-			model_data_->ChangeColor(ModelData::kYellow);
+			set_color_type(kYellow);
 		}
 		else
 		{
-			model_data_->ChangeColor(ModelData::kRed);
+			set_color_type(kRed);
 		}
 
 		if (rest_jump_count_ > 0 && b_jump_btn_enable_ && key_pressed[VK_SPACE])
@@ -65,7 +66,9 @@ namespace ba
 			b_jump_btn_enable_ = false;
 
 			// Do jump.
-			AccumulateVelocity(jump_vel_);
+			XMFLOAT3 vel = velocity_xf();
+			set_velocity(XMFLOAT3(vel.x, jump_vel_.y, vel.z));
+			//AccumulateVelocity(jump_vel_);
 			jump_started_time_ = static_cast<float>(timer_->get_total_time());
 		}
 	}

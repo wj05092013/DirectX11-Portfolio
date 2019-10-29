@@ -14,7 +14,7 @@ namespace ba
 	class Character : public physics::PhysicsModel
 	{
 	public:
-		Character(ModelData* model_data, Timer* timer);
+		Character(const std::string& name, ModelData* model_data, Timer* timer);
 		~Character() override;
 
 		void Update() override;

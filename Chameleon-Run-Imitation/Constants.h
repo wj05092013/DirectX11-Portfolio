@@ -1,9 +1,10 @@
 #pragma once
 
 /*
-PCH: Yes
+PCH: No
 */
 
+#include "Model.h"
 #include "FreeViewpointCamera.h"
 #include "RotationalCamera.h"
 
@@ -37,6 +38,7 @@ namespace ba
 		//
 
 		extern const UINT kShadowMapSize;
+		extern const float kSceneBoundsRadius;
 
 		extern const float kFogStart;
 		extern const float kFogRange;
@@ -58,6 +60,13 @@ namespace ba
 		extern const XMMATRIX kBoxLocalTransform;
 		extern const float kBoxRestitutions[6];
 
+		// Model data of grounds.
+		extern const float kGroundSizeX;
+		extern const float kGroundSizeZ;
+		extern const UINT kGroundSliceCountX;
+		extern const UINT kGroundSliceCountZ;
+		extern const XMMATRIX kGroundLocalTransform;
+
 		// Materials.
 		//
 		extern const light::Material kDefaultMaterial;
@@ -67,9 +76,17 @@ namespace ba
 
 		extern const light::Material kMaterials[4];
 		//__
-		
+	}
+
+	namespace scene01
+	{
+		//
+		// Models
+		//
+
 		// Main character.
 		//
+		extern const std::string kCharacterName;
 		extern const XMFLOAT3 kCharacterInitScale;
 		extern const XMFLOAT4 kCharacterInitRotation;
 		extern const XMFLOAT3 kCharacterInitTranslation;
@@ -85,30 +102,26 @@ namespace ba
 		extern const int kMaxJumpCount;
 		extern const XMFLOAT3 kCharacterJumpVelocity;
 		//__
-	}
 
-	namespace scene01
-	{
 		// Spheres.
 
 		// Boxes.
 		//
-		extern const XMFLOAT3 kBox01InitScale;
-		extern const XMFLOAT4 kBox01InitRotation;
-		extern const XMFLOAT3 kBox01InitTranslation;
-		
-		extern const XMFLOAT3 kBox02InitScale;
-		extern const XMFLOAT4 kBox02InitRotation;
-		extern const XMFLOAT3 kBox02InitTranslation;
-
-		extern const XMFLOAT3 kBox03InitScale;
-		extern const XMFLOAT4 kBox03InitRotation;
-		extern const XMFLOAT3 kBox03InitTranslation;
-
-		extern const XMFLOAT3 kBox04InitScale;
-		extern const XMFLOAT4 kBox04InitRotation;
-		extern const XMFLOAT3 kBox04InitTranslation;
+		extern const int kBoxCount;
+		extern const std::string kBoxNames[10];
+		extern const XMFLOAT3 kBoxInitScales[10];
+		extern const XMFLOAT4 kBoxInitRotations[10];
+		extern const XMFLOAT3 kBoxInitTranslations[10];
+		extern const Model::EColorType kBoxInitColorType[10];
 		//__
+
+		// Ground.
+		extern const std::string kGroundName;
+		extern const XMFLOAT3 kGroundInitScale;
+		extern const XMFLOAT4 kGroundInitRotation;
+		extern const XMFLOAT3 kGroundInitTranslation;
+		extern const Model::EColorType kGroundInitColorType;
+
 
 		//
 		// Cameras Settings
@@ -125,6 +138,7 @@ namespace ba
 		extern const FreeViewpointCamera::FreeViewpointCameraDesc kFVCamInitDesc;
 
 		// Rotational camera.
+		extern const float kRTCamInitTargetDiffZ;
 		extern const XMFLOAT3 kRTCamInitPos;
 		extern const XMFLOAT3 kRTCamInitTarget;
 		extern const XMFLOAT3 kRTCamInitUp;

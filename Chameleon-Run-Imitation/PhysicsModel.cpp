@@ -6,8 +6,8 @@ namespace ba
 	{
 		const XMVECTOR PhysicsModel::kGravityAcceleration = XMVectorSet(0.0f, -9.8f, 0.0f, 0.0f);
 
-		PhysicsModel::PhysicsModel(ModelData* model_data, Timer* timer) :
-			Model(model_data, timer, kPhysics),
+		PhysicsModel::PhysicsModel(const std::string& name, ModelData* model_data, Timer* timer) :
+			Model(name, model_data, timer, kPhysics),
 			mass_(0.0f),
 			velocity_(0.0f, 0.0f, 0.0f),
 			net_force_(0.0f, 0.0f, 0.0f),
@@ -21,11 +21,20 @@ namespace ba
 
 		void PhysicsModel::OnCollision(const collision::CollisionInfo& info)
 		{
+			// Debug
+			//
+			if (info.opponent->model()->name() == "box07")
+			{
+				int a = 0;
+			}
+			//__
+
 			set_translation(translation_xv() + info.overlapped * info.normal);
 
 			XMVECTOR velocity = velocity_xv();
-			velocity = velocity - (1.0f + info.restitution) * XMVector3Dot(velocity, info.normal)*info.normal;
-			set_velocity(velocity);
+			//velocity = velocity - (1.0f + info.restitution) * XMVector3Dot(velocity, info.normal)*info.normal;
+			AccumulateVelocity(-(1.0f + info.restitution) * XMVector3Dot(velocity, info.normal) * info.normal);
+			//set_velocity(velocity);
 		}
 
 		void PhysicsModel::Update()
@@ -69,7 +78,7 @@ namespace ba
 			XMStoreFloat3(&net_force_, net_force_xv() + force);
 		}
 
-		void PhysicsModel::SetGravity(bool enable)
+		void PhysicsModel::EnableGravity(bool enable)
 		{
 			if (b_gravity_ == enable)
 				return;

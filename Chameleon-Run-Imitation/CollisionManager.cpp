@@ -350,7 +350,7 @@ namespace ba
 							float result_restitution = 0.0f;
 							collision_info.normal = XMVectorZero();
 
-							// Interpolate normals, restitution factors.
+							// Interpolate normals, restitution factors between multiple planes of the target box collider.
 							for (int i = 0; i < front_plane_count; ++i)
 							{
 								// 'front_plane_indices[i]' is current plane's index.
@@ -363,7 +363,7 @@ namespace ba
 
 							// Set collision info.
 							collision_info.normal = XMVector3Normalize(collision_info.normal);
-							collision_info.restitution = result_restitution;
+							collision_info.restitution = main_collider->restitution_ * result_restitution;
 
 							// Calculate the overlapped distance in the main spherer collider.
 							collision_info.overlapped = main_collider->dx_bounding_sphere_.Radius - std::sqrt(dist_square_sum);
