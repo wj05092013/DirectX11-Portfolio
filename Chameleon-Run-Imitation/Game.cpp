@@ -31,6 +31,12 @@ bool ba::Game::OnResize()
 	if (!current_scene_->OnResize(client_width_, client_height_))
 		return false;
 
+	Renderer::ScreenDesc screen_desc;
+	screen_desc.rtv = rtv_;
+	screen_desc.dsv = dsv_;
+	screen_desc.viewport = &viewport_;
+	renderer_.set_screen_desc(screen_desc);
+
 	return true;
 }
 

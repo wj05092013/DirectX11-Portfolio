@@ -2,3 +2,5 @@ impl
 	bug: box07 저항력 작용 안함
 	Renderer
 		shadow map, ssao map 사용 여부에 따라 다르게 처리
+	Collision
+		정확한 물리 법칙 적용
