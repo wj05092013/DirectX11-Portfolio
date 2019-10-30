@@ -75,7 +75,7 @@ namespace ba
 	{
 	}
 
-	void Model::OnCollision(const collision::CollisionInfo& info)
+	void Model::OnCollision(const physics::CollisionInfo& info)
 	{
 		// Do nothing.
 	}

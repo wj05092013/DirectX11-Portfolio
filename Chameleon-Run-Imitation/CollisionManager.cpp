@@ -2,8 +2,55 @@
 
 namespace ba
 {
-	namespace collision
+	namespace physics
 	{
+		//
+		// Helpers
+		//
+
+		struct PhysicsSphere
+		{
+			float mass;
+			float restitution;
+			XMVECTOR center;
+			XMVECTOR velocity;
+		};
+
+		void CalcAfterCollisionVelocity(const PhysicsSphere& s0, const PhysicsSphere& s1, XMVECTOR& out_v0, XMVECTOR& out_v1)
+		{
+			// Regard the vector from center of s0 to center of s1 as the normal vector of this collision.
+			XMVECTOR n = XMVector3Normalize(s1.center - s0.center);
+
+			// Get velocities in the direction of the normal vector.
+			XMVECTOR v0_n = XMVector3Dot(s0.velocity, n) * n;
+			XMVECTOR v1_n = XMVector3Dot(s1.velocity, n) * n;
+
+			// Get velocities in the direction of the tangent vector of this collision.
+			XMVECTOR v0_t = XMVectorSubtract(s0.velocity, v0_n);
+			XMVECTOR v1_t = XMVectorSubtract(s1.velocity, v1_n);
+
+			// Get the final coefficient of restitution.
+			float e = s0.restitution * s1.restitution;
+
+			// Caclulate the velocities in the direction of the normal vector after collision.
+			//  (Using the law of conservation of momentum and the equation of the coefficient of restitution.)
+			XMVECTOR out_v0_n = ((s0.mass - s1.mass * e) * v0_n + (1.0f + e) * s1.mass * v1_n) / (s0.mass + s1.mass);
+			XMVECTOR out_v1_n = e * (v0_n - v1_n) + out_v0_n;
+
+			// The result vector is sum of tangent and normal vecters.
+			out_v0 = v0_t + out_v0_n;
+			out_v1 = v1_t + out_v1_n;
+		}
+
+		void CalcAfterCollisionVelocity(const XMVECTOR& v, const XMVECTOR normal, float e, XMVECTOR& out_v)
+		{
+			out_v = -(e + 1) * XMVector3Dot(v, normal) * normal + v;
+		}
+
+		//
+		// CollisionManager Class
+		//
+
 		CollisionManager::CollisionManager()
 		{
 		}
@@ -69,7 +116,7 @@ namespace ba
 
 				// Compute and store each planes' equations in local space.
 				XMVECTOR plane_eq[6];
-				SetAABBPlaneEquations(aabb_collider->dx_bounding_box_, plane_eq);
+				mathhelper::SetAABBPlaneEquations(aabb_collider->dx_bounding_box_, plane_eq);
 				for (int i = 0; i < 6; ++i)
 				{
 					aabb_collider->planes_[i].plane_eq = plane_eq[i];
@@ -199,34 +246,45 @@ namespace ba
 
 						if (main_bounding_sphere.Intersects(target_bounding_sphere))
 						{
+							PhysicsModel* main_model = reinterpret_cast<PhysicsModel*>(main_collider->model_);
+							PhysicsModel* target_model = reinterpret_cast<PhysicsModel*>(target_collider->model_);
+
+							PhysicsSphere main_sphere{
+								main_model->mass(), main_collider->restitution_,
+								XMLoadFloat3(&main_bounding_sphere.Center), main_model->velocity_xv()
+							};
+							PhysicsSphere target_sphere{
+								target_model->mass(), target_collider->restitution_,
+								XMLoadFloat3(&target_bounding_sphere.Center), target_model->velocity_xv()
+							};
+
+							// Calculate the velocities of the models after this collision.
+							XMVECTOR main_vel =XMVectorZero();
+							XMVECTOR target_vel = XMVectorZero();
+							CalcAfterCollisionVelocity(main_sphere, target_sphere, main_vel, target_vel);
+
+							// Update the velocities.
+							main_model->set_velocity(main_vel);
+							target_model->set_velocity(target_vel);
+
+							XMVECTOR center_to_center = XMLoadFloat3(&target_bounding_sphere.Center) - XMLoadFloat3(&main_bounding_sphere.Center);
+							XMVECTOR target_normal = XMVector3Normalize(center_to_center);
+							XMVECTOR main_normal = -target_normal;
+
+							// Calculate the overlapped distance between the two colliders
+							//  and translate the models in the direction of the normal vector as half of the overlapped distance.
+							float overlapped = main_bounding_sphere.Radius + target_bounding_sphere.Radius - XMVectorGetX(XMVector3Length(center_to_center));
+							main_model->set_translation(main_model->translation_xv() + 0.5f * overlapped * main_normal);
+							target_model->set_translation(target_model->translation_xv() + 0.5f * overlapped * target_normal);
+
 							CollisionInfo collision_info;
 
-							// Calculate restitution factor.
-							float restitution = main_collider->restitution_ * target_collider->restitution_;
-							collision_info.restitution = restitution;
-
-							XMVECTOR center_to_center = XMLoadFloat3(&main_bounding_sphere.Center) - XMLoadFloat3(&target_bounding_sphere.Center);
-
-							// Set main collider's normal vector.
-							collision_info.normal = XMVector3Normalize(center_to_center);
-
-							// Calculate the overlapped distance between the two colliders.
-							collision_info.overlapped = main_bounding_sphere.Radius + target_bounding_sphere.Radius - XMVectorGetX(XMVector3Length(center_to_center));
-							collision_info.overlapped *= 0.5f;
-
-							// Set opponent collider.
-							collision_info.opponent = target_collider;
-
 							// Deliver collision information to the main collider.
+							collision_info.opponent = target_collider;
 							main_collider->OnCollision(collision_info);
 
-							// Set target collider's normal vector.
-							collision_info.normal = -collision_info.normal;
-
-							// Set opponent collider.
-							collision_info.opponent = main_collider;
-
 							// Deliver collision information to the target collider.
+							collision_info.opponent = main_collider;
 							target_collider->OnCollision(collision_info);
 						}
 					}
@@ -267,34 +325,34 @@ namespace ba
 
 						if (main_bounding_sphere.Intersects(target_bounding_sphere))
 						{
-							CollisionInfo collision_info;
+							PhysicsModel* main_model = reinterpret_cast<PhysicsModel*>(main_collider->model_);
 
-							// Calculate restitution factor.
-							float restitution = main_collider->restitution_ * target_collider->restitution_;
-							collision_info.restitution = restitution;
+							// Calculate coefficient of restitution.
+							float e = main_collider->restitution_ * target_collider->restitution_;
 
+							// Regard the vector from center of target sphere to center of main sphere as the normal vector of this collision.
 							XMVECTOR center_to_center = XMLoadFloat3(&main_bounding_sphere.Center) - XMLoadFloat3(&target_bounding_sphere.Center);
+							XMVECTOR normal = XMVector3Normalize(center_to_center);
 
-							// Set main collider's normal vector.
-							collision_info.normal = XMVector3Normalize(center_to_center);
+							// Velocity of main sphere.
+							XMVECTOR vel = main_model->velocity_xv();
+							
+							// Calculate and update the velocity after this collision.
+							CalcAfterCollisionVelocity(vel, normal, e, vel);
+							main_model->set_velocity(vel);
 
 							// Calculate the overlapped distance between the two colliders.
-							collision_info.overlapped = main_bounding_sphere.Radius + target_bounding_sphere.Radius - XMVectorGetX(XMVector3Length(center_to_center));
+							float overlapped = main_bounding_sphere.Radius + target_bounding_sphere.Radius - XMVectorGetX(XMVector3Length(center_to_center));
+							main_model->set_translation(main_model->translation_xv() + overlapped * normal);
 
-							// Set opponent collider.
-							collision_info.opponent = target_collider;
+							CollisionInfo collision_info;
 
 							// Deliver collision information to the main collider.
+							collision_info.opponent = target_collider;
 							main_collider->OnCollision(collision_info);
 
-							collision_info.overlapped = 0.0f;
-							collision_info.restitution = 0.0f;
-							collision_info.normal = XMVectorZero();
-
-							// Set opponent collider.
-							collision_info.opponent = main_collider;
-
 							// Deliver collision information to the target collider.
+							collision_info.opponent = main_collider;
 							target_collider->OnCollision(collision_info);
 						}
 					}
@@ -312,12 +370,12 @@ namespace ba
 						target_collider->dx_bounding_box_.Transform(target_bounding_box, target_collider->model_->local_world());
 
 						XMVECTOR target_planes[6];
-						SetAABBPlaneEquations(target_bounding_box, target_planes);
+						mathhelper::SetAABBPlaneEquations(target_bounding_box, target_planes);
 						//__
 
 						if (main_bounding_sphere.Intersects(target_bounding_box))
 						{
-							CollisionInfo collision_info;
+							PhysicsModel* main_model = reinterpret_cast<PhysicsModel*>(main_collider->model_);
 
 							// Front planes' count cannot bigger than 3.
 							int front_plane_indices[3];
@@ -330,7 +388,7 @@ namespace ba
 							// Get planes' indices which the sphere's center is in front of.
 							for (int i = 0; i < 6; ++i)
 							{
-								XMVECTOR to_main_center = CalcVectorFromTo(target_planes[i], XMLoadFloat3(&main_bounding_sphere.Center));
+								XMVECTOR to_main_center = mathhelper::CalcVectorFromTo(target_planes[i], XMLoadFloat3(&main_bounding_sphere.Center));
 
 								// The sphere's center point is in front of the plane.
 								if (XMVectorGetX(XMVector3Dot(to_main_center, target_planes[i])) >= 0.0f)
@@ -347,41 +405,41 @@ namespace ba
 								}
 							}
 
-							float result_restitution = 0.0f;
-							collision_info.normal = XMVectorZero();
+							float target_restitution = 0.0f;
+							XMVECTOR normal = XMVectorZero();
 
-							// Interpolate normals, restitution factors between multiple planes of the target box collider.
+							// Interpolate normals, coefficients of restitution between multiple planes of the target box collider.
 							for (int i = 0; i < front_plane_count; ++i)
 							{
 								// 'front_plane_indices[i]' is current plane's index.
 
 								float intp_factor = front_plane_dist[i] / dist_sum;
 
-								collision_info.normal += intp_factor * target_planes[front_plane_indices[i]];
-								result_restitution += intp_factor * target_collider->planes_[front_plane_indices[i]].restitution;
+								normal += intp_factor * target_planes[front_plane_indices[i]];
+								target_restitution += intp_factor * target_collider->planes_[front_plane_indices[i]].restitution;
 							}
+							normal = XMVector3Normalize(normal);
 
-							// Set collision info.
-							collision_info.normal = XMVector3Normalize(collision_info.normal);
-							collision_info.restitution = main_collider->restitution_ * result_restitution;
+							// Final coefficients of restitution of this collision.
+							float e = main_collider->restitution_ * target_restitution;
 
-							// Calculate the overlapped distance in the main spherer collider.
-							collision_info.overlapped = main_bounding_sphere.Radius - std::sqrt(dist_square_sum);
+							// Calculate and update the velocity after this collision.
+							XMVECTOR vel = main_model->velocity_xv();
+							CalcAfterCollisionVelocity(vel, normal, e, vel);
+							main_model->set_velocity(vel);
 
-							// Set opponent collider.
-							collision_info.opponent = target_collider;
+							// Calculate the overlapped distance in the main sphere collider.
+							float overlapped = main_bounding_sphere.Radius - std::sqrt(dist_square_sum);
+							main_model->set_translation(main_model->translation_xv() + overlapped * normal);
+
+							CollisionInfo collision_info;
 
 							// Deliver collision information to the main collider.
+							collision_info.opponent = target_collider;
 							main_collider->OnCollision(collision_info);
 
-							collision_info.overlapped = 0.0f;
-							collision_info.restitution = 0.0f;
-							collision_info.normal = XMVectorZero();
-
-							// Set opponent collider.
-							collision_info.opponent = main_collider;
-
 							// Deliver collision information to the target collider.
+							collision_info.opponent = main_collider;
 							target_collider->OnCollision(collision_info);
 						}
 					}

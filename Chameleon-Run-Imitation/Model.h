@@ -40,7 +40,7 @@ namespace ba
 		virtual ~Model();
 
 		// If a collider for this model was created, this function would be called on collision.
-		virtual void OnCollision(const collision::CollisionInfo& info);
+		virtual void OnCollision(const physics::CollisionInfo& info);
 
 		// Should update the world transform matrix manually after changing the scaling, rotation and translation of thins model.
 		void RecalculateWorldTransform();

@@ -19,7 +19,7 @@ namespace ba
 
 		void Update() override;
 
-		void OnCollision(const collision::CollisionInfo& info) override;
+		void OnCollision(const physics::CollisionInfo& info) override;
 
 		void UpdateOnKeyInput(bool key_pressed[256], bool key_switch[256]);
 

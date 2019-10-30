@@ -18,10 +18,10 @@ namespace ba
 		const XMVECTOR kLightSteelBlue = { 0.69f, 0.77f, 0.87f, 1.0f };
 	}
 
-	namespace collision
+	namespace physics
 	{
 		const float kDomainStartZ = 0.0f;
-		const float kDomainSizeZ = 10.0f;
+		const float kDomainSizeZ = 1000.0f;
 	}
 
 	namespace game
@@ -69,7 +69,7 @@ namespace ba
 		// Materials.
 		const light::Material kDefaultMaterial = {
 			XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f),				// ambient
-			XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f),				// diffuse
+			XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f),				// diffuse
 			XMFLOAT4(0.4f, 0.4f, 0.4f, 8.0f),				// specular
 			XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f)				// reflection
 		};

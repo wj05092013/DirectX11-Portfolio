@@ -6,7 +6,7 @@ PCH: Yes
 
 namespace ba
 {
-	namespace collision
+	namespace physics
 	{
 		class SphereCollider : public Collider
 		{

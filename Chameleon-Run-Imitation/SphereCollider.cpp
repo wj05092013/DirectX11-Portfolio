@@ -3,7 +3,7 @@
 
 namespace ba
 {
-	namespace collision
+	namespace physics
 	{
 		SphereCollider::SphereCollider() :
 			restitution_(0.0f)

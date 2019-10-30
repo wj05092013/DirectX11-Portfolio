@@ -120,7 +120,7 @@ namespace ba
 		// Set effect variables' values to be used on start and resizing screen.
 		renderer_->SetEffectVariablesOnStartAndResize(evb_on_start_and_resize_);
 
-		collision::CollisionManager::GetInstance().Init();
+		physics::CollisionManager::GetInstance().Init();
 
 		// Load models.
 		if (!LoadModels())
@@ -135,7 +135,7 @@ namespace ba
 
 		DestroyModels();
 
-		collision::CollisionManager::GetInstance().Destroy();
+		physics::CollisionManager::GetInstance().Destroy();
 
 		renderer_->Destroy();
 
@@ -177,7 +177,7 @@ namespace ba
 			{
 				models_[i]->Update();
 			}
-			collision::CollisionManager::GetInstance().CheckCollision();
+			physics::CollisionManager::GetInstance().CheckCollision();
 		}
 	}
 
@@ -274,7 +274,7 @@ namespace ba
 		character_->set_max_velocity_z(scene01::kCharacterInitMaxVelocityZ);
 		character_->set_jump_velocity(scene01::kCharacterJumpVelocity);
 
-		if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kSphere, &scene01::kCharacterInitRestitution, character_))
+		if (!physics::CollisionManager::GetInstance().CreateCollider(physics::Collider::kSphere, &scene01::kCharacterInitRestitution, character_))
 			return false;
 
 		models_.push_back(character_);
@@ -325,7 +325,7 @@ namespace ba
 		model->set_translation(kGroundInitTranslation);
 		model->RecalculateWorldTransform();
 		model->set_color_type(kGroundInitColorType);
-		if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kAxisAlignedBox, game::kBoxRestitutions, model))
+		if (!physics::CollisionManager::GetInstance().CreateCollider(physics::Collider::kAxisAlignedBox, game::kBoxRestitutions, model))
 			return false;
 
 		models_.push_back(model);
@@ -348,7 +348,7 @@ namespace ba
 			model->set_mass(1.0f);
 			model->EnableGravity(true);
 
-			if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kSphere, &game::kSphereRestitution, model))
+			if (!physics::CollisionManager::GetInstance().CreateCollider(physics::Collider::kSphere, &game::kSphereRestitution, model))
 				return false;
 
 			models_.push_back(model);
@@ -368,7 +368,7 @@ namespace ba
 
 			model->set_color_type(kBoxInitColorType[i]);
 
-			if (!collision::CollisionManager::GetInstance().CreateCollider(collision::Collider::kAxisAlignedBox, game::kBoxRestitutions, model))
+			if (!physics::CollisionManager::GetInstance().CreateCollider(physics::Collider::kAxisAlignedBox, game::kBoxRestitutions, model))
 				return false;
 
 			models_.push_back(model);

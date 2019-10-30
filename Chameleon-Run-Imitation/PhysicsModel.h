@@ -14,7 +14,7 @@ namespace ba
 			PhysicsModel(const std::string& name, ModelData* model_data, Timer* timer);
 			~PhysicsModel() override;
 
-			void OnCollision(const collision::CollisionInfo& info) override;
+			void OnCollision(const physics::CollisionInfo& info) override;
 
 			// Update this models position using velocity and net force.
 			//  Also update the world transform of this model, automatically.

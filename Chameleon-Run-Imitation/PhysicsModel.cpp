@@ -19,14 +19,9 @@ namespace ba
 		{
 		}
 
-		void PhysicsModel::OnCollision(const collision::CollisionInfo& info)
+		void PhysicsModel::OnCollision(const physics::CollisionInfo& info)
 		{
-			set_translation(translation_xv() + info.overlapped * info.normal);
-
-			XMVECTOR velocity = velocity_xv();
-			//velocity = velocity - (1.0f + info.restitution) * XMVector3Dot(velocity, info.normal)*info.normal;
-			AccumulateVelocity(-(1.0f + info.restitution) * XMVector3Dot(velocity, info.normal) * info.normal);
-			//set_velocity(velocity);
+			Model::OnCollision(info);
 		}
 
 		void PhysicsModel::Update()

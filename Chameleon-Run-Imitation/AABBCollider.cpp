@@ -3,7 +3,7 @@
 
 namespace ba
 {
-	namespace collision
+	namespace physics
 	{
 		AABBCollider::AABBCollider() :
 			planes_{}

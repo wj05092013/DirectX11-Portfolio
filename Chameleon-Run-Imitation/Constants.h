@@ -25,7 +25,7 @@ namespace ba
 		extern const XMVECTOR kLightSteelBlue;
 	}
 
-	namespace collision
+	namespace physics
 	{
 		extern const float kDomainStartZ;
 		extern const float kDomainSizeZ;

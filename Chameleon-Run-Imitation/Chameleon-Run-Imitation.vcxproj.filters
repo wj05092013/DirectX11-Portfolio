@@ -58,12 +58,6 @@
     <Filter Include="Sources\Util">
       <UniqueIdentifier>{607526fa-3508-418f-ba8d-26c4b0c578c9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Includes\Collision">
-      <UniqueIdentifier>{0712ad96-45b9-40f7-9b69-af2d94bb9e2d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Collision">
-      <UniqueIdentifier>{13a6b75d-fe0a-4325-bbd8-667fd00bcfd9}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -195,23 +189,20 @@
     <ClInclude Include="Constants.h">
       <Filter>Includes\Game</Filter>
     </ClInclude>
-    <ClInclude Include="AABBCollider.h">
-      <Filter>Includes\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="Collider.h">
-      <Filter>Includes\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionManager.h">
-      <Filter>Includes\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="SphereCollider.h">
-      <Filter>Includes\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionHelper.h">
-      <Filter>Includes\Collision</Filter>
-    </ClInclude>
     <ClInclude Include="Character.h">
       <Filter>Includes\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="AABBCollider.h">
+      <Filter>Includes\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>Includes\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>Includes\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="SphereCollider.h">
+      <Filter>Includes\Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -323,26 +314,23 @@
     <ClCompile Include="PhysicsModel.cpp">
       <Filter>Sources\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="SphereCollider.cpp">
-      <Filter>Sources\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionManager.cpp">
-      <Filter>Sources\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="Collider.cpp">
-      <Filter>Sources\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="AABBCollider.cpp">
-      <Filter>Sources\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionHelper.cpp">
-      <Filter>Sources\Collision</Filter>
-    </ClCompile>
     <ClCompile Include="Character.cpp">
       <Filter>Sources\Game</Filter>
     </ClCompile>
     <ClCompile Include="Constants.cpp">
       <Filter>Sources\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="AABBCollider.cpp">
+      <Filter>Sources\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider.cpp">
+      <Filter>Sources\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>Sources\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="SphereCollider.cpp">
+      <Filter>Sources\Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

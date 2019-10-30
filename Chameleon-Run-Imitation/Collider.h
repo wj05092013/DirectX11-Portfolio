@@ -8,7 +8,7 @@ namespace ba
 {
 	class Model;
 
-	namespace collision
+	namespace physics
 	{
 		struct CollisionInfo;
 		

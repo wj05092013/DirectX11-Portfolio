@@ -6,8 +6,13 @@ PCH: Yes
 
 namespace ba
 {
-	namespace collision
+	namespace physics
 	{
+		struct CollisionInfo
+		{
+			Collider* opponent;
+		};
+
 		class CollisionManager
 		{
 		private:

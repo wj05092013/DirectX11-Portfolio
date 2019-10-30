@@ -2,7 +2,7 @@
 
 namespace ba
 {
-	namespace collision
+	namespace physics
 	{
 		Collider::Collider() :
 			model_(nullptr),

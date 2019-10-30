@@ -41,9 +41,19 @@ namespace ba
 		}
 	}
 
-	void Character::OnCollision(const collision::CollisionInfo& info)
+	void Character::OnCollision(const physics::CollisionInfo& info)
 	{
 		PhysicsModel::OnCollision(info);
+
+		// Set the x-value of translation and velocity to 0.
+		//
+		XMFLOAT3 translation = translation_xf();
+		XMFLOAT3 velocity = velocity_xf();
+
+		translation.x = 0.0f;
+		velocity.x = 0.0f;
+		set_translation(translation);
+		set_velocity(velocity);
 
 		rest_jump_count_ = scene01::kMaxJumpCount;
 	}

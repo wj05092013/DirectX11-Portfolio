@@ -59,7 +59,6 @@
 #include "GeometryGenerator.h"
 #include "Mesh.h"
 
-#include "CollisionHelper.h"
 #include "Collider.h"
 #include "SphereCollider.h"
 #include "AABBCollider.h"
