@@ -3,4 +3,6 @@ impl
 	Renderer
 		shadow map, ssao map 사용 여부에 따라 다르게 처리
 
-scale, rotation, translation 정보를 Transform  클래스로 묶어서 관리
+
+cmt
+	클래스 설명(abstract, singleton 등)
