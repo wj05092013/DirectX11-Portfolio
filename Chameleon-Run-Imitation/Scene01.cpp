@@ -31,8 +31,6 @@ namespace ba
 	//
 
 	scene01::Scene01::Scene01() :
-		scene_state_(kPause),
-
 		shadow_map_(nullptr),
 		ssao_map_(nullptr),
 		rt_camera_(nullptr),
@@ -74,8 +72,6 @@ namespace ba
 			return false;
 		}
 
-		scene_state_ = kRun;
-
 		return true;
 	}
 
@@ -84,24 +80,20 @@ namespace ba
 		// Initialize the directional lights.
 		InitLights(lights_);
 
-		// Initialize grahic components.
-		//
+		// Create grahic components.
 		shadow_map_ = GraphicComponentManager::GetInstance().CreateComponent<ShadowMap>("SHADOW_MAP");
 		ssao_map_ = GraphicComponentManager::GetInstance().CreateComponent<SSAOMap>("SSAO_MAP");
 		rt_camera_ = GraphicComponentManager::GetInstance().CreateComponent<RotationalCamera>("RT_CAMERA");
 
-		if (!shadow_map_->Init(device_, game::kShadowMapSize, game::kShadowMapSize))
-			return false;
+		// Initialize the ssao system.
 		if (!ssao_map_->Init(device_, dc_, client_width_, client_height_, kCamFovY, kCamFarZ))
 			return false;
 
+		// Initialize the shadow map.
+		if (!shadow_map_->Init(device_, game::kShadowMapSize, game::kShadowMapSize))
+			return false;
 		shadow_map_->set_directional_light(lights_);
 		shadow_map_->set_bounding_sphere(&bounding_sphere_);
-
-		rt_camera_->Init(kRTCamInitDesc);
-		rt_camera_->SetLens(kCamFovY, aspect_ratio_, kCamNearZ, kCamFarZ);
-		rt_camera_->LookAt(kRTCamInitPos, kRTCamInitTarget, kRTCamInitUp);
-		//__
 
 		// Renderer setting.
 		renderer_->set_shadow_map(shadow_map_);
@@ -117,22 +109,48 @@ namespace ba
 		evb_change_rarely_.to_tex = game::kToTex;
 		renderer_->SetEffectVariablesChangeRarely(evb_change_rarely_);
 
+		// Initialize the camera and calculate projection matrix.
+		rt_camera_->Init(kRTCamInitDesc);
+		rt_camera_->SetLens(kCamFovY, aspect_ratio_, kCamNearZ, kCamFarZ);
+
+		// Initialize camera and models.
+		if (!InitForRestart())
+			return false;
+
+		return true;
+	}
+
+	bool scene01::Scene01::InitForRestart()
+	{
+		// Calculate view matrix.
+		rt_camera_->LookAt(kRTCamInitPos, kRTCamInitTarget, kRTCamInitUp);
+
 		// Set effect variables' values to be used on start and resizing screen.
 		renderer_->SetEffectVariablesOnStartAndResize(evb_on_start_and_resize_);
 
+		// Initialize the collision system.
 		physics::CollisionManager::GetInstance().Init();
 
 		// Load models.
 		if (!LoadModels())
 			return false;
 
+		// The z-value of the rotational camera's target is always same as that of the character.
+		XMFLOAT3 center = kRTCamInitTarget;
+		center.z = character_->translation_xf().z + kRTCamInitTargetDiffZ;
+		rt_camera_->set_center_pos(center);
+
 		return true;
+	}
+
+	void scene01::Scene01::DestroyForRestart()
+	{
+		DestroyModels();
+		physics::CollisionManager::GetInstance().Destroy();
 	}
 
 	void scene01::Scene01::Destroy()
 	{
-		scene_state_ = kFinish;
-
 		DestroyModels();
 
 		physics::CollisionManager::GetInstance().Destroy();
@@ -163,15 +181,17 @@ namespace ba
 	void scene01::Scene01::Update()
 	{
 		// The z-value of the rotational camera's target is always same as that of the character.
-		XMFLOAT3 pos = kRTCamInitTarget;
-		pos.z = character_->translation_xf().z + kRTCamInitTargetDiffZ;
-		rt_camera_->set_center_pos(pos);
+		XMFLOAT3 center = kRTCamInitTarget;
+		center.z = character_->translation_xf().z + kRTCamInitTargetDiffZ;
+		rt_camera_->UpdateCenterPos(center);
 
+		// Update the members for rendering.
 		bounding_sphere_.center = rt_camera_->center_pos_xf();
 		shadow_map_->BuildShadowTransform();
 		rt_camera_->UpdateViewMatrix();
 
-		if (scene_state_ == kRun)
+		// Manage the scene state.
+		if (scene_state_ == kRunning)
 		{
 			for (UINT i = 0; i < models_.size(); ++i)
 			{
@@ -202,28 +222,48 @@ namespace ba
 
 	void scene01::Scene01::UpdateOnKeyInput(bool key_pressed[256], bool key_down[256], bool key_up[256])
 	{
-		character_->UpdateOnKeyInput(key_pressed, key_down, key_up);
+		switch (scene_state_)
+		{
+		case ba::Scene::kRunning:
+		{
+			character_->UpdateOnKeyInput(key_pressed, key_down, key_up);
+
+			if (key_down[VK_ESCAPE])
+				scene_state_ = kPaused;
+
+			break;
+		}
+		case ba::Scene::kLoaded:
+		{
+			if (key_down[VK_RETURN])
+				scene_state_ = kRunning;
+
+			break;
+		}
+		case ba::Scene::kPaused:
+		{
+			if (key_down[VK_ESCAPE])
+				scene_state_ = kRunning;
+
+			break;
+		}
+		case ba::Scene::kCleared:
+		case ba::Scene::kGameOver:
+		{
+			if (key_down[VK_RETURN])
+			{
+				DestroyForRestart();
+				InitForRestart();
+				scene_state_ = kLoaded;
+			}
+			break;
+		}
+		}
 
 		if (key_pressed['W'])
 			rt_camera_->Approach(static_cast<float>(timer_->get_delta_time()));
 		if (key_pressed['S'])
 			rt_camera_->StepBack(static_cast<float>(timer_->get_delta_time()));
-
-		if (key_down[VK_ESCAPE])
-		{
-			if (scene_state_ == kRun)
-			{
-				scene_state_ = kPause;
-			}
-			else if (scene_state_ == kPause)
-			{
-				scene_state_ = kRun;
-			}
-		}
-
-		if (scene_state_ == kRun)
-		{
-		}
 	}
 
 	void scene01::Scene01::OnMouseMove(HWND wnd, WPARAM w_par, int x, int y)
@@ -263,7 +303,7 @@ namespace ba
 
 	bool scene01::Scene01::LoadCharacter()
 	{
-		character_ = new Character(kCharacterName, sphere_, timer_);
+		character_ = new Character(kCharacterName, sphere_, this, timer_);
 
 		// Model class.
 		character_->set_scale(scene01::kCharacterInitScale);
@@ -325,7 +365,7 @@ namespace ba
 
 		// Ground model.
 		//
-		Model* model = new Model(kGroundName, ground_, timer_);
+		Model* model = new Model(kGroundName, ground_, this, timer_);
 
 		model->set_scale(kGroundInitScale);
 		model->set_rotation(kGroundInitRotation);
@@ -342,7 +382,7 @@ namespace ba
 		//
 		for (int i = 0; i < kSphereCount; ++i)
 		{
-			physics::PhysicsModel* model = new physics::PhysicsModel(kSphereNames[i], sphere_, timer_);
+			physics::PhysicsModel* model = new physics::PhysicsModel(kSphereNames[i], sphere_, this, timer_);
 
 			// Model class.
 			model->set_scale(kSphereInitScales[i]);
@@ -366,7 +406,7 @@ namespace ba
 		//
 		for (int i = 0; i < kBoxCount; ++i)
 		{
-			model = new Model(kBoxNames[i], box_, timer_);
+			model = new Model(kBoxNames[i], box_, this, timer_);
 
 			model->set_scale(kBoxInitScales[i]);
 			model->set_rotation(kBoxInitRotations[i]);

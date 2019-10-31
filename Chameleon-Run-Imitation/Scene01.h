@@ -13,14 +13,6 @@ namespace ba
 		class Scene01 : public Scene
 		{
 		public:
-			enum State
-			{
-				kPause = 0,
-				kRun,
-				kFinish
-			};
-
-		public:
 			Scene01();
 			~Scene01() override;
 
@@ -33,6 +25,8 @@ namespace ba
 		private:
 			// For memory deallocation on failing initialization of members.
 			bool InitImpl();
+			bool InitForRestart();
+			void DestroyForRestart();
 
 		public:
 			void Destroy() override;
@@ -54,8 +48,6 @@ namespace ba
 			void DestroyModels();
 
 		private:
-			State scene_state_;
-
 			// Graphic components.
 			ShadowMap* shadow_map_;
 			SSAOMap* ssao_map_;

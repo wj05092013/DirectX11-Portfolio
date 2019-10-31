@@ -6,12 +6,18 @@ ba::Scene::Scene() :
 	renderer_(nullptr),
 	timer_(nullptr),
 	client_width_(0),
-	client_height_(0)
+	client_height_(0),
+	scene_state_(kLoaded)
 {
 }
 
 ba::Scene::~Scene()
 {
+}
+
+void ba::Scene::set_scene_state(State state)
+{
+	scene_state_ = state;
 }
 
 bool ba::Scene::Init(ID3D11Device* device, ID3D11DeviceContext* dc, Renderer* renderer, Timer* timer, int client_width, int client_height)

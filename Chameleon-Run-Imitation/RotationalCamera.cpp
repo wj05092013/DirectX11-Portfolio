@@ -57,17 +57,27 @@ void ba::RotationalCamera::StepBack(float delta_time)
 	MoveCameraZ(-dist);
 }
 
-void ba::RotationalCamera::set_center_pos(const XMFLOAT3& pos)
+void ba::RotationalCamera::UpdateCenterPos(const XMFLOAT3& pos)
 {
-	set_center_pos(XMLoadFloat3(&pos));
+	UpdateCenterPos(XMLoadFloat3(&pos));
 }
 
-void ba::RotationalCamera::set_center_pos(const XMVECTOR& pos)
+void ba::RotationalCamera::UpdateCenterPos(const XMVECTOR& pos)
 {
 	XMVECTOR diff = pos - center_pos_xv();
 
 	XMStoreFloat3(&center_pos_, pos);
 	LookAt(position_w_xv() + diff, pos, XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
+}
+
+void ba::RotationalCamera::set_center_pos(const XMFLOAT3& pos)
+{
+	center_pos_ = pos;
+}
+
+void ba::RotationalCamera::set_center_pos(const XMVECTOR& pos)
+{
+	XMStoreFloat3(&center_pos_, pos);
 }
 
 void ba::RotationalCamera::set_rotation_rate(float rate)

@@ -6,8 +6,8 @@ namespace ba
 	{
 		const XMVECTOR PhysicsModel::kGravityAcceleration = XMVectorSet(0.0f, -9.8f, 0.0f, 0.0f);
 
-		PhysicsModel::PhysicsModel(const std::string& name, ModelData* model_data, Timer* timer) :
-			Model(name, model_data, timer, kPhysics),
+		PhysicsModel::PhysicsModel(const std::string& name, ModelData* model_data, Scene* scene, Timer* timer) :
+			Model(name, model_data, scene, timer, kPhysics),
 			mass_(0.0f),
 			velocity_(0.0f, 0.0f, 0.0f),
 			net_force_(0.0f, 0.0f, 0.0f),

@@ -4,8 +4,8 @@
 
 namespace ba
 {
-	Character::Character(const std::string& name, ModelData* model_data, Timer* timer) :
-		PhysicsModel(name, model_data, timer),
+	Character::Character(const std::string& name, ModelData* model_data, Scene* scene, Timer* timer) :
+		PhysicsModel(name, model_data, scene, timer),
 		acc_z_(0.0f),
 		max_vel_z_(0.0f),
 		jump_vel_(0.0f, 0.0f, 0.0f),
@@ -58,6 +58,7 @@ namespace ba
 		else
 		{
 			// Destroy this character.
+			scene_->set_scene_state(Scene::kGameOver);
 		}
 	}
 

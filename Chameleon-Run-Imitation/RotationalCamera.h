@@ -23,7 +23,6 @@ namespace ba
 		void Init(const RotationalCameraDesc& desc);
 		void Destroy() override;
 
-
 		//
 		// Modulate camera transform.
 		//
@@ -33,6 +32,9 @@ namespace ba
 		void Approach(float delta_time);
 		void StepBack(float delta_time);
 
+		// If this camera's center position is moving, this function must be called on per frame.
+		void UpdateCenterPos(const XMFLOAT3& pos);
+		void UpdateCenterPos(const XMVECTOR& pos);
 
 		//
 		// Mutators.
@@ -44,7 +46,6 @@ namespace ba
 		void set_min_view_radius(float radius);
 		void set_max_view_radius(float radius);
 		void set_approach_rate(float rate);
-
 
 		//
 		// Accessors.

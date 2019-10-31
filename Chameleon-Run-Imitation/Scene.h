@@ -28,6 +28,16 @@ namespace ba
 	*/
 	class Scene
 	{
+	public:
+		enum State
+		{
+			kRunning = 0,
+			kLoaded,
+			kPaused,
+			kCleared,
+			kGameOver
+		};
+		
 	protected:
 		// Only the class 'SceneManager' can call this constructor.
 		Scene();
@@ -54,6 +64,8 @@ namespace ba
 		virtual void OnMouseLBtnUp(HWND wnd, WPARAM w_par, int x, int y) {};
 		virtual void OnMouseRBtnUp(HWND wnd, WPARAM w_par, int x, int y) {};
 
+		void set_scene_state(State state);
+
 	protected:
 		ID3D11Device* device_;
 		ID3D11DeviceContext* dc_;
@@ -61,5 +73,7 @@ namespace ba
 		Timer* timer_;
 		int client_width_;
 		int client_height_;
+
+		State scene_state_;
 	};
 }

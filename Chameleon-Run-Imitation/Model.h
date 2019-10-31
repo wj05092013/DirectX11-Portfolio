@@ -6,6 +6,8 @@ PCH: Yes
 
 namespace ba
 {
+	class Scene;
+
 	class ModelData
 	{
 	public:
@@ -35,8 +37,8 @@ namespace ba
 		};
 
 	public:
-		Model(const std::string& name, ModelData* model_data, Timer* timer);
-		Model(const std::string& name, ModelData* model_data, Timer* timer, EModelType type);
+		Model(const std::string& name, ModelData* model_data, Scene* scene, Timer* timer);
+		Model(const std::string& name, ModelData* model_data, Scene* scene, Timer* timer, EModelType type);
 		virtual ~Model();
 
 		// If a collider for this model was created, this function would be called on collision.
@@ -94,6 +96,7 @@ namespace ba
 		XMFLOAT3	translation_;
 		XMMATRIX	local_world_;
 
+		Scene* scene_;
 		Timer* timer_;
 
 	private:

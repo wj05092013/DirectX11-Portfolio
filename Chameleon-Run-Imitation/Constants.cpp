@@ -220,7 +220,7 @@ namespace ba
 
 		// Rotational camera.
 		const float kRTCamInitTargetDiffZ = 3.0f;
-		const XMFLOAT3 kRTCamInitPos(10.0f, 10.0f, -20.0f);
+		const XMFLOAT3 kRTCamInitPos(12.0f, 12.0f, -15.0f);
 		const XMFLOAT3 kRTCamInitTarget{3.0f, 3.0f, kCharacterInitTranslation.z + kRTCamInitTargetDiffZ };
 		const XMFLOAT3 kRTCamInitUp(0.0f, 1.0f, 0.0f);
 		const RotationalCamera::RotationalCameraDesc kRTCamInitDesc = {

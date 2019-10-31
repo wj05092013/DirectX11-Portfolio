@@ -41,7 +41,7 @@ namespace ba
 	// Model class
 	//
 
-	Model::Model(const std::string& name, ModelData* model_data, Timer* timer) :
+	Model::Model(const std::string& name, ModelData* model_data, Scene* scene, Timer* timer) :
 		name_(name),
 		color_type_(kDefault),
 		material_(game::kMaterials[color_type_]),
@@ -51,12 +51,13 @@ namespace ba
 		rotation_(0.0f, 0.0f, 0.0f, 1.0f),
 		translation_(0.0f, 0.0f, 0.0f),
 		local_world_(XMMatrixIdentity()),
+		scene_(scene),
 		timer_(timer),
 		model_type_(kStatic)
 	{
 	}
 
-	Model::Model(const std::string& name, ModelData* model_data, Timer* timer, EModelType type) :
+	Model::Model(const std::string& name, ModelData* model_data, Scene* scene, Timer* timer, EModelType type) :
 		name_(name),
 		color_type_(kDefault),
 		material_(game::kMaterials[color_type_]),
@@ -66,6 +67,7 @@ namespace ba
 		rotation_(0.0f, 0.0f, 0.0f, 1.0f),
 		translation_(0.0f, 0.0f, 0.0f),
 		local_world_(XMMatrixIdentity()),
+		scene_(scene),
 		timer_(timer),
 		model_type_(type)
 	{

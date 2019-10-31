@@ -44,5 +44,6 @@ namespace ba
 	{
 		Scene* scene = new Type;
 		scenes_.insert({ add_scene_idx, scene });
+		++add_scene_idx;
 	}
 }

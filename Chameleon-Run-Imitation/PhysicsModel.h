@@ -11,7 +11,7 @@ namespace ba
 		class PhysicsModel : public Model
 		{
 		public:
-			PhysicsModel(const std::string& name, ModelData* model_data, Timer* timer);
+			PhysicsModel(const std::string& name, ModelData* model_data, Scene* scene, Timer* timer);
 			~PhysicsModel() override;
 
 			void OnCollision(const physics::CollisionInfo& info) override;
