@@ -193,11 +193,17 @@ namespace ba
 		// Manage the scene state.
 		if (scene_state_ == kRunning)
 		{
+			// Update all models.
 			for (UINT i = 0; i < models_.size(); ++i)
 			{
 				models_[i]->Update();
 			}
 			physics::CollisionManager::GetInstance().CheckCollision();
+
+			// Game cleared.
+			XMFLOAT3 pos = character_->translation_xf();
+			if (pos.z > kClearPosZ && pos.y > kClearPosY)
+				scene_state_ = kCleared;
 		}
 	}
 

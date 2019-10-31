@@ -226,5 +226,12 @@ namespace ba
 		const RotationalCamera::RotationalCameraDesc kRTCamInitDesc = {
 			0.1f, 10.0f, 40.0f, 20.0f
 		};
+
+		//
+		// Play Settings
+		//
+
+		const float kClearPosZ = 86.0f;
+		const float kClearPosY = 0.99f;
 	}
 }

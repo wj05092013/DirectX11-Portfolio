@@ -150,5 +150,12 @@ namespace ba
 		extern const XMFLOAT3 kRTCamInitTarget;
 		extern const XMFLOAT3 kRTCamInitUp;
 		extern const RotationalCamera::RotationalCameraDesc kRTCamInitDesc;
+
+		//
+		// Play Settings
+		//
+
+		extern const float kClearPosZ;
+		extern const float kClearPosY;
 	}
 }
