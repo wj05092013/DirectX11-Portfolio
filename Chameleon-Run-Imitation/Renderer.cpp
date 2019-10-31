@@ -44,7 +44,7 @@ void ba::Renderer::RenderScene(const std::vector<Model*>& models, const EffectVa
 
 	ID3DX11EffectTechnique* tech = nullptr;
 
-	tech = effects::kBasicEffect.tech(BasicEffect::kLight3);
+	tech = effects::kBasicEffect.tech(BasicEffect::kLight3Fog);
 
 	effects::kBasicEffect.SetEyePos(camera_->position_w_xf());
 	effects::kBasicEffect.SetView(camera_->view());

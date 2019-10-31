@@ -33,7 +33,7 @@ namespace ba
 		const UINT kShadowMapSize = 4096U;
 		const float kSceneBoundsRadius = 300.0f;
 
-		const float kFogStart = 5.0f;
+		const float kFogStart = 20.0f;
 		const float kFogRange = 20.0f;
 		const XMVECTOR kFogColor = color::kSilver;
 
