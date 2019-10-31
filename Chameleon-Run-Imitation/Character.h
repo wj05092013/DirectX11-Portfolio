@@ -21,7 +21,7 @@ namespace ba
 
 		void OnCollision(const physics::CollisionInfo& info) override;
 
-		void UpdateOnKeyInput(bool key_pressed[256], bool key_switch[256]);
+		void UpdateOnKeyInput(bool key_pressed[256], bool key_down[256], bool key_up[256]);
 
 		//
 		// Mutators
@@ -36,7 +36,6 @@ namespace ba
 		float max_vel_z_;
 		XMFLOAT3 jump_vel_;
 
-		bool b_jump_btn_enable_;
 		float jump_started_time_;
 		int rest_jump_count_;
 	};

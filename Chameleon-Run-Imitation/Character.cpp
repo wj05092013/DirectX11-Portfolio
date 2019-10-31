@@ -9,7 +9,6 @@ namespace ba
 		acc_z_(0.0f),
 		max_vel_z_(0.0f),
 		jump_vel_(0.0f, 0.0f, 0.0f),
-		b_jump_btn_enable_(true),
 		jump_started_time_(0.0f),
 		rest_jump_count_(2)
 	{
@@ -34,11 +33,6 @@ namespace ba
 
 		set_velocity(vel);
 		//__
-
-		if (static_cast<float>(timer_->get_total_time()) - jump_started_time_ > scene01::kJumpEnableTime)
-		{
-			b_jump_btn_enable_ = true;
-		}
 	}
 
 	void Character::OnCollision(const physics::CollisionInfo& info)
@@ -54,32 +48,37 @@ namespace ba
 		velocity.x = 0.0f;
 		set_translation(translation);
 		set_velocity(velocity);
+		//__
 
-		rest_jump_count_ = scene01::kMaxJumpCount;
-	}
-
-	void Character::UpdateOnKeyInput(bool key_pressed[256], bool key_switch[256])
-	{
-		if (key_switch['A'])
+		if (info.opponent->model()->color_type() == color_type_)
 		{
-			set_color_type(kYellow);
+			// Restore the jump count if the character collided with a box having same color.
+			rest_jump_count_ = scene01::kMaxJumpCount;
 		}
 		else
 		{
-			set_color_type(kRed);
+			// Destroy this character.
+		}
+	}
+
+	void Character::UpdateOnKeyInput(bool key_pressed[256], bool key_down[256], bool key_up[256])
+	{
+		 // Change color.
+		if (key_down['A'])
+		{
+			if(color_type_ == kYellow)
+				set_color_type(kRed);
+			else
+				set_color_type(kYellow);
 		}
 
-		if (rest_jump_count_ > 0 && b_jump_btn_enable_ && key_pressed[VK_SPACE])
+		// Do jump.
+		if (rest_jump_count_ > 0 && key_down[VK_SPACE])
 		{
 			--rest_jump_count_;
 
-			b_jump_btn_enable_ = false;
-
-			// Do jump.
 			XMFLOAT3 vel = velocity_xf();
 			set_velocity(XMFLOAT3(vel.x, jump_vel_.y, vel.z));
-			//AccumulateVelocity(jump_vel_);
-			jump_started_time_ = static_cast<float>(timer_->get_total_time());
 		}
 	}
 

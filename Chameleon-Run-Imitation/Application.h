@@ -147,7 +147,11 @@ namespace ba
 		// Cache keyboard inputs.
 		//
 		bool key_pressed_[256];
-		bool key_switch_[256];
+		bool key_down_[256];
+		bool key_up_[256];
+
+		WPARAM prev_key_down_;
+		WPARAM prev_key_up_;
 		//__
 	};
 }

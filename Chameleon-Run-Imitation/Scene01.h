@@ -41,7 +41,7 @@ namespace ba
 			void Update() override;
 			bool OnResize(int client_width, int client_height) override;
 
-			void UpdateOnKeyInput(bool key_pressed[256], bool key_switch[256]) override;
+			void UpdateOnKeyInput(bool key_pressed[256], bool key_down[256], bool key_up[256]) override;
 			void OnMouseMove(HWND wnd, WPARAM w_par, int x, int y) override;
 			void OnMouseLBtnDown(HWND wnd, WPARAM w_par, int x, int y) override;
 			void OnMouseRBtnDown(HWND wnd, WPARAM w_par, int x, int y) override;

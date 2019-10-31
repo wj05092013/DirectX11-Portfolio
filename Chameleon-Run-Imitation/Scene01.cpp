@@ -200,19 +200,26 @@ namespace ba
 		return true;
 	}
 
-	void scene01::Scene01::UpdateOnKeyInput(bool key_pressed[256], bool key_switch[256])
+	void scene01::Scene01::UpdateOnKeyInput(bool key_pressed[256], bool key_down[256], bool key_up[256])
 	{
-		character_->UpdateOnKeyInput(key_pressed, key_switch);
+		character_->UpdateOnKeyInput(key_pressed, key_down, key_up);
 
 		if (key_pressed['W'])
 			rt_camera_->Approach(static_cast<float>(timer_->get_delta_time()));
 		if (key_pressed['S'])
 			rt_camera_->StepBack(static_cast<float>(timer_->get_delta_time()));
 
-		if (key_switch[VK_ESCAPE])
-			scene_state_ = kPause;
-		else
-			scene_state_ = kRun;
+		if (key_down[VK_ESCAPE])
+		{
+			if (scene_state_ == kRun)
+			{
+				scene_state_ = kPause;
+			}
+			else if (scene_state_ == kPause)
+			{
+				scene_state_ = kRun;
+			}
+		}
 
 		if (scene_state_ == kRun)
 		{

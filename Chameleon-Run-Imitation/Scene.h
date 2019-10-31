@@ -46,7 +46,7 @@ namespace ba
 		virtual void Update() = 0;
 		virtual bool OnResize(int client_width, int client_height) = 0;
 
-		virtual void UpdateOnKeyInput(bool key_pressed[256], bool key_switch[256]) {};
+		virtual void UpdateOnKeyInput(bool key_pressed[256], bool key_down[256], bool key_up[256]) {};
 
 		virtual void OnMouseMove(HWND wnd, WPARAM w_par, int x, int y) {};
 		virtual void OnMouseLBtnDown(HWND wnd, WPARAM w_par, int x, int y) {};

@@ -26,7 +26,8 @@ ba::Application::Application() :
 	device_(nullptr), dc_(nullptr),
 	swap_chain_(nullptr), rtv_(nullptr), dsv_(nullptr),
 	depth_stencil_buffer_(nullptr), viewport_{},
-	b_4x_msaa_(true), msaa_quality_level_(0), sample_desc_{}
+	b_4x_msaa_(true), msaa_quality_level_(0), sample_desc_{},
+	key_pressed_{}, key_down_{}, key_up_{}, prev_key_down_(0), prev_key_up_(0)
 {
 	kApp = this;
 }
@@ -65,10 +66,13 @@ LRESULT ba::Application::WndProc(HWND hwnd, UINT msg, WPARAM w_par, LPARAM l_par
 
 	case WM_KEYDOWN:
 		key_pressed_[w_par] = true;
+		key_down_[w_par] = true;
+		prev_key_down_ = w_par;
 		break;
 	case WM_KEYUP:
 		key_pressed_[w_par] = false;
-		key_switch_[w_par] = !key_switch_[w_par];		// Toggle switch.
+		key_up_[w_par] = true;
+		prev_key_up_ = w_par;
 		break;
 
 	case WM_ACTIVATE:
@@ -159,6 +163,12 @@ void ba::Application::Update()
 	ShowFrameState();
 	UpdateOnKeyInput();
 	UpdateDirectX();
+
+	// Reinitialize the key down and key up states.
+	key_down_[prev_key_down_] = false;
+	key_up_[prev_key_up_] = false;
+	prev_key_down_ = 0;
+	prev_key_up_ = 0;
 }
 
 void ba::Application::ShowFrameState()

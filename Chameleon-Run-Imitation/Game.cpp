@@ -83,7 +83,7 @@ void ba::Game::DestroyDirectX()
 
 void ba::Game::UpdateOnKeyInput()
 {
-	current_scene_->UpdateOnKeyInput(key_pressed_, key_switch_);
+	current_scene_->UpdateOnKeyInput(key_pressed_, key_down_, key_up_);
 }
 
 void ba::Game::OnMouseMove(WPARAM w_par, int x, int y)
