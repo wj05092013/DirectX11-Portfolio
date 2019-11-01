@@ -78,9 +78,10 @@
 #include "ShadowMap.h"
 #include "SSAOMap.h"
 #include "Renderer.h"
+#include "Particle.h"
+#include "ParticleManager.h"
 
 #include "SceneManager.h"
 #include "Scene.h"
-
 #include "Application.h"
 #include "Game.h"

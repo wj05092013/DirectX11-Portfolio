@@ -50,6 +50,8 @@ namespace ba
 		tex_arr_size_ = e->GetVariableByName("tex_arr_size")->AsScalar();
 		tex_arr_ = e->GetVariableByName("tex_arr")->AsShaderResource();
 		rand_tex_ = e->GetVariableByName("rand_tex")->AsShaderResource();
+
+		return true;
 	}
 
 	void ParticleEffect::Destroy()

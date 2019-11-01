@@ -39,7 +39,7 @@ namespace ba
 		// Render scene.
 		virtual void Render() = 0;
 
-		// Update functions.
+		// UpdateParticles functions.
 		//
 		void Update();
 
@@ -67,7 +67,7 @@ namespace ba
 		// Initialize DirectX properties.
 		virtual bool InitDirectX();
 
-		// Release DirectX properties.
+		// Destroy DirectX properties.
 		virtual void DestroyDirectX();
 
 		// Called when the window is resized.

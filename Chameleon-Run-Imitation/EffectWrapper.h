@@ -12,7 +12,7 @@ namespace ba
 
 	[virtual functions]
 		bool Init()		- call base function
-		void Release()	- call base function(end)
+		void Destroy()	- call base function(end)
 	*/
 	class EffectWrapper : private Uncopiable
 	{

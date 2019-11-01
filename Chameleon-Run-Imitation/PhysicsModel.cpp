@@ -41,7 +41,7 @@ namespace ba
 			set_velocity(velocity);
 			set_translation(translation);
 
-			// Update the world transform of this model.
+			// UpdateParticles the world transform of this model.
 			RecalculateWorldTransform();
 		}
 

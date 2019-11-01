@@ -10,12 +10,34 @@ namespace ba
 		max_vel_z_(0.0f),
 		jump_vel_(0.0f, 0.0f, 0.0f),
 		jump_started_time_(0.0f),
-		rest_jump_count_(2)
+		rest_jump_count_(2),
+		smoke_particle_(nullptr)
 	{
 	}
 
 	Character::~Character()
 	{
+	}
+
+	bool Character::InitParticle(ID3D11Device* device)
+	{
+		std::vector<std::wstring> file_names;
+		game::GetCharacterParticleFileNames(file_names);
+
+		ID3D11ShaderResourceView* tex_arr_srv = nullptr;
+		ID3D11ShaderResourceView* rand_tex_srv = nullptr;
+		if (!TextureManager::GetInstance().CreateTex2DArrSRV(file_names, &tex_arr_srv))
+			return false;
+		if (!TextureManager::GetInstance().CreateRandomTex1DSRV(game::kRandomTexSize, &rand_tex_srv))
+			return false;
+
+		if(!ParticleManager::GetInstance().CreateParticle(
+			&effects::kSmokeParticleEffect, game::kCharacterMaxParticleCount,
+			tex_arr_srv, file_names.size(), rand_tex_srv, &smoke_particle_
+		))
+			return false;
+
+		return true;
 	}
 
 	void Character::Update()
@@ -33,6 +55,9 @@ namespace ba
 
 		set_velocity(vel);
 		//__
+
+		// UpdateParticles particle's emittion position.
+		smoke_particle_->set_emit_pos_xv(translation_xv() + XMLoadFloat3(&game::kCharacterParticleEmitPos));
 	}
 
 	void Character::OnCollision(const physics::CollisionInfo& info)
@@ -53,7 +78,7 @@ namespace ba
 		if (info.opponent->model()->color_type() == color_type_)
 		{
 			// Restore the jump count if the character collided with a box having same color.
-			rest_jump_count_ = scene01::kMaxJumpCount;
+			rest_jump_count_ = game::kCharacterMaxJumpCount;
 		}
 		else
 		{

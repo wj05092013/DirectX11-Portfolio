@@ -27,6 +27,24 @@ namespace ba
 	namespace game
 	{
 		//
+		// Initialization Function
+		//
+
+		void GetCharacterParticleFileNames(std::vector<std::wstring>& out_names)
+		{
+			int file_count = 30;
+			std::wstring path = L"Texture/Particle/Smoke/";
+			std::wstring extention = L".png";
+
+			out_names.resize(file_count);
+
+			for (int i = 0; i < file_count; ++i)
+			{
+				out_names[i] = path + std::to_wstring(i + 1) + extention;
+			}
+		}
+
+		//
 		// Rendering Settings
 		//
 
@@ -94,6 +112,29 @@ namespace ba
 		const light::Material kMaterials[4] = {
 			kDefaultMaterial, kRedMaterial, kYellowMaterial, kBlackMaterial
 		};
+
+		// Main character.
+		//
+		const float kCharacterInitMass = 1.0f;
+		const bool kCharacterInitGravityEnable = true;
+		const float kCharacterInitRestitution = 0.8f;
+
+		const float kCharacterInitAccelerationZ = 5.0f;
+		const float kCharacterInitMaxVelocityZ = 6.0f;
+
+		const float kCharacterJumpEnableTime = 0.2f;
+		const int kCharacterMaxJumpCount = 2;
+		const XMFLOAT3 kCharacterJumpVelocity(0.0f, 7.0f, 0.0f);
+
+		const UINT kCharacterMaxParticleCount = 30;
+		const XMFLOAT3 kCharacterParticleEmitPos = {0.0f, 0.0f, 0.0f};
+		//__
+
+		//
+		// Others
+		//
+
+		const UINT kRandomTexSize = 1024;
 	}
 
 	namespace scene01
@@ -106,17 +147,6 @@ namespace ba
 		const XMFLOAT3 kCharacterInitScale(1.0f, 1.0f, 1.0f);
 		const XMFLOAT4 kCharacterInitRotation(0.0f, 0.0f, 0.0f, 1.0f);
 		const XMFLOAT3 kCharacterInitTranslation(0.0f, 2.0f, 0.0f);
-
-		const float kCharacterInitMass = 1.0f;
-		const bool kCharacterInitGravityEnable = true;
-		const float kCharacterInitRestitution = 0.8f;
-
-		const float kCharacterInitAccelerationZ = 5.0f;
-		const float kCharacterInitMaxVelocityZ = 6.0f;
-
-		const float kJumpEnableTime = 0.2f;
-		const int kMaxJumpCount = 2;
-		const XMFLOAT3 kCharacterJumpVelocity(0.0f, 7.0f, 0.0f);
 		//__
 
 		// Spheres.

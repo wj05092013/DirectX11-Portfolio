@@ -17,7 +17,7 @@ namespace ba
 		void Destroy() override;
 
 		//
-		// Functions for Update
+		// Functions for UpdateParticles
 		//
 
 		// Call on every frame.

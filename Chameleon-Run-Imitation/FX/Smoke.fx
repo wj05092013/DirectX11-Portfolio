@@ -28,7 +28,7 @@ Texture1D rand_tex; // All components of texels have a value in the range [-1, 1
 
 cbuffer CBFixed
 {
-    float3 kAccelerationW = { 0.0f, 7.8f, 0.0f };
+    float3 kAccelerationW = { 0.0f, 0.2f, 0.0f };
 
     float2 kQuadTexCrd[4] =
     {
@@ -38,21 +38,20 @@ cbuffer CBFixed
 		float2(1.0f, 1.0f)
     };
 
-    float kEmitTimeInterval = 0.005f;
-    float kMaxLifeTime = 1.0f;
+    float kEmitTimeInterval = 1.0f;
+    float kMaxLifeTime = 3.0f;
 
     float2 kPtcSize = float2(3.0f, 3.0f);
-    float3 kPtcRGBColor = float3(1.0f, 1.0f, 1.0f);
 
-    float kPtcInitVelScale = 5.0f;
-    float kPtcInitVelScaleX = 0.5f;
-    float kPtcInitVelScaleY = 1.0f;
-    float kPtcInitVelScaleZ = 0.5f;
+    float kPtcInitVelScale = 1.0f;
+    float kPtcInitVelScaleX = 0.1f;
+    float kPtcInitVelScaleY = 0.1f;
+    float kPtcInitVelScaleZ = 0.1f;
 
 	// Types of particles.
 	//
     uint kTypeEmitter = 0;
-    uint kTypeFlare = 1;
+    uint kTypeSmoke = 1;
 };
 
 //
@@ -171,7 +170,7 @@ void StreamOutGS
             p.init_vel_w = vel;
             p.size_w = kPtcSize;
             p.age = 0.0f;
-            p.type = kTypeFlare;
+            p.type = kTypeSmoke;
 
             stream.Append(p);
 			//__

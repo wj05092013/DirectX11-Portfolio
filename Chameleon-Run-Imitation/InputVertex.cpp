@@ -128,7 +128,7 @@ bool ba::inputvertex::Particle::Init(ID3D11Device* device)
 	if (kInputLayout)
 		return false;
 
-	ID3DX11EffectTechnique* tech = effects::.tech();
+	ID3DX11EffectTechnique* tech = effects::kSmokeParticleEffect.tech(ParticleEffect::kStreamOut);
 	D3DX11_PASS_DESC pass_desc;
 	tech->GetPassByIndex(0)->GetDesc(&pass_desc);
 
@@ -153,12 +153,14 @@ void ba::inputvertex::Particle::Destroy()
 ba::inputvertex::PosNormalTex ba::inputvertex::kPosNormalTex;
 ba::inputvertex::PosNormalTexTangent ba::inputvertex::kPosNormalTexTangent;
 ba::inputvertex::PosNormalTexTanSkinned ba::inputvertex::kPosNormalTexTanSkinned;
+ba::inputvertex::Particle ba::inputvertex::kParticle;
 
 bool ba::inputvertex::InitAll(ID3D11Device* device)
 {
 	if (!kPosNormalTex.Init(device)) return false;
 	if (!kPosNormalTexTangent.Init(device)) { DestroyAll(); return false; }
 	if (!kPosNormalTexTanSkinned.Init(device)) { DestroyAll(); return false; }
+	if (!kParticle.Init(device)) { DestroyAll(); return false; }
 
 	return true;
 }
@@ -168,4 +170,5 @@ void ba::inputvertex::DestroyAll()
 	kPosNormalTex.Destroy();
 	kPosNormalTexTangent.Destroy();
 	kPosNormalTexTanSkinned.Destroy();
+	kParticle.Destroy();
 }

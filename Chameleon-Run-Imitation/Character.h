@@ -5,6 +5,7 @@ PCH: No
 */
 
 #include "PhysicsModel.h"
+#include "Particle.h"
 
 namespace ba
 {
@@ -16,6 +17,8 @@ namespace ba
 	public:
 		Character(const std::string& name, ModelData* model_data, Scene* scene, Timer* timer);
 		~Character() override;
+
+		bool InitParticle(ID3D11Device* device);
 
 		void Update() override;
 
@@ -38,5 +41,7 @@ namespace ba
 
 		float jump_started_time_;
 		int rest_jump_count_;
+
+		Particle* smoke_particle_;
 	};
 }

@@ -61,6 +61,9 @@
     <Filter Include="Texture\Particle">
       <UniqueIdentifier>{6a5234ef-53bb-4443-b9c3-8dd2b208cacd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Texture\Particle\Smoke">
+      <UniqueIdentifier>{1a383a3e-a381-4a70-9363-c9d813f597e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -210,6 +213,12 @@
     <ClInclude Include="ParticleEffect.h">
       <Filter>Includes\Graphics\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Includes\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleManager.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Effects.cpp">
@@ -341,6 +350,12 @@
     <ClCompile Include="ParticleEffect.cpp">
       <Filter>Sources\Graphics\Effect</Filter>
     </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Sources\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleManager.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Chameleon-Run-Imitation.rc">
@@ -354,95 +369,95 @@
     <Image Include="Chameleon-Run-Imitation.ico">
       <Filter>Resources</Filter>
     </Image>
-    <Image Include="Texture\smoke\0001.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\1.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0002.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\2.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0003.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\3.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0004.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\4.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0005.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\5.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0006.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\6.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0007.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\7.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0008.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\8.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0009.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\9.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0010.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\10.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0011.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\11.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0012.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\12.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0013.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\13.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0014.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\14.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0015.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\15.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0016.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\16.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0017.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\17.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0018.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\18.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0019.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\19.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0020.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\20.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0021.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\21.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0022.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\22.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0023.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\23.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0024.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\24.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0025.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\25.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0026.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\26.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0027.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\27.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0028.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\28.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0029.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\29.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-    <Image Include="Texture\smoke\0030.png">
-      <Filter>Texture\Particle</Filter>
+    <Image Include="Texture\Particle\Smoke\30.png">
+      <Filter>Texture\Particle\Smoke</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>

@@ -34,6 +34,12 @@ namespace ba
 	namespace game
 	{
 		//
+		// Initialization Function
+		//
+
+		void GetCharacterParticleFileNames(std::vector<std::wstring>& out_names);
+
+		//
 		// Rendering Settings
 		//
 
@@ -77,6 +83,29 @@ namespace ba
 
 		extern const light::Material kMaterials[4];
 		//__
+
+		// Main character.
+		//
+		extern const float kCharacterInitMass;
+		extern const bool kCharacterInitGravityEnable;
+		extern const float kCharacterInitRestitution;
+
+		extern const float kCharacterInitAccelerationZ;
+		extern const float kCharacterInitMaxVelocityZ;
+
+		extern const float kCharacterJumpEnableTime;
+		extern const int kCharacterMaxJumpCount;
+		extern const XMFLOAT3 kCharacterJumpVelocity;
+		
+		extern const UINT kCharacterMaxParticleCount;
+		extern const XMFLOAT3 kCharacterParticleEmitPos;
+		//__
+
+		//
+		// Others
+		//
+
+		extern const UINT kRandomTexSize;
 	}
 
 	namespace scene01
@@ -91,17 +120,6 @@ namespace ba
 		extern const XMFLOAT3 kCharacterInitScale;
 		extern const XMFLOAT4 kCharacterInitRotation;
 		extern const XMFLOAT3 kCharacterInitTranslation;
-
-		extern const float kCharacterInitMass;
-		extern const bool kCharacterInitGravityEnable;
-		extern const float kCharacterInitRestitution;
-
-		extern const float kCharacterInitAccelerationZ;
-		extern const float kCharacterInitMaxVelocityZ;
-
-		extern const float kJumpEnableTime;
-		extern const int kMaxJumpCount;
-		extern const XMFLOAT3 kCharacterJumpVelocity;
 		//__
 
 		// Spheres.

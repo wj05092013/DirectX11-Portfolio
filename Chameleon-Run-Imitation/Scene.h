@@ -9,7 +9,7 @@ namespace ba
 	/*
 	[pure virtual functions]
 		void Render()
-		void Update()
+		void UpdateParticles()
 		void OnResize()
 
 	[virtual functions]

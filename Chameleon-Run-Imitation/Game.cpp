@@ -53,7 +53,7 @@ bool ba::Game::InitDirectX()
 		return false;
 	if (!SceneManager::GetInstance().Init(device_, dc_, &renderer_, &timer_))
 		return false;
-	TextureManager::GetInstance().Init(device_);
+	TextureManager::GetInstance().Init(device_, dc_);
 
 	// Set screen descriptions participating on all kinds of rendering.
 	Renderer::ScreenDesc screen_desc;

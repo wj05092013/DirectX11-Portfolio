@@ -113,6 +113,9 @@ namespace ba
 		rt_camera_->Init(kRTCamInitDesc);
 		rt_camera_->SetLens(kCamFovY, aspect_ratio_, kCamNearZ, kCamFarZ);
 
+		// Initialize ParticleManager.
+		ParticleManager::GetInstance().Init(device_, dc_, timer_);
+
 		// Initialize camera and models.
 		if (!InitForRestart())
 			return false;
@@ -140,6 +143,9 @@ namespace ba
 		center.z = character_->translation_xf().z + kRTCamInitTargetDiffZ;
 		rt_camera_->set_center_pos(center);
 
+		// Reset emittion of particles.
+		ParticleManager::GetInstance().ResetParticles();
+		
 		return true;
 	}
 
@@ -151,6 +157,8 @@ namespace ba
 
 	void scene01::Scene01::Destroy()
 	{
+		ParticleManager::GetInstance().Destroy();
+
 		DestroyModels();
 
 		physics::CollisionManager::GetInstance().Destroy();
@@ -176,6 +184,9 @@ namespace ba
 
 		// Render on normal render targets.
 		renderer_->RenderScene(models_, evb_per_frame_);
+
+		// Draw particles.
+		ParticleManager::GetInstance().DrawParticles(rt_camera_);
 	}
 
 	void scene01::Scene01::Update()
@@ -185,7 +196,7 @@ namespace ba
 		center.z = character_->translation_xf().z + kRTCamInitTargetDiffZ;
 		rt_camera_->UpdateCenterPos(center);
 
-		// Update the members for rendering.
+		// UpdateParticles the members for rendering.
 		bounding_sphere_.center = rt_camera_->center_pos_xf();
 		shadow_map_->BuildShadowTransform();
 		rt_camera_->UpdateViewMatrix();
@@ -193,12 +204,13 @@ namespace ba
 		// Manage the scene state.
 		if (scene_state_ == kRunning)
 		{
-			// Update all models.
+			// Update all models and particles.
 			for (UINT i = 0; i < models_.size(); ++i)
 			{
 				models_[i]->Update();
 			}
 			physics::CollisionManager::GetInstance().CheckCollision();
+			ParticleManager::GetInstance().UpdateParticles();
 
 			// Game cleared.
 			XMFLOAT3 pos = character_->translation_xf();
@@ -209,7 +221,7 @@ namespace ba
 
 	bool scene01::Scene01::OnResize(int client_width, int client_height)
 	{
-		// Update the aspect ratio.
+		// UpdateParticles the aspect ratio.
 		client_width_ = client_width;
 		client_height_ = client_height;
 		aspect_ratio_ = aspect_ratio_ = static_cast<float>(client_width_) / static_cast<float>(client_height_);
@@ -319,15 +331,17 @@ namespace ba
 		character_->set_color_type(Model::kRed);
 
 		// PhysicsModel class.
-		character_->set_mass(scene01::kCharacterInitMass);
-		character_->EnableGravity(scene01::kCharacterInitGravityEnable);
+		character_->set_mass(game::kCharacterInitMass);
+		character_->EnableGravity(game::kCharacterInitGravityEnable);
 
 		// Character class.
-		character_->set_acceleration_z(scene01::kCharacterInitAccelerationZ);
-		character_->set_max_velocity_z(scene01::kCharacterInitMaxVelocityZ);
-		character_->set_jump_velocity(scene01::kCharacterJumpVelocity);
+		if (!character_->InitParticle(device_))
+			return false;
+		character_->set_acceleration_z(game::kCharacterInitAccelerationZ);
+		character_->set_max_velocity_z(game::kCharacterInitMaxVelocityZ);
+		character_->set_jump_velocity(game::kCharacterJumpVelocity);
 
-		if (!physics::CollisionManager::GetInstance().CreateCollider(physics::Collider::kSphere, &scene01::kCharacterInitRestitution, character_))
+		if (!physics::CollisionManager::GetInstance().CreateCollider(physics::Collider::kSphere, &game::kCharacterInitRestitution, character_))
 			return false;
 
 		models_.push_back(character_);

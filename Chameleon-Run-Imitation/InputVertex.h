@@ -87,6 +87,7 @@ namespace ba
 		extern PosNormalTex kPosNormalTex;
 		extern PosNormalTexTangent kPosNormalTexTangent;
 		extern PosNormalTexTanSkinned kPosNormalTexTanSkinned;
+		extern Particle kParticle;
 		//__
 	}
 }

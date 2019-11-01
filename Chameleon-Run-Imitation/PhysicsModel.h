@@ -16,7 +16,7 @@ namespace ba
 
 			void OnCollision(const physics::CollisionInfo& info) override;
 
-			// Update this models position using velocity and net force.
+			// UpdateParticles this models position using velocity and net force.
 			//  Also update the world transform of this model, automatically.
 			//  Integration method used is Modified Euler method.
 			void Update() override;

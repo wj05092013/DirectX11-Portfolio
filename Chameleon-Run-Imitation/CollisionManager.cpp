@@ -160,7 +160,7 @@ namespace ba
 
 		void CollisionManager::CheckCollision()
 		{
-			// Update domain indices of physics model's colliders.
+			// UpdateParticles domain indices of physics model's colliders.
 			for (auto iter = physics_model_collider.begin(); iter != physics_model_collider.end(); ++iter)
 			{
 				(*iter)->UpdateDomainIndices();
@@ -263,7 +263,7 @@ namespace ba
 							XMVECTOR target_vel = XMVectorZero();
 							CalcAfterCollisionVelocity(main_sphere, target_sphere, main_vel, target_vel);
 
-							// Update the velocities.
+							// UpdateParticles the velocities.
 							main_model->set_velocity(main_vel);
 							target_model->set_velocity(target_vel);
 
