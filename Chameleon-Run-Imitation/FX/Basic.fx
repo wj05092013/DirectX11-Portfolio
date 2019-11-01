@@ -114,7 +114,6 @@ struct SkinnedVSIn
 //
 
 // Output of the vertex shader.
-//
 struct VSOut
 {
     float4 pos_h : SV_POSITION;
@@ -124,10 +123,8 @@ struct VSOut
     float4 shadow_pos_h : TEXCOORD1;
     float4 screen_tex_h : TEXCOORD2;
 };
-//__
 
 // Vertex shader for rendering normal objects.
-//
 VSOut VS(VSIn vs_in)
 {
     VSOut vs_out;
@@ -145,10 +142,8 @@ VSOut VS(VSIn vs_in)
 
     return vs_out;
 }
-//__
 
 // Vertex shader for rendering skinned objects.
-//
 VSOut SkinnedVS(SkinnedVSIn vs_in)
 {
 	// Blending.
@@ -184,10 +179,8 @@ VSOut SkinnedVS(SkinnedVSIn vs_in)
 
     return vs_out;
 }
-//__
 
 // Pixel shader.
-//
 float4 PS(
 	VSOut ps_in,
 	uniform int lit_cnt,
@@ -275,7 +268,6 @@ float4 PS(
 
     return lit_color;
 }
-//__
 
 
 //

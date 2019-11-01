@@ -15,6 +15,7 @@ ba::ShadowMapEffect::ShadowMapEffect() :
 
 ba::ShadowMapEffect::~ShadowMapEffect()
 {
+	ShadowMapEffect::Destroy();
 }
 
 bool ba::ShadowMapEffect::Init(ID3D11Device* device, const std::wstring& file_name)

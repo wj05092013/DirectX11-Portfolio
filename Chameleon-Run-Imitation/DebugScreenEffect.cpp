@@ -9,6 +9,7 @@ ba::DebugScreenEffect::DebugScreenEffect() :
 
 ba::DebugScreenEffect::~DebugScreenEffect()
 {
+	DebugScreenEffect::Destroy();
 }
 
 bool ba::DebugScreenEffect::Init(ID3D11Device* device, const std::wstring& file_name)

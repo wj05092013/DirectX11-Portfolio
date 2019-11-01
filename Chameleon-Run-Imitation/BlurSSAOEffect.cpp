@@ -11,6 +11,7 @@ ba::BlurSSAOEffect::BlurSSAOEffect() :
 
 ba::BlurSSAOEffect::~BlurSSAOEffect()
 {
+	BlurSSAOEffect::Destroy();
 }
 
 bool ba::BlurSSAOEffect::Init(ID3D11Device* device, const std::wstring& file_name)

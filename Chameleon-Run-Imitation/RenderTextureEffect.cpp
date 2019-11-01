@@ -9,6 +9,7 @@ ba::RenderTextureEffect::RenderTextureEffect() :
 
 ba::RenderTextureEffect::~RenderTextureEffect()
 {
+	RenderTextureEffect::Destroy();
 }
 
 bool ba::RenderTextureEffect::Init(ID3D11Device* device, const std::wstring& file_name)

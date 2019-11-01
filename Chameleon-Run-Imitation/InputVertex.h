@@ -61,6 +61,23 @@ namespace ba
 			void Destroy();
 		};
 
+		struct Particle : public Uncopiable
+		{
+			struct Vertex
+			{
+				XMFLOAT3 pos;
+				XMFLOAT3 velocity;
+				XMFLOAT2 size;
+				float age;
+				unsigned int type;
+			};
+			static const D3D11_INPUT_ELEMENT_DESC kInputElemDesc[5];
+			static ID3D11InputLayout* kInputLayout;
+
+			bool Init(ID3D11Device* device);
+			void Destroy();
+		};
+
 
 		// Integrated management of all input layouts.
 		//

@@ -8,6 +8,7 @@ ba::SSAOMapEffect ba::effects::kSSAOMapEffect;
 ba::BlurSSAOEffect ba::effects::kBlurSSAOEffect;
 ba::DebugScreenEffect ba::effects::kDebugScreenEffect;
 ba::RenderTextureEffect ba::effects::kRenderTextureEffect;
+ba::ParticleEffect ba::effects::kSmokeParticleEffect;
 
 bool ba::effects::InitAll(ID3D11Device* device)
 {
@@ -19,6 +20,7 @@ bool ba::effects::InitAll(ID3D11Device* device)
 	if (!kBlurSSAOEffect.Init(device, kBlurSSAOMapEffectFileName)) { DestroyAll(); return false; }
 	if (!kDebugScreenEffect.Init(device, kDebugScreenEffectFileName)) { DestroyAll(); return false; }
 	if (!kRenderTextureEffect.Init(device, kRenderTextureEffectFileName)) { DestroyAll(); return false; }
+	if (!kSmokeParticleEffect.Init(device, kSmokeParticleEffectFileName)) { DestroyAll(); return false; }
 
 	return true;
 }
@@ -33,4 +35,5 @@ void ba::effects::DestroyAll()
 	kBlurSSAOEffect.Destroy();
 	kDebugScreenEffect.Destroy();
 	kRenderTextureEffect.Destroy();
+	kSmokeParticleEffect.Destroy();
 }

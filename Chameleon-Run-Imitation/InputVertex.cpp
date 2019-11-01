@@ -35,7 +35,6 @@ void ba::inputvertex::PosNormalTex::Destroy()
 	DestroyCOM(kInputLayout);
 }
 
-
 //
 // PosNormalTexTangent
 //
@@ -71,7 +70,6 @@ void ba::inputvertex::PosNormalTexTangent::Destroy()
 {
 	DestroyCOM(kInputLayout);
 }
-
 
 //
 // PosNormalTexTanSkinned
@@ -111,6 +109,42 @@ void ba::inputvertex::PosNormalTexTanSkinned::Destroy()
 	DestroyCOM(kInputLayout);
 }
 
+//
+// Particle
+//
+
+const D3D11_INPUT_ELEMENT_DESC ba::inputvertex::Particle::kInputElemDesc[5] =
+{
+	{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	{"VELOCITY", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	{"SIZE", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	{"AGE", 0, DXGI_FORMAT_R32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	{"TYPE", 0, DXGI_FORMAT_R32_UINT, 0, 36, D3D11_INPUT_PER_VERTEX_DATA, 0}
+};
+ID3D11InputLayout* ba::inputvertex::Particle::kInputLayout = nullptr;
+
+bool ba::inputvertex::Particle::Init(ID3D11Device* device)
+{
+	if (kInputLayout)
+		return false;
+
+	ID3DX11EffectTechnique* tech = effects::.tech();
+	D3DX11_PASS_DESC pass_desc;
+	tech->GetPassByIndex(0)->GetDesc(&pass_desc);
+
+	HRESULT res = device->CreateInputLayout(
+		kInputElemDesc, 5,
+		pass_desc.pIAInputSignature, pass_desc.IAInputSignatureSize, &kInputLayout
+	);
+	if (FAILED(res))
+		return false;
+	return true;
+}
+
+void ba::inputvertex::Particle::Destroy()
+{
+	DestroyCOM(kInputLayout);
+}
 
 //
 // Integrated management of all input layouts.

@@ -30,6 +30,7 @@ ba::BasicEffect::BasicEffect() :
 
 ba::BasicEffect::~BasicEffect()
 {
+	BasicEffect::Destroy();
 }
 
 bool ba::BasicEffect::Init(ID3D11Device* device, const std::wstring& file_name)

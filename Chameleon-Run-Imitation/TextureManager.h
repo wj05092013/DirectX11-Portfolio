@@ -14,13 +14,21 @@ namespace ba
 	public:
 		static TextureManager& GetInstance();
 
-		void Init(ID3D11Device* device);
+		void Init(ID3D11Device* device, ID3D11DeviceContext* dc_);
 		void Destroy();
 
-		bool CreateSRV(const std::wstring& file_name, ID3D11ShaderResourceView** out_srv);
+		bool CreateTexSRV(
+			const std::wstring& file_name, ID3D11ShaderResourceView** out_srv
+			);
+		bool CreateTexArrSRV(
+			const std::vector<std::wstring>& file_names, ID3D11ShaderResourceView** out_srv,
+			DXGI_FORMAT format = DXGI_FORMAT_FROM_FILE,
+			UINT filter = D3DX11_FILTER_NONE, UINT mip_filter = D3DX11_FILTER_LINEAR
+			);
 
 	private:
 		ID3D11Device* device_;
+		ID3D11DeviceContext* dc_;
 		std::map<std::wstring, ID3D11ShaderResourceView*> srvs_;
 	};
 }

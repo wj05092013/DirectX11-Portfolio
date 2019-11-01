@@ -7,6 +7,7 @@ ba::EffectWrapper::EffectWrapper() :
 
 ba::EffectWrapper::~EffectWrapper()
 {
+	EffectWrapper::Destroy();
 }
 
 bool ba::EffectWrapper::Init(ID3D11Device* device, const std::wstring& file_name)

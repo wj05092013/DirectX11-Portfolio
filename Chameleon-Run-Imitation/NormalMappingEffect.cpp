@@ -31,6 +31,7 @@ ba::NormalMappingEffect::NormalMappingEffect() :
 
 ba::NormalMappingEffect::~NormalMappingEffect()
 {
+	NormalMappingEffect::Destroy();
 }
 
 bool ba::NormalMappingEffect::Init(ID3D11Device* device, const std::wstring& file_name)

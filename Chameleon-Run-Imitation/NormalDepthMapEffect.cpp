@@ -15,6 +15,7 @@ ba::NormalDepthMapEffect::NormalDepthMapEffect() :
 
 ba::NormalDepthMapEffect::~NormalDepthMapEffect()
 {
+	NormalDepthMapEffect::Destroy();
 }
 
 bool ba::NormalDepthMapEffect::Init(ID3D11Device* device, const std::wstring& file_name)

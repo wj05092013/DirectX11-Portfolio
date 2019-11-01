@@ -182,6 +182,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="NormalDepthMapEffect.h" />
     <ClInclude Include="NormalMappingEffect.h" />
+    <ClInclude Include="ParticleEffect.h" />
     <ClInclude Include="PhysicsModel.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="RenderStates.h" />
@@ -231,6 +232,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="NormalDepthMapEffect.cpp" />
     <ClCompile Include="NormalMappingEffect.cpp" />
+    <ClCompile Include="ParticleEffect.cpp" />
     <ClCompile Include="PhysicsModel.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="RenderStates.cpp" />
@@ -257,6 +259,36 @@
   <ItemGroup>
     <Image Include="Chameleon-Run-Imitation.ico" />
     <Image Include="small.ico" />
+    <Image Include="Texture\smoke\0001.png" />
+    <Image Include="Texture\smoke\0002.png" />
+    <Image Include="Texture\smoke\0003.png" />
+    <Image Include="Texture\smoke\0004.png" />
+    <Image Include="Texture\smoke\0005.png" />
+    <Image Include="Texture\smoke\0006.png" />
+    <Image Include="Texture\smoke\0007.png" />
+    <Image Include="Texture\smoke\0008.png" />
+    <Image Include="Texture\smoke\0009.png" />
+    <Image Include="Texture\smoke\0010.png" />
+    <Image Include="Texture\smoke\0011.png" />
+    <Image Include="Texture\smoke\0012.png" />
+    <Image Include="Texture\smoke\0013.png" />
+    <Image Include="Texture\smoke\0014.png" />
+    <Image Include="Texture\smoke\0015.png" />
+    <Image Include="Texture\smoke\0016.png" />
+    <Image Include="Texture\smoke\0017.png" />
+    <Image Include="Texture\smoke\0018.png" />
+    <Image Include="Texture\smoke\0019.png" />
+    <Image Include="Texture\smoke\0020.png" />
+    <Image Include="Texture\smoke\0021.png" />
+    <Image Include="Texture\smoke\0022.png" />
+    <Image Include="Texture\smoke\0023.png" />
+    <Image Include="Texture\smoke\0024.png" />
+    <Image Include="Texture\smoke\0025.png" />
+    <Image Include="Texture\smoke\0026.png" />
+    <Image Include="Texture\smoke\0027.png" />
+    <Image Include="Texture\smoke\0028.png" />
+    <Image Include="Texture\smoke\0029.png" />
+    <Image Include="Texture\smoke\0030.png" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\TODO_LIST.txt" />
@@ -270,6 +302,7 @@
     <FxCompile Include="FX\NormalMapping.fx" />
     <FxCompile Include="FX\RenderTexture.fx" />
     <FxCompile Include="FX\ShadowMap.fx" />
+    <FxCompile Include="FX\Smoke.fx" />
     <FxCompile Include="FX\SSAOMap.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

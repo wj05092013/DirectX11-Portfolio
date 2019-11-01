@@ -53,6 +53,7 @@
 #include "BlurSSAOEffect.h"
 #include "DebugScreenEffect.h"
 #include "RenderTextureEffect.h"
+#include "ParticleEffect.h"
 #include "Effects.h"
 
 #include "InputVertex.h"

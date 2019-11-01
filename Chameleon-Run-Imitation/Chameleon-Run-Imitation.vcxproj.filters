@@ -58,6 +58,9 @@
     <Filter Include="Sources\Util">
       <UniqueIdentifier>{607526fa-3508-418f-ba8d-26c4b0c578c9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Texture\Particle">
+      <UniqueIdentifier>{6a5234ef-53bb-4443-b9c3-8dd2b208cacd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -204,6 +207,9 @@
     <ClInclude Include="SphereCollider.h">
       <Filter>Includes\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleEffect.h">
+      <Filter>Includes\Graphics\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Effects.cpp">
@@ -332,6 +338,9 @@
     <ClCompile Include="SphereCollider.cpp">
       <Filter>Sources\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="ParticleEffect.cpp">
+      <Filter>Sources\Graphics\Effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Chameleon-Run-Imitation.rc">
@@ -344,6 +353,96 @@
     </Image>
     <Image Include="Chameleon-Run-Imitation.ico">
       <Filter>Resources</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0001.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0002.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0003.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0004.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0005.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0006.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0007.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0008.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0009.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0010.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0011.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0012.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0013.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0014.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0015.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0016.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0017.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0018.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0019.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0020.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0021.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0022.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0023.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0024.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0025.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0026.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0027.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0028.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0029.png">
+      <Filter>Texture\Particle</Filter>
+    </Image>
+    <Image Include="Texture\smoke\0030.png">
+      <Filter>Texture\Particle</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
@@ -377,6 +476,9 @@
       <Filter>FX</Filter>
     </FxCompile>
     <FxCompile Include="FX\NormalDepthMap.fx">
+      <Filter>FX</Filter>
+    </FxCompile>
+    <FxCompile Include="FX\Smoke.fx">
       <Filter>FX</Filter>
     </FxCompile>
   </ItemGroup>
