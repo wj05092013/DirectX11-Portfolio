@@ -37,9 +37,9 @@ namespace ba
 		device_ = nullptr;
 		dc_ = nullptr;
 
-		for (UINT i = 0; i < particles_.size(); ++i)
+		for (auto iter = particles_.begin(); iter != particles_.end(); ++iter)
 		{
-			delete particles_[i];
+			delete (*iter);
 		}
 		particles_.clear();
 	}
@@ -57,33 +57,45 @@ namespace ba
 			return false;
 		}
 
-		particles_.push_back(particle);
+		particles_.insert(particle);
 		*out_particle = particle;
 
 		return true;
 	}
 
+	void ParticleManager::DestroyParticle(Particle* target)
+	{
+		particles_.erase(target);
+
+		auto iter = particles_.find(target);
+		if (iter != particles_.end())
+		{
+			delete(*iter);
+			particles_.erase(iter);
+		}
+	}
+
 	void ParticleManager::ResetParticles()
 	{
-		for (UINT i = 0; i < particles_.size(); ++i)
+		for (auto iter = particles_.begin(); iter != particles_.end(); ++iter)
 		{
-			particles_[i]->Reset();
+			(*iter)->Reset();
 		}
 	}
 
 	void ParticleManager::UpdateParticles()
 	{
-		for (UINT i = 0; i < particles_.size(); ++i)
+		for (auto iter = particles_.begin(); iter != particles_.end(); ++iter)
 		{
-			particles_[i]->Update(static_cast<float>(timer_->get_total_time()), static_cast<float>(timer_->get_delta_time()));
+			(*iter)->Update(static_cast<float>(timer_->get_total_time()), static_cast<float>(timer_->get_delta_time()));
 		}
 	}
 
 	void ParticleManager::DrawParticles(const Camera* camera)
 	{
-		for (UINT i = 0; i < particles_.size(); ++i)
+		for (auto iter = particles_.begin(); iter != particles_.end(); ++iter)
 		{
-			particles_[i]->Draw(dc_, camera);
+			(*iter)->Draw(dc_, camera);
 		}
 	}
 }

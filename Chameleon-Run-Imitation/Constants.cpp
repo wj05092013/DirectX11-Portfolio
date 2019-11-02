@@ -70,7 +70,7 @@ namespace ba
 		const float kSphereRadius = 0.5f;
 		const int kSphereSubdivisionCount = 3;
 		const XMMATRIX kSphereLocalTransform = XMMatrixTranslation(0.5f, 0.5f, 0.5f);
-		const float kSphereRestitution = 0.5f;
+		const float kSphereRestitution = 0.9f;
 
 		// Model data of boxes.
 		const XMFLOAT3 kBoxSize = XMFLOAT3(1.0f, 1.0f, 1.0f);

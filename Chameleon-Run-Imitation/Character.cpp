@@ -17,10 +17,14 @@ namespace ba
 
 	Character::~Character()
 	{
+		ParticleManager::GetInstance().DestroyParticle(smoke_particle_);
 	}
 
 	bool Character::InitParticle(ID3D11Device* device)
 	{
+		if (smoke_particle_)
+			return false;
+
 		std::vector<std::wstring> file_names;
 		game::GetCharacterParticleFileNames(file_names);
 

@@ -38,7 +38,7 @@ cbuffer CBFixed
 		float2(1.0f, 1.0f)
     };
 
-    float kEmitTimeInterval = 1.0f;
+    float kEmitTimeInterval = 0.1f;
     float kMaxLifeTime = 3.0f;
 
     float2 kPtcSize = float2(3.0f, 3.0f);

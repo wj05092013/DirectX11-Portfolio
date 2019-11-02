@@ -25,6 +25,7 @@ namespace ba
 			ID3D11ShaderResourceView* rand_tex_srv,
 			Particle** out_particle
 		);
+		void DestroyParticle(Particle* target);
 
 		void ResetParticles();
 		void UpdateParticles();
@@ -35,6 +36,6 @@ namespace ba
 		ID3D11DeviceContext* dc_;
 		Timer* timer_;
 
-		std::vector<Particle*> particles_;
+		std::set<Particle*> particles_;
 	};
 }
