@@ -126,8 +126,8 @@ namespace ba
 		const int kCharacterMaxJumpCount = 2;
 		const XMFLOAT3 kCharacterJumpVelocity(0.0f, 7.0f, 0.0f);
 
-		const UINT kCharacterMaxParticleCount = 30;
-		const XMFLOAT3 kCharacterParticleEmitPos = {0.0f, 0.0f, 0.0f};
+		const UINT kCharacterMaxParticleCount = 256;
+		const XMFLOAT3 kCharacterParticleEmitPos = {0.5f, 0.0f, 0.0f};
 		//__
 
 		//
@@ -150,24 +150,40 @@ namespace ba
 		//__
 
 		// Spheres.
-		const int kSphereCount = 2;
-		const std::string kSphereNames[2] = {
-			"sphere00", "sphere01"
+		const int kSphereCount = 6;
+		const std::string kSphereNames[6] = {
+			"sphere00", "sphere01", "sphere02", "sphere03", "sphere04", "sphere05"
 		};
-		const XMFLOAT3 kSphereInitScales[2] = {
+		const XMFLOAT3 kSphereInitScales[6] = {
 			{0.8f, 0.8f, 0.8f},
-			{1.4f, 1.4f, 1.4f}
+			{0.4f, 0.4f, 0.4f},
+			{0.5f, 0.5f, 0.5f},
+			{0.3f, 0.3f, 0.3f},
+			{1.0f, 1.0f, 1.0f},
+			{1.6f, 1.6f, 1.6f}
 		};
-		const XMFLOAT4 kSphereInitRotations[2] = {
+		const XMFLOAT4 kSphereInitRotations[6] = {
+			{0.0f, 0.0f, 0.0f, 1.0f},
+			{0.0f, 0.0f, 0.0f, 1.0f},
+			{0.0f, 0.0f, 0.0f, 1.0f},
+			{0.0f, 0.0f, 0.0f, 1.0f},
 			{0.0f, 0.0f, 0.0f, 1.0f},
 			{0.0f, 0.0f, 0.0f, 1.0f}
 		};
-		const XMFLOAT3 kSphereInitTranslations[2] = {
+		const XMFLOAT3 kSphereInitTranslations[6] = {
 			{0.0f, 4.0f, 11.0f},
-			{0.0f, 6.0f, 64.0f}
+			{0.5f, 3.0f, 31.0f},
+			{0.2f, 3.0f, 34.0f},
+			{0.0f, 3.0f, 36.0f},
+			{0.0f, 6.0f, 64.0f},
+			{-0.4f, 3.0f, 73.0f}
 		};
-		const Model::EColorType kSphereInitColorType[2] = {
+		const Model::EColorType kSphereInitColorType[6] = {
 			Model::kYellow,
+			Model::kYellow,
+			Model::kYellow,
+			Model::kYellow,
+			Model::kRed,
 			Model::kRed
 		};
 

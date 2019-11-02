@@ -273,7 +273,10 @@ bool ba::Application::InitMainWindow(HINSTANCE wnd_inst)
 		nullptr, nullptr, wnd_inst_, nullptr
 	);
 	if (!main_wnd_)
+	{
+		MessageBox(nullptr, L"fail: CreateWindowW", nullptr, 0);
 		return false;
+	}
 
 	ShowWindow(main_wnd_, SW_SHOWDEFAULT);
 	UpdateWindow(main_wnd_);
@@ -315,20 +318,32 @@ bool ba::Application::OnResize()
 
 	HRESULT res = swap_chain_->ResizeBuffers(1, client_width_, client_height_, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
 	if (FAILED(res))
+	{
+		MessageBox(nullptr, L"fail: ResizeBuffers", nullptr, 0);
 		return false;
+	}
 
 	ID3D11Texture2D* back_buffer = nullptr;
 	res = swap_chain_->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)& back_buffer);
 	if (FAILED(res))
+	{
+		MessageBox(nullptr, L"fail: GetBuffer", nullptr, 0);
 		return false;
+	}
 
 	res = device_->CreateRenderTargetView(back_buffer, nullptr, &rtv_);
 	DestroyCOM(back_buffer);
 	if (FAILED(res))
+	{
+		MessageBox(nullptr, L"fail: CreateRenderTargetView", nullptr, 0);
 		return false;
+	}
 
 	if (!CreateDepthStencilView())
+	{
+		MessageBox(nullptr, L"fail: CreateDepthStencilView", nullptr, 0);
 		return false;
+	}
 
 	InitViewport();
 
@@ -350,15 +365,27 @@ bool ba::Application::CreateDeviceAndImmediateContext()
 		&device_, &feature_level, &dc_
 	);
 	if (FAILED(res))
+	{
+		MessageBox(nullptr, L"fail: D3D11CreateDevice", nullptr, 0);
 		return false;
+	}
 	if (feature_level != D3D_FEATURE_LEVEL_11_0)
+	{
+		MessageBox(nullptr, L"fail: feature_level != D3D_FEATURE_LEVEL_11_0", nullptr, 0);
 		return false;
+	}
 
 	res = device_->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 4, &msaa_quality_level_);
 	if (FAILED(res))
+	{
+		MessageBox(nullptr, L"fail: CheckMultisampleQualityLevels", nullptr, 0);
 		return false;
+	}
 	if (msaa_quality_level_ <= 0)
+	{
+		MessageBox(nullptr, L"fail: msaa_quality_level_ <= 0", nullptr, 0);
 		return false;
+	}
 
 	if (b_4x_msaa_)
 	{
@@ -417,7 +444,10 @@ bool ba::Application::CreateSwapChain()
 	DestroyCOM(dxgi_device);
 
 	if (FAILED(res))
+	{
+		MessageBox(nullptr, L"fail: CreateSwapChain", nullptr, 0);
 		return false;
+	}
 
 	return true;
 }
@@ -428,13 +458,19 @@ bool ba::Application::CreateRenderTargetView()
 
 	HRESULT res = swap_chain_->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)& back_buffer);
 	if (FAILED(res))
+	{
+		MessageBox(nullptr, L"fail: GetBuffer", nullptr, 0);
 		return false;
+	}
 
 	res = device_->CreateRenderTargetView(back_buffer, nullptr, &rtv_);
 	DestroyCOM(back_buffer);
 
 	if (FAILED(res))
+	{
+		MessageBox(nullptr, L"fail: CreateRenderTargetView", nullptr, 0);
 		return false;
+	}
 
 	return true;
 }
@@ -455,11 +491,17 @@ bool ba::Application::CreateDepthStencilView()
 
 	HRESULT res = device_->CreateTexture2D(&depth_stencil_buffer_desc, nullptr, &depth_stencil_buffer_);
 	if (FAILED(res))
+	{
+		MessageBox(nullptr, L"fail: CreateTexture2D", nullptr, 0);
 		return false;
+	}
 
 	res = device_->CreateDepthStencilView(depth_stencil_buffer_, nullptr, &dsv_);
 	if (FAILED(res))
+	{
+		MessageBox(nullptr, L"fail: CreateDepthStencilView", nullptr, 0);
 		return false;
+	}
 
 	return true;
 }

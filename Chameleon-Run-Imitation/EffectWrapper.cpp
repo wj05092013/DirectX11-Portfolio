@@ -23,6 +23,7 @@ bool ba::EffectWrapper::Init(ID3D11Device* device, const std::wstring& file_name
 	else if (substr == L"fxo")
 		return CreateEffectFromFXO(device);
 
+	MessageBox(nullptr, L"failed: not exist fx or fxo file", nullptr, 0);
 	return false;
 }
 

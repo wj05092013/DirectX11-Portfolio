@@ -87,11 +87,17 @@ namespace ba
 
 		// Initialize the ssao system.
 		if (!ssao_map_->Init(device_, dc_, client_width_, client_height_, kCamFovY, kCamFarZ))
+		{
+			MessageBox(nullptr, L"ssao_map_->Init", nullptr, 0);
 			return false;
+		}
 
 		// Initialize the shadow map.
 		if (!shadow_map_->Init(device_, game::kShadowMapSize, game::kShadowMapSize))
+		{
+			MessageBox(nullptr, L"shadow_map_->Init", nullptr, 0);
 			return false;
+		}
 		shadow_map_->set_directional_light(lights_);
 		shadow_map_->set_bounding_sphere(&bounding_sphere_);
 

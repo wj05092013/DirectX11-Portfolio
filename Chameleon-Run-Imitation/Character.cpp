@@ -31,15 +31,24 @@ namespace ba
 		ID3D11ShaderResourceView* tex_arr_srv = nullptr;
 		ID3D11ShaderResourceView* rand_tex_srv = nullptr;
 		if (!TextureManager::GetInstance().CreateTex2DArrSRV(file_names, &tex_arr_srv))
+		{
+			MessageBox(nullptr, L"fail: CreateTex2DArrSRV", nullptr, 0);
 			return false;
+		}
 		if (!TextureManager::GetInstance().CreateRandomTex1DSRV(game::kRandomTexSize, &rand_tex_srv))
+		{
+			MessageBox(nullptr, L"fail: CreateRandomTex1DSRV", nullptr, 0);
 			return false;
+		}
 
 		if(!ParticleManager::GetInstance().CreateParticle(
 			&effects::kSmokeParticleEffect, game::kCharacterMaxParticleCount,
 			tex_arr_srv, file_names.size(), rand_tex_srv, &smoke_particle_
 		))
+		{
+			MessageBox(nullptr, L"fail: CreateParticle", nullptr, 0);
 			return false;
+		}
 
 		return true;
 	}

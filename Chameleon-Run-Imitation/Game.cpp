@@ -48,7 +48,10 @@ bool ba::Game::InitDirectX()
 	if (!GraphicComponentManager::GetInstance().Init())
 		return false;
 	if (!renderer_.Init(device_, dc_))
+	{
+		MessageBox(nullptr, L"renderer_.Init", nullptr, MB_OK);
 		return false;
+	}
 	if (!inputvertex::InitAll(device_))
 		return false;
 	if (!SceneManager::GetInstance().Init(device_, dc_, &renderer_, &timer_))

@@ -124,11 +124,11 @@ namespace ba
 
 		// Spheres.
 		extern const int kSphereCount;
-		extern const std::string kSphereNames[2];
-		extern const XMFLOAT3 kSphereInitScales[2];
-		extern const XMFLOAT4 kSphereInitRotations[2];
-		extern const XMFLOAT3 kSphereInitTranslations[2];
-		extern const Model::EColorType kSphereInitColorType[2];
+		extern const std::string kSphereNames[6];
+		extern const XMFLOAT3 kSphereInitScales[6];
+		extern const XMFLOAT4 kSphereInitRotations[6];
+		extern const XMFLOAT3 kSphereInitTranslations[6];
+		extern const Model::EColorType kSphereInitColorType[6];
 
 		// Boxes.
 		//
