@@ -6,7 +6,7 @@ PCH: Yes
 
 namespace ba
 {
-	namespace GeometryGenerator
+	namespace geometrygenerator
 	{
 		struct Vertex
 		{

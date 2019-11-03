@@ -357,11 +357,11 @@ namespace ba
 
 	bool scene01::Scene01::LoadModels()
 	{
-		GeometryGenerator::Geometry sphere_geo;
-		GeometryGenerator::CreateGeosphere(game::kSphereRadius, game::kSphereSubdivisionCount, sphere_geo);
+		geometrygenerator::Geometry sphere_geo;
+		geometrygenerator::CreateGeosphere(game::kSphereRadius, game::kSphereSubdivisionCount, sphere_geo);
 
-		GeometryGenerator::Geometry box_geo;
-		GeometryGenerator::CreateBox(game::kBoxSize.x, game::kBoxSize.y, game::kBoxSize.z, box_geo);
+		geometrygenerator::Geometry box_geo;
+		geometrygenerator::CreateBox(game::kBoxSize.x, game::kBoxSize.y, game::kBoxSize.z, box_geo);
 
 		//
 		// Create 'ModelData'

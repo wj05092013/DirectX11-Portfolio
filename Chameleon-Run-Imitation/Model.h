@@ -13,7 +13,7 @@ namespace ba
 	public:
 		ModelData();
 
-		bool Init(ID3D11Device* device, const GeometryGenerator::Geometry& geo, const XMMATRIX& local_transform);
+		bool Init(ID3D11Device* device, const geometrygenerator::Geometry& geo, const XMMATRIX& local_transform);
 
 		Mesh mesh;
 		ID3D11ShaderResourceView* diffuse_map;

@@ -12,7 +12,7 @@ namespace ba
 	{
 	}
 
-	bool ModelData::Init(ID3D11Device* device, const GeometryGenerator::Geometry& geo, const XMMATRIX& local_transform)
+	bool ModelData::Init(ID3D11Device* device, const geometrygenerator::Geometry& geo, const XMMATRIX& local_transform)
 	{
 		UINT vtx_count = geo.vertices.size();
 

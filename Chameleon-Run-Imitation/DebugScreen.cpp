@@ -77,8 +77,8 @@ bool ba::DebugScreen::BuildGeometryBuffers(ID3D11Device* device)
 	if (vb_ || ib_)
 		return false;
 
-	GeometryGenerator::Geometry geo;
-	GeometryGenerator::CreateFullscreenQuad(geo);
+	geometrygenerator::Geometry geo;
+	geometrygenerator::CreateFullscreenQuad(geo);
 
 	std::vector<inputvertex::PosNormalTex::Vertex> vertices(geo.vertices.size());
 
