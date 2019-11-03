@@ -49,7 +49,9 @@ namespace ba
 		sphere_(nullptr),
 		box_(nullptr),
 		ground_(nullptr),
-		character_(nullptr)
+		character_(nullptr),
+
+		b_debug_screen_(false)
 	{
 	}
 
@@ -122,6 +124,10 @@ namespace ba
 		// Initialize ParticleManager.
 		ParticleManager::GetInstance().Init(device_, dc_, timer_);
 
+		// Initialize DebugScreen.
+		debug_screen_.Init(device_);
+		debug_screen_.set_ndc_position_size(0.3f, -0.3f, 0.7f, 0.7f);
+
 		// Initialize camera and models.
 		if (!InitForRestart())
 			return false;
@@ -163,6 +169,8 @@ namespace ba
 
 	void scene01::Scene01::Destroy()
 	{
+		debug_screen_.Destroy();
+
 		ParticleManager::GetInstance().Destroy();
 
 		DestroyModels();
@@ -193,6 +201,12 @@ namespace ba
 
 		// Draw particles.
 		ParticleManager::GetInstance().DrawParticles(rt_camera_);
+
+		if (b_debug_screen_)
+		{
+			// Draw the debug screen.
+			debug_screen_.Render(dc_);
+		}
 	}
 
 	void scene01::Scene01::Update()
@@ -284,10 +298,28 @@ namespace ba
 		}
 		}
 
+		if (key_down['1'])
+			b_debug_screen_ = !b_debug_screen_;
+
 		if (key_pressed['W'])
 			rt_camera_->Approach(static_cast<float>(timer_->get_delta_time()));
 		if (key_pressed['S'])
 			rt_camera_->StepBack(static_cast<float>(timer_->get_delta_time()));
+		if (key_pressed['2'])
+		{
+			debug_screen_.set_tech_type(DebugScreenEffect::ETechType::kViewRGBA);
+			debug_screen_.set_srv(shadow_map_->srv());
+		}
+		if (key_pressed['3'])
+		{
+			debug_screen_.set_tech_type(DebugScreenEffect::ETechType::kViewRGBA);
+			debug_screen_.set_srv(ssao_map_->normal_depth_map_srv());
+		}
+		if (key_pressed['4'])
+		{
+			debug_screen_.set_tech_type(DebugScreenEffect::ETechType::kViewRed);
+			debug_screen_.set_srv(ssao_map_->ssao_map_srv());
+		}
 	}
 
 	void scene01::Scene01::OnMouseMove(HWND wnd, WPARAM w_par, int x, int y)

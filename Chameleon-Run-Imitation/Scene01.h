@@ -72,6 +72,9 @@ namespace ba
 			ModelData* ground_;
 			std::vector<Model*> models_;
 			Character* character_;
+
+			DebugScreen debug_screen_;
+			bool b_debug_screen_;
 		};
 	}
 }

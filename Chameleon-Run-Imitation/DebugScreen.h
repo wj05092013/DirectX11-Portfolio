@@ -8,14 +8,6 @@ namespace ba
 {
 	class DebugScreen
 	{
-	private:
-		ID3D11Buffer* vb_;
-		ID3D11Buffer* ib_;
-
-		ID3D11ShaderResourceView* srv_;
-
-		XMFLOAT4X4 proj_;
-
 	public:
 		DebugScreen();
 		~DebugScreen();
@@ -27,8 +19,18 @@ namespace ba
 
 		void set_ndc_position_size(float left_top_x, float left_top_y, float width, float height);
 		void set_srv(ID3D11ShaderResourceView* srv);
+		void set_tech_type(DebugScreenEffect::ETechType tech_type);
 
 	private:
 		bool BuildGeometryBuffers(ID3D11Device* device);
+
+		ID3D11Buffer* vb_;
+		ID3D11Buffer* ib_;
+
+		ID3D11ShaderResourceView* srv_;
+
+		XMFLOAT4X4 proj_;
+
+		DebugScreenEffect::ETechType tech_type_;
 	};
 }

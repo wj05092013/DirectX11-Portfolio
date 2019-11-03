@@ -85,5 +85,5 @@ void ba::SSAOMapEffect::SetNormalDepthMap(ID3D11ShaderResourceView* srv)
 
 void ba::SSAOMapEffect::SetRandomVectorMap(ID3D11ShaderResourceView* srv)
 {
-	normal_depth_map_->SetResource(srv);
+	random_vector_map_->SetResource(srv);
 }

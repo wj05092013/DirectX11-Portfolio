@@ -3,7 +3,8 @@
 ba::DebugScreen::DebugScreen() :
 	vb_(nullptr),
 	ib_(nullptr),
-	srv_(nullptr)
+	srv_(nullptr),
+	tech_type_(DebugScreenEffect::ETechType::kViewRGBA)
 {
 }
 
@@ -39,7 +40,7 @@ void ba::DebugScreen::Render(ID3D11DeviceContext* dc)
 	dc->IASetVertexBuffers(0, 1, &vb_, &strides, &offsets);
 	dc->IASetIndexBuffer(ib_, DXGI_FORMAT_R32_UINT, 0);
 
-	ID3DX11EffectTechnique* tech = effects::kDebugScreenEffect.tech(DebugScreenEffect::kViewAlpha);
+	ID3DX11EffectTechnique* tech = effects::kDebugScreenEffect.tech(tech_type_);
 	D3DX11_TECHNIQUE_DESC tech_desc;
 	tech->GetDesc(&tech_desc);
 
@@ -70,6 +71,11 @@ void ba::DebugScreen::set_ndc_position_size(float left_top_x, float left_top_y, 
 void ba::DebugScreen::set_srv(ID3D11ShaderResourceView* srv)
 {
 	srv_ = srv;
+}
+
+void ba::DebugScreen::set_tech_type(DebugScreenEffect::ETechType tech_type)
+{
+	tech_type_ = tech_type;
 }
 
 bool ba::DebugScreen::BuildGeometryBuffers(ID3D11Device* device)

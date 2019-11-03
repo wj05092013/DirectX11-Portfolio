@@ -217,7 +217,7 @@
       <Filter>Includes\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="ParticleManager.h">
-      <Filter>Includes</Filter>
+      <Filter>Includes\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -354,7 +354,7 @@
       <Filter>Sources\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="ParticleManager.cpp">
-      <Filter>Sources</Filter>
+      <Filter>Sources\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
