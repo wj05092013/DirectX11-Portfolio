@@ -32,7 +32,7 @@
 * **리소스 관리**
 	* Texture Manager, Graphic Component Manager, Particle Manager 등의 Manager 클래스들
 
-<image src="./ScreenShot/image04.jpg" width="20%"></image> <image src="./ScreenShot/image02.jpg" width="30%"></image> <image src="./ScreenShot/image03.jpg" width="35%"></image>
+<image src="./ScreenShot/image04.jpg" width="20%"></image> <image src="./ScreenShot/image02.jpg" width="30%"></image> <image src="./ScreenShot/image03.jpg" width="35%"></image><br>
 [Shadow Effect, Normal-depth Map, SSAO Map]
 
 ## 참고 자료
