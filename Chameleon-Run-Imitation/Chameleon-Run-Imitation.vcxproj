@@ -295,9 +295,6 @@
     <Image Include="Texture\Particle\Smoke\30.png" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\TODO_LIST.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <FxCompile Include="FX\Basic.fx" />
     <FxCompile Include="FX\BlurSSAOMap.fx" />
     <FxCompile Include="FX\DebugScreen.fx" />

@@ -34,9 +34,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Document">
-      <UniqueIdentifier>{6681a2f4-9890-46aa-bb44-028ed1211b4c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="FX">
       <UniqueIdentifier>{1d0c9681-d504-4e77-a2c6-c69d21bdb26f}</UniqueIdentifier>
     </Filter>
@@ -459,11 +456,6 @@
     <Image Include="Texture\Particle\Smoke\30.png">
       <Filter>Texture\Particle\Smoke</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\TODO_LIST.txt">
-      <Filter>Document</Filter>
-    </Text>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="FX\NormalMapping.fx">
