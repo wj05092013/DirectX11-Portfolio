@@ -119,7 +119,7 @@ LRESULT ba::Application::WndProc(HWND hwnd, UINT msg, WPARAM w_par, LPARAM l_par
 				client_maximized_ = false;
 				client_minimized_ = true;
 				paused_ = true;
-				timer_.Unpause();
+				timer_.Pause();
 			}
 			else if (w_par == SIZE_RESTORED)
 			{
