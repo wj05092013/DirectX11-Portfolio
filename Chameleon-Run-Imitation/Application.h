@@ -39,7 +39,7 @@ namespace ba
 		// Render scene.
 		virtual void Render() = 0;
 
-		// UpdateParticles functions.
+		// Functions for update.
 		//
 		void Update();
 
